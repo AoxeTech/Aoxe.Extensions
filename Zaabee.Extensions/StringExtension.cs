@@ -14,8 +14,8 @@ namespace Zaabee.Extensions
 
         public static bool IsNullOrWhiteSpace(this string value) => string.IsNullOrWhiteSpace(value);
 
-        public static string StringJoin<T>(this IEnumerable<T> strings, string separator) =>
-            string.Join(separator, strings);
+        public static string StringJoin<T>(this IEnumerable<T> values, string separator) =>
+            string.Join(separator, values);
 
         #region Bytes
         
