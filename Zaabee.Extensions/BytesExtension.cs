@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 
 namespace Zaabee.Extensions
@@ -19,6 +20,7 @@ namespace Zaabee.Extensions
         public static string UnicodeToString(this byte[] bytes) => GetString(bytes, Encoding.Unicode);
 
         public static string GetString(this byte[] bytes, Encoding encoding = null) =>
-            encoding == null ? Encoding.UTF8.GetString(bytes) : encoding.GetString(bytes);
+            bytes is null ? throw new ArgumentNullException(nameof(bytes)) :
+            encoding is null ? Encoding.UTF8.GetString(bytes) : encoding.GetString(bytes);
     }
 }

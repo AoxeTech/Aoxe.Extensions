@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.Extensions", "Zaabee.Extensions\Zaabee.Extensions.csproj", "{979C7CA2-05C6-4E45-92D9-D80F8D89F1AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.Extensions.TestProject", "Zaabee.Extensions.TestProject\Zaabee.Extensions.TestProject.csproj", "{FDEA2522-E910-491E-AC92-8AC959E8B4EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,17 @@ Global
 		{979C7CA2-05C6-4E45-92D9-D80F8D89F1AA}.Release|x64.Build.0 = Release|Any CPU
 		{979C7CA2-05C6-4E45-92D9-D80F8D89F1AA}.Release|x86.ActiveCfg = Release|Any CPU
 		{979C7CA2-05C6-4E45-92D9-D80F8D89F1AA}.Release|x86.Build.0 = Release|Any CPU
+		{FDEA2522-E910-491E-AC92-8AC959E8B4EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDEA2522-E910-491E-AC92-8AC959E8B4EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDEA2522-E910-491E-AC92-8AC959E8B4EB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FDEA2522-E910-491E-AC92-8AC959E8B4EB}.Debug|x64.Build.0 = Debug|Any CPU
+		{FDEA2522-E910-491E-AC92-8AC959E8B4EB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FDEA2522-E910-491E-AC92-8AC959E8B4EB}.Debug|x86.Build.0 = Debug|Any CPU
+		{FDEA2522-E910-491E-AC92-8AC959E8B4EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDEA2522-E910-491E-AC92-8AC959E8B4EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDEA2522-E910-491E-AC92-8AC959E8B4EB}.Release|x64.ActiveCfg = Release|Any CPU
+		{FDEA2522-E910-491E-AC92-8AC959E8B4EB}.Release|x64.Build.0 = Release|Any CPU
+		{FDEA2522-E910-491E-AC92-8AC959E8B4EB}.Release|x86.ActiveCfg = Release|Any CPU
+		{FDEA2522-E910-491E-AC92-8AC959E8B4EB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
