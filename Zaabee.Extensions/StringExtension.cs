@@ -14,6 +14,11 @@ namespace Zaabee.Extensions
 
         public static bool IsNullOrWhiteSpace(this string value) => string.IsNullOrWhiteSpace(value);
 
+        public static string StringJoin<T>(this IEnumerable<T> strings, string separator) =>
+            string.Join(separator, strings);
+
+        #region Bytes
+        
         public static byte[] ToUtf8Bytes(this string value) => value.ToBytes(Encoding.UTF8);
 
         public static byte[] ToAsciiBytes(this string value) => value.ToBytes(Encoding.ASCII);
@@ -32,37 +37,117 @@ namespace Zaabee.Extensions
             value is null ? throw new ArgumentNullException(nameof(value)) :
             encoding is null ? Utf8Encoding.GetBytes(value) : encoding.GetBytes(value);
 
-        public static string StringJoin<T>(this IEnumerable<T> strings, string separator) =>
-            string.Join(separator, strings);
+        #endregion
 
-        public static short TryParseShort(this string str) =>
-            short.TryParse(str, out var result) ? result : default;
+        #region Parse
 
-        public static int TryParseInt(this string str) =>
-            int.TryParse(str, out var result) ? result : default;
+        public static sbyte ParseSbyte(this string s) =>
+            sbyte.Parse(s);
 
-        public static long TryParseLong(this string str) =>
-            long.TryParse(str, out var result) ? result : default;
+        public static byte ParseByte(this string s) =>
+            byte.Parse(s);
 
-        public static float TryParseFloat(this string str) =>
-            float.TryParse(str, out var result) ? result : default;
+        public static short ParseShort(this string s) =>
+            short.Parse(s);
 
-        public static double TryParseDouble(this string str) =>
-            double.TryParse(str, out var result) ? result : default;
+        public static ushort ParseUshort(this string s) =>
+            ushort.Parse(s);
 
-        public static decimal TryParseDecimal(this string str) =>
-            decimal.TryParse(str, out var result) ? result : default;
+        public static int ParseInt(this string s) =>
+            int.Parse(s);
 
-        public static TEnum TryParseEnum<TEnum>(this string str) where TEnum : struct, Enum =>
-            Enum.TryParse(str, out TEnum result) ? result : default;
+        public static uint ParseUint(this string s) =>
+            uint.Parse(s);
 
-        public static string ToBase64(this string str, Encoding encoding = null) =>
-            Convert.ToBase64String(encoding is null ? Utf8Encoding.GetBytes(str) : encoding.GetBytes(str));
+        public static long ParseLong(this string s) =>
+            long.Parse(s);
 
-        public static string FromBase64(this string str, Encoding encoding = null) =>
+        public static ulong ParseUlong(this string s) =>
+            ulong.Parse(s);
+
+        public static float ParseFloat(this string s) =>
+            float.Parse(s);
+
+        public static double ParseDouble(this string s) =>
+            double.Parse(s);
+
+        public static decimal ParseDecimal(this string s) =>
+            decimal.Parse(s);
+
+        public static bool ParseBool(this string s) =>
+            bool.Parse(s);
+
+        public static DateTime ParseDateTime(this string s) =>
+            DateTime.Parse(s);
+
+        public static DateTimeOffset ParseDateTimeOffset(this string s) =>
+            DateTimeOffset.Parse(s);
+
+        public static object ParseEnum(this string s, Type enumType) =>
+            Enum.Parse(enumType, s);
+
+        #endregion
+
+        #region TryParse
+
+        public static sbyte TryParseSbyte(this string s) =>
+            sbyte.TryParse(s, out var result) ? result : default;
+
+        public static byte TryParseByte(this string s) =>
+            byte.TryParse(s, out var result) ? result : default;
+
+        public static short TryParseShort(this string s) =>
+            short.TryParse(s, out var result) ? result : default;
+
+        public static ushort TryParseUshort(this string s) =>
+            ushort.TryParse(s, out var result) ? result : default;
+
+        public static int TryParseInt(this string s) =>
+            int.TryParse(s, out var result) ? result : default;
+
+        public static uint TryParseUint(this string s) =>
+            uint.TryParse(s, out var result) ? result : default;
+
+        public static long TryParseLong(this string s) =>
+            long.TryParse(s, out var result) ? result : default;
+
+        public static ulong TryParseUlong(this string s) =>
+            ulong.TryParse(s, out var result) ? result : default;
+
+        public static float TryParseFloat(this string s) =>
+            float.TryParse(s, out var result) ? result : default;
+
+        public static double TryParseDouble(this string s) =>
+            double.TryParse(s, out var result) ? result : default;
+
+        public static decimal TryParseDecimal(this string s) =>
+            decimal.TryParse(s, out var result) ? result : default;
+
+        public static bool TryParseBool(this string s) =>
+            bool.TryParse(s, out var result) ? result : default;
+
+        public static DateTime TryParseDateTime(this string s) =>
+            DateTime.TryParse(s, out var result) ? result : default;
+
+        public static DateTimeOffset TryParseDateTimeOffset(this string s) =>
+            DateTimeOffset.TryParse(s, out var result) ? result : default;
+
+        public static TEnum TryParseEnum<TEnum>(this string s) where TEnum : struct, Enum =>
+            Enum.TryParse(s, out TEnum result) ? result : default;
+
+        #endregion
+
+        #region Base64
+        
+        public static string ToBase64(this string s, Encoding encoding = null) =>
+            Convert.ToBase64String(encoding is null ? Utf8Encoding.GetBytes(s) : encoding.GetBytes(s));
+
+        public static string FromBase64(this string s, Encoding encoding = null) =>
             encoding is null
-                ? Utf8Encoding.GetString(Convert.FromBase64String(str))
-                : encoding.GetString(Convert.FromBase64String(str));
+                ? Utf8Encoding.GetString(Convert.FromBase64String(s))
+                : encoding.GetString(Convert.FromBase64String(s));
+
+        #endregion
 
         public static string GetLetterOrDigit(this string source) =>
             new string(source.Where(char.IsLetterOrDigit).ToArray());
