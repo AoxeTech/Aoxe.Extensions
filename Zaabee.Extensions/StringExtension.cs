@@ -18,7 +18,7 @@ namespace Zaabee.Extensions
             string.Join(separator, values);
 
         #region Bytes
-        
+
         public static byte[] ToUtf8Bytes(this string value) => value.ToBytes(Encoding.UTF8);
 
         public static byte[] ToAsciiBytes(this string value) => value.ToBytes(Encoding.ASCII);
@@ -83,8 +83,8 @@ namespace Zaabee.Extensions
         public static DateTimeOffset ParseDateTimeOffset(this string s) =>
             DateTimeOffset.Parse(s);
 
-        public static object ParseEnum(this string s, Type enumType) =>
-            Enum.Parse(enumType, s);
+        public static object ParseEnum(this string value, Type enumType) =>
+            enumType is null ? throw new ArgumentNullException(nameof(enumType)) : Enum.Parse(enumType, value);
 
         #endregion
 
@@ -132,13 +132,13 @@ namespace Zaabee.Extensions
         public static DateTimeOffset TryParseDateTimeOffset(this string s) =>
             DateTimeOffset.TryParse(s, out var result) ? result : default;
 
-        public static TEnum TryParseEnum<TEnum>(this string s) where TEnum : struct, Enum =>
-            Enum.TryParse(s, out TEnum result) ? result : default;
+        public static TEnum TryParseEnum<TEnum>(this string value) where TEnum : struct, Enum =>
+            Enum.TryParse(value, out TEnum result) ? result : default;
 
         #endregion
 
         #region Base64
-        
+
         public static string ToBase64(this string s, Encoding encoding = null) =>
             Convert.ToBase64String(encoding is null ? Utf8Encoding.GetBytes(s) : encoding.GetBytes(s));
 
