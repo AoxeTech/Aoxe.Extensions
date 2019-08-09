@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Zaabee.Extensions.Commons;
 
 namespace Zaabee.Extensions
 {
@@ -151,35 +150,5 @@ namespace Zaabee.Extensions
 
         public static string GetLetterOrDigit(this string source) =>
             new string(source.Where(char.IsLetterOrDigit).ToArray());
-
-        public static int ToInt(this string source, NumberSystem numberSystem)
-        {
-            if (source.IsNullOrWhiteSpace())
-                return 0;
-            if (source.Any(c => !char.IsLetterOrDigit(c)))
-                throw new ArgumentException("String can only be letter or digit.");
-
-            if (numberSystem <= NumberSystem.Hexatrigesimal)
-                source = source.ToLower();
-
-            var intScale = (int) numberSystem;
-            return source.Select((t, i) =>
-                (int) (Consts.Chars.IndexOf(t) * Math.Pow(intScale, source.Length - i - 1))).Sum();
-        }
-
-        public static long ToLong(this string source, NumberSystem numberSystem)
-        {
-            if (source.IsNullOrWhiteSpace())
-                return 0;
-            if (source.Any(c => !char.IsLetterOrDigit(c)))
-                throw new ArgumentException("String can only be letter or digit.");
-
-            if (numberSystem <= NumberSystem.Hexatrigesimal)
-                source = source.ToLower();
-
-            var intScale = (int) numberSystem;
-            return source.Select((t, i) =>
-                (long) (Consts.Chars.IndexOf(t) * Math.Pow(intScale, source.Length - i - 1))).Sum();
-        }
     }
 }

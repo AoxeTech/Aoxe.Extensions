@@ -3,6 +3,15 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Version>1.0.0</Version>
+    <Authors>Mutuduxf</Authors>
+    <Company>Mutuduxf</Company>
+    <PackageTags>Zaabee Extensions</PackageTags>
+    <Description>Exteinsions for C#</Description>
+    <PackageProjectUrl>https://github.com/Mutuduxf/Zaabee.Extensions</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/Mutuduxf/Zaabee.Extensions/blob/master/LICENSE</PackageLicenseUrl>
   </PropertyGroup>
 
 </Project>
