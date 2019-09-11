@@ -113,13 +113,21 @@ namespace Zaabee.Extensions
 
         #region Base64
 
-        public static string ToBase64(this string s, Encoding encoding = null) =>
-            Convert.ToBase64String(encoding is null ? Utf8Encoding.GetBytes(s) : encoding.GetBytes(s));
+        public static string ToBase64(this string s) => s.ToBase64String();
 
-        public static string FromBase64(this string s, Encoding encoding = null) =>
-            encoding is null
-                ? Utf8Encoding.GetString(Convert.FromBase64String(s))
-                : encoding.GetString(Convert.FromBase64String(s));
+        public static string FromBase64(this string s) => s.DecodeBase64ToString();
+
+        public static string ToBase64String(this string s, Encoding encoding = null) =>
+            Convert.ToBase64String(s.ToBytes(encoding));
+
+        public static byte[] ToBase64Bytes(this string s, Encoding encoding = null) =>
+            s.ToBase64String(encoding).ToBytes(encoding);
+
+        public static byte[] DecodeBase64ToBytes(this string s) =>
+            Convert.FromBase64String(s);
+
+        public static string DecodeBase64ToString(this string s, Encoding encoding = null) =>
+            Convert.FromBase64String(s).GetString(encoding);
 
         #endregion
 
