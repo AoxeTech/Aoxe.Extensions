@@ -133,5 +133,8 @@ namespace Zaabee.Extensions
 
         public static string GetLetterOrDigit(this string source) =>
             new string(source.Where(char.IsLetterOrDigit).ToArray());
+
+        public static string TryReplace(this string str, string oldValue, string newValue) =>
+            string.IsNullOrWhiteSpace(str) || string.IsNullOrEmpty(oldValue) ? str : str.Replace(oldValue, newValue);
     }
 }
