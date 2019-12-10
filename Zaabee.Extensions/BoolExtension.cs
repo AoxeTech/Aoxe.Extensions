@@ -8,5 +8,15 @@ namespace Zaabee.Extensions
         {
             if (b) throw exception;
         }
+
+        public static void IfTrue(this bool b, Action action)
+        {
+            if (b) action();
+        }
+
+        public static void IfFalse(this bool b, Action action)
+        {
+            if (b) action();
+        }
     }
 }
