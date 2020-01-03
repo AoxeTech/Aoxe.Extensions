@@ -11,7 +11,7 @@
     <PackageTags>Zaabee Extensions</PackageTags>
     <Description>Exteinsions for C#</Description>
     <PackageProjectUrl>https://github.com/Mutuduxf/Zaabee.Extensions</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/Mutuduxf/Zaabee.Extensions/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
 </Project>

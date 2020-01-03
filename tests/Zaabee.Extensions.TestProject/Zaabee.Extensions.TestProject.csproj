@@ -13,7 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Zaabee.Extensions\Zaabee.Extensions.csproj" />
+      <ProjectReference Include="..\..\src\Zaabee.Extensions\Zaabee.Extensions.csproj" />
     </ItemGroup>
 
 </Project>
