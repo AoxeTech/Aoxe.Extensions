@@ -15,8 +15,6 @@ namespace Zaabee.Extensions
         public static async Task<int> TryReadAsync(this Stream stream, byte[] buffer, int offset, int count) =>
             stream.CanRead ? await stream.ReadAsync(buffer, offset, count) : 0;
 
-        public static int TryReadByte(this Stream stream) => stream.CanRead ? stream.ReadByte() : 0;
-
         public static void TryWrite(this Stream stream, byte[] buffer, int offset, int count)
         {
             if (stream.CanWrite) stream.Write(buffer, offset, count);
@@ -25,11 +23,6 @@ namespace Zaabee.Extensions
         public static async Task TryWriteAsync(this Stream stream, byte[] buffer, int offset, int count)
         {
             if (stream.CanWrite) await stream.WriteAsync(buffer, offset, count);
-        }
-
-        public static void TryWriteByte(this Stream stream, byte value)
-        {
-            if (stream.CanWrite) stream.WriteByte(value);
         }
 
         public static void TrySetReadTimeout(this Stream stream, int timeout)
@@ -45,6 +38,13 @@ namespace Zaabee.Extensions
         public static void TrySetWriteTimeout(this Stream stream, TimeSpan timeout)
         {
             if (stream.CanTimeout) stream.WriteTimeout = timeout.Milliseconds;
+        }
+
+        public static int TryReadByte(this Stream stream) => stream.CanRead ? stream.ReadByte() : 0;
+
+        public static void TryWriteByte(this Stream stream, byte value)
+        {
+            if (stream.CanWrite) stream.WriteByte(value);
         }
     }
 }

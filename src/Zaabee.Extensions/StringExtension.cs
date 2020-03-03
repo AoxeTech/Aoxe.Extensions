@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Zaabee.Extensions.Commons;
 
 namespace Zaabee.Extensions
 {
@@ -60,7 +61,7 @@ namespace Zaabee.Extensions
         public static float ParseFloat(this string s) => float.Parse(s);
 
         public static double ParseDouble(this string s) => double.Parse(s);
-
+        
         public static decimal ParseDecimal(this string s) => decimal.Parse(s);
 
         public static bool ParseBool(this string s) => bool.Parse(s);
@@ -113,20 +114,16 @@ namespace Zaabee.Extensions
 
         #region Base64
 
-        public static string ToBase64(this string s) => s.ToBase64String();
-
-        public static string FromBase64(this string s) => s.DecodeBase64ToString();
-
         public static string ToBase64String(this string s, Encoding encoding = null) =>
             Convert.ToBase64String(s.ToBytes(encoding));
 
         public static byte[] ToBase64Bytes(this string s, Encoding encoding = null) =>
             s.ToBase64String(encoding).ToBytes(encoding);
 
-        public static byte[] DecodeBase64ToBytes(this string s) =>
+        public static byte[] FromBase64ToBytes(this string s) =>
             Convert.FromBase64String(s);
 
-        public static string DecodeBase64ToString(this string s, Encoding encoding = null) =>
+        public static string FromBase64ToString(this string s, Encoding encoding = null) =>
             Convert.FromBase64String(s).GetString(encoding);
 
         #endregion
@@ -135,6 +132,60 @@ namespace Zaabee.Extensions
             new string(source.Where(char.IsLetterOrDigit).ToArray());
 
         public static string TryReplace(this string str, string oldValue, string newValue) =>
-            string.IsNullOrWhiteSpace(str) || string.IsNullOrEmpty(oldValue) ? str : str.Replace(oldValue, newValue);
+            string.IsNullOrEmpty(str) || string.IsNullOrEmpty(oldValue) ? str : str.Replace(oldValue, newValue);
+
+        public static int ToInt(this string value, NumerationSystem numerationSystem) =>
+            value.ToInt((int) numerationSystem);
+        
+        public static long ToLong(this string value, NumerationSystem numerationSystem) =>
+            value.ToLong((int) numerationSystem);
+        
+        public static int ToInt(this string value, int fromBase)
+        {
+            if (value.IsNullOrWhiteSpace()) return 0;
+
+            var isMinus = false;
+            if (value[0] is '-')
+            {
+                isMinus = true;
+                value = new string(value.Skip(1).ToArray());
+            }
+
+            if (value.Any(c => !char.IsLetterOrDigit(c)))
+                throw new ArgumentException("The string can only contain letter or digit.", nameof(value));
+
+            if (fromBase <= 36) value = value.ToLower();
+
+            var result = value
+                .Select((t, i) => Consts.LetterAndDigit.IndexOf(t) * (int) Math.Pow(fromBase, value.Length - i - 1))
+                .Sum();
+
+            result = isMinus ? 0 - result : result;
+            return result;
+        }
+
+        public static long ToLong(this string value, int fromBase)
+        {
+            if (value.IsNullOrWhiteSpace()) return 0L;
+
+            var isMinus = false;
+            if (value[0] is '-')
+            {
+                isMinus = true;
+                value = new string(value.Skip(1).ToArray());
+            }
+
+            if (value.Any(c => !char.IsLetterOrDigit(c)))
+                throw new ArgumentException("The string can only contain letter or digit.", nameof(value));
+
+            if (fromBase <= 36) value = value.ToLower();
+
+            var result = value
+                .Select((t, i) => Consts.LetterAndDigit.IndexOf(t) * (long) Math.Pow(fromBase, value.Length - i - 1))
+                .Sum();
+
+            result = isMinus ? 0 - result : result;
+            return result;
+        }
     }
 }

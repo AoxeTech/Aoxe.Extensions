@@ -6,7 +6,7 @@ namespace Zaabee.Extensions
     {
         public static Exception GetInmostException(this Exception ex)
         {
-            if (ex.InnerException == null) return ex;
+            if (ex.InnerException is null) return ex;
             var inmostException = ex.InnerException;
             while (inmostException.InnerException != null)
                 inmostException = inmostException.InnerException;

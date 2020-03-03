@@ -5,23 +5,19 @@ namespace Zaabee.Extensions
 {
     public static class BytesExtension
     {
-        public static string Utf8ToString(this byte[] bytes) => bytes.GetString(Encoding.UTF8);
+        public static string GetStringByUtf8(this byte[] bytes) => bytes.GetString(Encoding.UTF8);
 
-        public static string AsciiToString(this byte[] bytes) => bytes.GetString(Encoding.ASCII);
+        public static string GetStringByAscii(this byte[] bytes) => bytes.GetString(Encoding.ASCII);
 
-        public static string BigEndianUnicodeToString(this byte[] bytes) => bytes.GetString(Encoding.BigEndianUnicode);
+        public static string GetStringByBigEndianUnicode(this byte[] bytes) => bytes.GetString(Encoding.BigEndianUnicode);
 
-        public static string DefaultToString(this byte[] bytes) => bytes.GetString(Encoding.Default);
+        public static string GetStringByDefault(this byte[] bytes) => bytes.GetString(Encoding.Default);
 
-        public static string Utf32ToString(this byte[] bytes) => bytes.GetString(Encoding.UTF32);
+        public static string GetStringByUtf32(this byte[] bytes) => bytes.GetString(Encoding.UTF32);
 
-        public static string Utf7ToString(this byte[] bytes) => bytes.GetString(Encoding.UTF7);
+        public static string GetStringByUtf7(this byte[] bytes) => bytes.GetString(Encoding.UTF7);
 
-        public static string UnicodeToString(this byte[] bytes) => bytes.GetString(Encoding.Unicode);
-
-        public static byte[] ToBase64(this byte[] bytes) => bytes.ToBase64Bytes();
-
-        public static byte[] FromBase64(this byte[] bytes) => bytes.DecodeBase64ToBytes();
+        public static string GetStringByUnicode(this byte[] bytes) => bytes.GetString(Encoding.Unicode);
 
         public static string ToBase64String(this byte[] bytes) => Convert.ToBase64String(bytes);
 
