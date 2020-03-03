@@ -7,13 +7,13 @@ namespace Zaabee.Extensions
     public static class StreamExtension
     {
         public static long TrySeek(this Stream stream, long offset, SeekOrigin seekOrigin) =>
-            stream.CanSeek ? stream.Seek(offset, seekOrigin) : 0L;
+            stream.CanSeek ? stream.Seek(offset, seekOrigin) : default;
 
         public static int TryRead(this Stream stream, byte[] buffer, int offset, int count) =>
-            stream.CanRead ? stream.Read(buffer, offset, count) : 0;
+            stream.CanRead ? stream.Read(buffer, offset, count) : default;
 
         public static async Task<int> TryReadAsync(this Stream stream, byte[] buffer, int offset, int count) =>
-            stream.CanRead ? await stream.ReadAsync(buffer, offset, count) : 0;
+            stream.CanRead ? await stream.ReadAsync(buffer, offset, count) : default;
 
         public static void TryWrite(this Stream stream, byte[] buffer, int offset, int count)
         {
@@ -40,7 +40,7 @@ namespace Zaabee.Extensions
             if (stream.CanTimeout) stream.WriteTimeout = timeout.Milliseconds;
         }
 
-        public static int TryReadByte(this Stream stream) => stream.CanRead ? stream.ReadByte() : 0;
+        public static int TryReadByte(this Stream stream) => stream.CanRead ? stream.ReadByte() : default;
 
         public static void TryWriteByte(this Stream stream, byte value)
         {
