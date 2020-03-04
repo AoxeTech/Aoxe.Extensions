@@ -15,36 +15,42 @@ namespace Zaabee.Extensions
         public static async Task<int> TryReadAsync(this Stream stream, byte[] buffer, int offset, int count) =>
             stream.CanRead ? await stream.ReadAsync(buffer, offset, count) : default;
 
-        public static void TryWrite(this Stream stream, byte[] buffer, int offset, int count)
-        {
-            if (stream.CanWrite) stream.Write(buffer, offset, count);
-        }
-
-        public static async Task TryWriteAsync(this Stream stream, byte[] buffer, int offset, int count)
-        {
-            if (stream.CanWrite) await stream.WriteAsync(buffer, offset, count);
-        }
-
-        public static void TrySetReadTimeout(this Stream stream, int timeout)
-        {
-            if (stream.CanTimeout) stream.ReadTimeout = timeout;
-        }
-
-        public static void TrySetReadTimeout(this Stream stream, TimeSpan timeout)
-        {
-            if (stream.CanTimeout) stream.ReadTimeout = timeout.Milliseconds;
-        }
-
-        public static void TrySetWriteTimeout(this Stream stream, TimeSpan timeout)
-        {
-            if (stream.CanTimeout) stream.WriteTimeout = timeout.Milliseconds;
-        }
-
         public static int TryReadByte(this Stream stream) => stream.CanRead ? stream.ReadByte() : default;
 
-        public static void TryWriteByte(this Stream stream, byte value)
+        public static bool TryWrite(this Stream stream, byte[] buffer, int offset, int count)
+        {
+            if (stream.CanWrite) stream.Write(buffer, offset, count);
+            return stream.CanWrite;
+        }
+
+        public static async Task<bool> TryWriteAsync(this Stream stream, byte[] buffer, int offset, int count)
+        {
+            if (stream.CanWrite) await stream.WriteAsync(buffer, offset, count);
+            return stream.CanWrite;
+        }
+
+        public static bool TryWriteByte(this Stream stream, byte value)
         {
             if (stream.CanWrite) stream.WriteByte(value);
+            return stream.CanWrite;
         }
+
+        public static bool TrySetReadTimeout(this Stream stream, int milliseconds)
+        {
+            if (stream.CanTimeout) stream.ReadTimeout = milliseconds;
+            return stream.CanTimeout;
+        }
+
+        public static bool TrySetReadTimeout(this Stream stream, TimeSpan timeout) =>
+            stream.TrySetReadTimeout(timeout.Milliseconds);
+
+        public static bool TrySetWriteTimeout(this Stream stream, int milliseconds)
+        {
+            if (stream.CanTimeout) stream.WriteTimeout = milliseconds;
+            return stream.CanTimeout;
+        }
+
+        public static bool TrySetWriteTimeout(this Stream stream, TimeSpan timeout) =>
+            stream.TrySetWriteTimeout(timeout.Milliseconds);
     }
 }
