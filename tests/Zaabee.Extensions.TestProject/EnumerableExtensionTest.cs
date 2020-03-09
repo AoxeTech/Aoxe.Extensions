@@ -31,6 +31,7 @@ namespace Zaabee.Extensions.TestProject
             var enumerable = testModels.AsEnumerable();
             enumerable.ForEach(p => p.Name = "Bob");
             Assert.True(enumerable.All(p => p.Name == "Bob"));
+            enumerable.ForEach(null);
             IEnumerable<TestModel> nullEnumerable = null;
             Assert.Throws<ArgumentNullException>(() => nullEnumerable.ForEach(p => p.Name = "Bob"));
         }
@@ -51,6 +52,7 @@ namespace Zaabee.Extensions.TestProject
                     .ForEachLazy(p => p.Birthday = new DateTime(2001, 1, 1))
                     .ToList();
             Assert.True(result.All(p => p.Name == "Bob" && p.Birthday == new DateTime(2001, 1, 1)));
+            enumerable.ForEachLazy(null);
             IEnumerable<TestModel> nullEnumerable = null;
             Assert.Throws<ArgumentNullException>(() => nullEnumerable.ForEachLazy(p => p.Name = "Bob"));
         }
