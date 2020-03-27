@@ -8,8 +8,10 @@ namespace Zaabee.Extensions.TestProject
         [Fact]
         public void IfThrowTest()
         {
-            false.IfThrow(new ArgumentException());
-            Assert.Throws<ArgumentException>(() => true.IfThrow(new ArgumentException()));
+            true.IfFalseThenThrow(new ArgumentException());
+            false.IfTrueThenThrow(new ArgumentException());
+            Assert.Throws<ArgumentException>(() => true.IfTrueThenThrow(new ArgumentException()));
+            Assert.Throws<ArgumentException>(() => false.IfFalseThenThrow(new ArgumentException()));
         }
 
         [Fact]

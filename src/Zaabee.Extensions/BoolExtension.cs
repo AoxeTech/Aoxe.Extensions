@@ -4,9 +4,13 @@ namespace Zaabee.Extensions
 {
     public static class BoolExtension
     {
-        public static void IfThrow(this bool b, Exception exception)
+        public static void IfTrueThenThrow(this bool b, Exception exception)
         {
             if (b) throw exception;
+        }
+        public static void IfFalseThenThrow(this bool b, Exception exception)
+        {
+            if (!b) throw exception;
         }
 
         public static void IfTrue(this bool b, Action action)
