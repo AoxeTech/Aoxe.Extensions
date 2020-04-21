@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
+using Zaabee.Extensions.TestProject.Commons;
 
 namespace Zaabee.Extensions.TestProject
 {
@@ -81,62 +82,31 @@ namespace Zaabee.Extensions.TestProject
             Assert.Equal(timeSpan.Milliseconds, stream.WriteTimeout);
         }
 
+        [Fact]
+        public void ReadToEndTest()
+        {
+            var ms = new MemoryStream();
+            var msBytes = new byte[1024];
+            for (var i = 0; i < msBytes.Length; i++) msBytes[i] = (byte) (i % (byte.MaxValue + 1));
+            for (var i = 0; i < msBytes.Length; i++) ms.TryWriteByte(msBytes[i]);
+            Assert.Equal(0, ms.TrySeek(0, SeekOrigin.Begin));
+            var msResult = ms.ReadToEnd();
+            Assert.True(BytesEqual(msBytes, msResult));
+
+            var ns = new FakeNetworkStream(new MemoryStream());
+            var nsBytes = new byte[1024];
+            for (var i = 0; i < nsBytes.Length; i++) nsBytes[i] = (byte) (i % (byte.MaxValue + 1));
+            for (var i = 0; i < nsBytes.Length; i++) ns.TryWriteByte(nsBytes[i]);
+            Assert.Equal(0, ns.TrySeek(0, SeekOrigin.Begin));
+            var nsResult = ns.ReadToEnd();
+            Assert.True(BytesEqual(nsBytes, nsResult));
+        }
+
         private static bool BytesEqual(byte[] first, byte[] second)
         {
             if (first == null || second == null) return false;
             if (first.Length != second.Length) return false;
             return !first.Where((t, i) => t != second[i]).Any();
         }
-    }
-
-    internal class FakeNetworkStream : Stream
-    {
-        private Stream Inner { get; }
-        private int Threshold { get; }
-
-        public FakeNetworkStream(Stream inner, int threshold = 1)
-        {
-            Inner = inner;
-            Threshold = threshold;
-        }
-
-        public override bool CanRead => Inner.CanRead;
-        public override bool CanSeek => Inner.CanSeek;
-        public override bool CanWrite => Inner.CanWrite;
-        public override long Length => Inner.Length;
-
-        public override long Position
-        {
-            get => Inner.Position;
-            set => Inner.Position = value;
-        }
-
-        public override void Flush() => Inner.Flush();
-
-        public override long Seek(long offset, SeekOrigin origin)
-            => Inner.Seek(offset, origin);
-
-        public override void SetLength(long value)
-            => Inner.SetLength(value);
-
-        public override void Write(byte[] buffer, int offset, int count)
-            => Inner.Write(buffer, offset, count);
-
-        public override int Read(byte[] buffer, int offset, int count)
-        {
-            if (count > Threshold)
-                count = Threshold;
-            return Inner.Read(buffer, offset, count);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            Inner?.Dispose();
-        }
-
-        public override bool CanTimeout => true;
-
-        public override int WriteTimeout { get; set; }
-        public override int ReadTimeout { get; set; }
     }
 }

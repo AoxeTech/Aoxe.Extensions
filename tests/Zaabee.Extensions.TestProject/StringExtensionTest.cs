@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using Xunit;
+using Zaabee.Extensions.Commons;
 
 namespace Zaabee.Extensions.TestProject
 {
@@ -370,6 +371,54 @@ namespace Zaabee.Extensions.TestProject
         [InlineData("     ", " ", "", "")]
         public void TryReplaceTest(string str, string first, string second, string result) =>
             Assert.Equal(str.TryReplace(first, second), result);
+
+        [Theory]
+        [InlineData(int.MaxValue, NumerationSystem.Binary)]
+        [InlineData(int.MaxValue, NumerationSystem.Decimalism)]
+        [InlineData(int.MaxValue, NumerationSystem.Duotricemary)]
+        [InlineData(int.MaxValue, NumerationSystem.Hexadecimal)]
+        [InlineData(int.MaxValue, NumerationSystem.Octal)]
+        [InlineData(int.MaxValue, NumerationSystem.SixtyTwoAry)]
+        [InlineData(int.MaxValue, NumerationSystem.ThirtySixAry)]
+        [InlineData(int.MinValue + 1, NumerationSystem.Binary)]
+        [InlineData(int.MinValue + 1, NumerationSystem.Decimalism)]
+        [InlineData(int.MinValue + 1, NumerationSystem.Duotricemary)]
+        [InlineData(int.MinValue + 1, NumerationSystem.Hexadecimal)]
+        [InlineData(int.MinValue + 1, NumerationSystem.Octal)]
+        [InlineData(int.MinValue + 1, NumerationSystem.SixtyTwoAry)]
+        [InlineData(int.MinValue + 1, NumerationSystem.ThirtySixAry)]
+        public void ToIntTest(int value, NumerationSystem numerationSystem)
+        {
+            var str = value.ToString(numerationSystem);
+            var result = str.ToInt(numerationSystem);
+            Assert.Equal(value, result);
+            Assert.Equal(0,"".ToInt(numerationSystem));
+            Assert.Throws<ArgumentException>(()=>"!@#".ToInt(numerationSystem));
+        }
+
+        [Theory]
+        [InlineData(long.MaxValue, NumerationSystem.Binary)]
+        [InlineData(long.MaxValue, NumerationSystem.Decimalism)]
+        [InlineData(long.MaxValue, NumerationSystem.Duotricemary)]
+        [InlineData(long.MaxValue, NumerationSystem.Hexadecimal)]
+        [InlineData(long.MaxValue, NumerationSystem.Octal)]
+        [InlineData(long.MaxValue, NumerationSystem.SixtyTwoAry)]
+        [InlineData(long.MaxValue, NumerationSystem.ThirtySixAry)]
+        [InlineData(long.MinValue + 1, NumerationSystem.Binary)]
+        [InlineData(long.MinValue + 1, NumerationSystem.Decimalism)]
+        [InlineData(long.MinValue + 1, NumerationSystem.Duotricemary)]
+        [InlineData(long.MinValue + 1, NumerationSystem.Hexadecimal)]
+        [InlineData(long.MinValue + 1, NumerationSystem.Octal)]
+        [InlineData(long.MinValue + 1, NumerationSystem.SixtyTwoAry)]
+        [InlineData(long.MinValue + 1, NumerationSystem.ThirtySixAry)]
+        public void ToLongTest(long value, NumerationSystem numerationSystem)
+        {
+            var str = value.ToString(numerationSystem);
+            var result = str.ToLong(numerationSystem);
+            Assert.Equal(value, result);
+            Assert.Equal(0,"".ToLong(numerationSystem));
+            Assert.Throws<ArgumentException>(()=>"!@#".ToLong(numerationSystem));
+        }
 
         private static bool BytesEqual(byte[] first, byte[] second)
         {
