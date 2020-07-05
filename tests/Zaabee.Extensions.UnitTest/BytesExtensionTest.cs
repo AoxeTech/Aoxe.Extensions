@@ -1,7 +1,7 @@
 using System.Text;
 using Xunit;
 
-namespace Zaabee.Extensions.TestProject
+namespace Zaabee.Extensions.UnitTest
 {
     public class BytesExtensionTest
     {
@@ -66,19 +66,30 @@ namespace Zaabee.Extensions.TestProject
         {
             const string str = "Alice";
             var bytes = str.ToBytes(Encoding.UTF8);
-            
+
             var bytesToBase64String = bytes.ToBase64String();
             var stringToBase64String = str.ToBase64String();
             Assert.Equal(bytesToBase64String, stringToBase64String);
-            
+
             var bytesToBase64Bytes = bytes.ToBase64Bytes();
             var stringToBase64Bytes = str.ToBase64Bytes();
             Assert.Equal(bytesToBase64Bytes.Length, stringToBase64Bytes.Length);
             Assert.Equal(bytesToBase64Bytes.GetStringByUtf8(), stringToBase64Bytes.GetStringByUtf8());
-            
+
             var bytesDecodeByBytes = bytesToBase64Bytes.DecodeBase64ToBytes();
             var stringDecodeByBytes = bytesToBase64Bytes.DecodeBase64ToString();
             Assert.Equal(bytesDecodeByBytes.GetStringByUtf8(), stringDecodeByBytes);
+        }
+
+        [Fact]
+        public void IsNullOrEmptyTest()
+        {
+            byte[] bytes = null;
+            Assert.True(bytes.IsNullOrEmpty());
+            bytes = new byte[0];
+            Assert.True(bytes.IsNullOrEmpty());
+            bytes = new byte[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
+            Assert.False(bytes.IsNullOrEmpty());
         }
     }
 }

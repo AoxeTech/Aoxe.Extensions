@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace Zaabee.Extensions.TestProject
+namespace Zaabee.Extensions.UnitTest
 {
     public class NullableExtensionTest
     {
@@ -9,8 +9,12 @@ namespace Zaabee.Extensions.TestProject
         {
             int? i0 = null;
             int? i1 = 1;
+            object i2 = null;
+            var i3 = new object();
             Assert.True(i0.IsNull());
             Assert.False(i1.IsNull());
+            Assert.True(i2.IsNull());
+            Assert.False(i3.IsNull());
         }
 
         [Fact]
@@ -18,8 +22,12 @@ namespace Zaabee.Extensions.TestProject
         {
             int? i0 = null;
             int? i1 = 1;
+            object i2 = null;
+            var i3 = new object();
             Assert.False(i0.IsNotNull());
             Assert.True(i1.IsNotNull());
+            Assert.False(i2.IsNotNull());
+            Assert.True(i3.IsNotNull());
         }
 
         [Fact]
@@ -27,8 +35,12 @@ namespace Zaabee.Extensions.TestProject
         {
             int? i0 = null;
             int? i1 = 0;
+            object i2 = null;
+            var i3 = new object();
             Assert.True(i0.IsNullOrDefault());
             Assert.False(i1.IsNullOrDefault());
+            Assert.True(i2.IsNullOrDefault());
+            Assert.False(i3.IsNullOrDefault());
         }
 
         [Fact]

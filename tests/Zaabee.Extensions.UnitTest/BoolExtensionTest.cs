@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace Zaabee.Extensions.TestProject
+namespace Zaabee.Extensions.UnitTest
 {
     public class BoolExtensionTest
     {

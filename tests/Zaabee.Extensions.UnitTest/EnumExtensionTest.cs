@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using Xunit;
 
-namespace Zaabee.Extensions.TestProject
+namespace Zaabee.Extensions.UnitTest
 {
     public class EnumExtensionTest
     {

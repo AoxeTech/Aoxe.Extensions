@@ -21,7 +21,7 @@ namespace Zaabee.Extensions
             });
 
         public static string GetDescriptions(this Enum enumerationValue, string separator = ",") =>
-            DescriptionsCache.GetOrAdd(new Tuple<Enum, string>(enumerationValue, separator), key =>
+            DescriptionsCache.GetOrAdd(new Tuple<Enum, string>(enumerationValue, separator), _ =>
             {
                 var names = enumerationValue.ToString().Split(',');
                 var res = new string[names.Length];

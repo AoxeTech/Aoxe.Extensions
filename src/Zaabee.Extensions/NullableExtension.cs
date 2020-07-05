@@ -8,6 +8,12 @@ namespace Zaabee.Extensions
 
         public static bool IsNullOrDefault<T>(this T? param) where T : struct => param is null || param.Equals(default);
 
+        public static bool IsNull<T>(this T param) where T : class => param is null;
+
+        public static bool IsNotNull<T>(this T param) where T : class => param != null;
+
+        public static bool IsNullOrDefault<T>(this T param) where T : class => param is null || param.Equals(default);
+
         public static T TryGetValue<T>(this T? param) where T : struct => param ?? default;
     }
 }

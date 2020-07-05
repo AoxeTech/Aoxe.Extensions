@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace Zaabee.Extensions.TestProject.Commons
+namespace Zaabee.Extensions.UnitTest.Commons
 {
 
     internal class FakeNetworkStream : Stream

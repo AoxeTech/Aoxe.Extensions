@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9A0A4DE6
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.Extensions", "src\Zaabee.Extensions\Zaabee.Extensions.csproj", "{9E052E0D-B088-44A8-8964-F4430E11F8BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.Extensions.TestProject", "tests\Zaabee.Extensions.TestProject\Zaabee.Extensions.TestProject.csproj", "{9549F3E6-4222-43D6-9ECD-78A52835DB13}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.Extensions.UnitTest", "tests\Zaabee.Extensions.UnitTest\Zaabee.Extensions.UnitTest.csproj", "{9549F3E6-4222-43D6-9ECD-78A52835DB13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

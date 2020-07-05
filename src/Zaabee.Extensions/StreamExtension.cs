@@ -55,7 +55,12 @@ namespace Zaabee.Extensions
 
         public static byte[] ReadToEnd(this Stream stream)
         {
-            if (stream is MemoryStream ms) return ms.ToArray();
+            switch (stream)
+            {
+                case null: return new byte[0];
+                case MemoryStream ms: return ms.ToArray();
+            }
+
             using var memoryStream = new MemoryStream();
             stream.CopyTo(memoryStream);
             return memoryStream.ToArray();

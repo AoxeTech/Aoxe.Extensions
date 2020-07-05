@@ -1,7 +1,7 @@
 using System.IO;
 using Xunit;
 
-namespace Zaabee.Extensions.TestProject
+namespace Zaabee.Extensions.UnitTest
 {
     public class AsyncExtensionTest
     {

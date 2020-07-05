@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel;
 
-namespace Zaabee.Extensions.TestProject
+namespace Zaabee.Extensions.UnitTest
 {
 
     [Flags]

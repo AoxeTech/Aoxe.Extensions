@@ -3,9 +3,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
-using Zaabee.Extensions.TestProject.Commons;
+using Zaabee.Extensions.UnitTest.Commons;
 
-namespace Zaabee.Extensions.TestProject
+namespace Zaabee.Extensions.UnitTest
 {
     public class StreamExtensionTest
     {
@@ -85,7 +85,11 @@ namespace Zaabee.Extensions.TestProject
         [Fact]
         public void ReadToEndTest()
         {
-            var ms = new MemoryStream();
+            MemoryStream ms = null;
+            Assert.Empty(ms.ReadToEnd());
+            ms = new MemoryStream();
+            Assert.Empty(ms.ReadToEnd());
+            
             var msBytes = new byte[1024];
             for (var i = 0; i < msBytes.Length; i++) msBytes[i] = (byte) (i % (byte.MaxValue + 1));
             for (var i = 0; i < msBytes.Length; i++) ms.TryWriteByte(msBytes[i]);
@@ -104,8 +108,7 @@ namespace Zaabee.Extensions.TestProject
 
         private static bool BytesEqual(byte[] first, byte[] second)
         {
-            if (first == null || second == null) return false;
-            if (first.Length != second.Length) return false;
+            if (first.IsNullOrEmpty() || second.IsNullOrEmpty()) return false;
             return !first.Where((t, i) => t != second[i]).Any();
         }
     }

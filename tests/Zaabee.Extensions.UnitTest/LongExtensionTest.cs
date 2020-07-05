@@ -1,7 +1,7 @@
 using Xunit;
 using Zaabee.Extensions.Commons;
 
-namespace Zaabee.Extensions.TestProject
+namespace Zaabee.Extensions.UnitTest
 {
     public class LongExtensionTest
     {
