@@ -49,12 +49,23 @@ namespace Zaabee.Extensions.UnitTest
             };
             var enumerable = testModels.AsEnumerable();
             var result = enumerable.ForEachLazy(p => p.Name = "Bob")
-                    .ForEachLazy(p => p.Birthday = new DateTime(2001, 1, 1))
-                    .ToList();
+                .ForEachLazy(p => p.Birthday = new DateTime(2001, 1, 1))
+                .ToList();
             Assert.True(result.All(p => p.Name == "Bob" && p.Birthday == new DateTime(2001, 1, 1)));
             enumerable.ForEachLazy(null);
             IEnumerable<TestModel> nullEnumerable = null;
             Assert.Throws<ArgumentNullException>(() => nullEnumerable.ForEachLazy(p => p.Name = "Bob"));
+        }
+
+        [Fact]
+        public void IsNullOrEmptyTest()
+        {
+            IList<TestModel> testModels = null;
+            Assert.True(testModels.IsNullOrEmpty());
+            testModels = new List<TestModel>();
+            Assert.True(testModels.IsNullOrEmpty());
+            testModels.Add(new TestModel());
+            Assert.False(testModels.IsNullOrEmpty());
         }
     }
 }

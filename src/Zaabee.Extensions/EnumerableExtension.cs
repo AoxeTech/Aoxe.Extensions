@@ -29,5 +29,7 @@ namespace Zaabee.Extensions
                 return i;
             });
         }
+
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> src) => src is null || src.Count() is 0;
     }
 }

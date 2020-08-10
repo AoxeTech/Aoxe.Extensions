@@ -80,16 +80,5 @@ namespace Zaabee.Extensions.UnitTest
             var stringDecodeByBytes = bytesToBase64Bytes.DecodeBase64ToString();
             Assert.Equal(bytesDecodeByBytes.GetStringByUtf8(), stringDecodeByBytes);
         }
-
-        [Fact]
-        public void IsNullOrEmptyTest()
-        {
-            byte[] bytes = null;
-            Assert.True(bytes.IsNullOrEmpty());
-            bytes = new byte[0];
-            Assert.True(bytes.IsNullOrEmpty());
-            bytes = new byte[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
-            Assert.False(bytes.IsNullOrEmpty());
-        }
     }
 }

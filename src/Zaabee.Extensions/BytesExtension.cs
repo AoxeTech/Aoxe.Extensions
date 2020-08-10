@@ -33,7 +33,5 @@ namespace Zaabee.Extensions
         public static string GetString(this byte[] bytes, Encoding encoding = null) =>
             bytes is null ? throw new ArgumentNullException(nameof(bytes)) :
             encoding is null ? Encoding.UTF8.GetString(bytes) : encoding.GetString(bytes);
-
-        public static bool IsNullOrEmpty(this byte[] bytes) => bytes is null || bytes.Length is 0;
     }
 }
