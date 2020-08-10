@@ -29,12 +29,5 @@ namespace Zaabee.Extensions
                 TypeCode.Single => true,
                 _ => false
             };
-
-        internal class TypeSupport
-        {
-            public Type Type { get; set; }
-            public object DefaultValue { get; set; }
-            public bool IsNumericType { get; set; }
-        }
     }
 }
