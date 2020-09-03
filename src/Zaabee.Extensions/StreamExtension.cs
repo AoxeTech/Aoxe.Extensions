@@ -65,5 +65,18 @@ namespace Zaabee.Extensions
             stream.CopyTo(memoryStream);
             return memoryStream.ToArray();
         }
+
+        public static async Task<byte[]> ReadToEndAsync(this Stream stream)
+        {
+            switch (stream)
+            {
+                case null: return new byte[0];
+                case MemoryStream ms: return ms.ToArray();
+            }
+
+            using var memoryStream = new MemoryStream();
+            await stream.CopyToAsync(memoryStream);
+            return memoryStream.ToArray();
+        }
     }
 }

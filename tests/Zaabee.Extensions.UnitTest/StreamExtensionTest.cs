@@ -106,6 +106,30 @@ namespace Zaabee.Extensions.UnitTest
             Assert.True(BytesEqual(nsBytes, nsResult));
         }
 
+        [Fact]
+        public async Task ReadToEndTestAsync()
+        {
+            MemoryStream ms = null;
+            Assert.Empty(await ms.ReadToEndAsync());
+            ms = new MemoryStream();
+            Assert.Empty(await ms.ReadToEndAsync());
+            
+            var msBytes = new byte[1024];
+            for (var i = 0; i < msBytes.Length; i++) msBytes[i] = (byte) (i % (byte.MaxValue + 1));
+            for (var i = 0; i < msBytes.Length; i++) ms.TryWriteByte(msBytes[i]);
+            Assert.Equal(0, ms.TrySeek(0, SeekOrigin.Begin));
+            var msResult = await ms.ReadToEndAsync();
+            Assert.True(BytesEqual(msBytes, msResult));
+
+            var ns = new FakeNetworkStream(new MemoryStream());
+            var nsBytes = new byte[1024];
+            for (var i = 0; i < nsBytes.Length; i++) nsBytes[i] = (byte) (i % (byte.MaxValue + 1));
+            for (var i = 0; i < nsBytes.Length; i++) ns.TryWriteByte(nsBytes[i]);
+            Assert.Equal(0, ns.TrySeek(0, SeekOrigin.Begin));
+            var nsResult = await ns.ReadToEndAsync();
+            Assert.True(BytesEqual(nsBytes, nsResult));
+        }
+
         private static bool BytesEqual(byte[] first, byte[] second)
         {
             if (first.IsNullOrEmpty() || second.IsNullOrEmpty()) return false;
