@@ -10,6 +10,17 @@ namespace Zaabee.Extensions.UnitTest
     public class StreamExtensionTest
     {
         [Fact]
+        public void IsNullOrEmptyTest()
+        {
+            MemoryStream ms = null;
+            Assert.True(ms.IsNullOrEmpty());
+            ms = new MemoryStream();
+            Assert.True(ms.IsNullOrEmpty());
+            ms.Write(new[] {(byte) 0, (byte) 1});
+            Assert.False(ms.IsNullOrEmpty());
+        }
+
+        [Fact]
         public void TrySeekTest()
         {
             var ms = new MemoryStream();
