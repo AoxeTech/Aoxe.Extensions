@@ -105,7 +105,7 @@ namespace Zaabee.Extensions.UnitTest
         }
 
         [Fact]
-        public void CopyToTest()
+        public void WriteToTest()
         {
             const string str = "Alice";
             var bytes = str.ToBytes(Encoding.UTF8);
@@ -116,7 +116,7 @@ namespace Zaabee.Extensions.UnitTest
         }
 
         [Fact]
-        public async Task CopyToTestAsync()
+        public async Task WriteToTestAsync()
         {
             const string str = "Alice";
             var bytes = str.ToBytes(Encoding.UTF8);
