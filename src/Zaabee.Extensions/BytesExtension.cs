@@ -1,5 +1,7 @@
 using System;
+using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Zaabee.Extensions
 {
@@ -9,7 +11,8 @@ namespace Zaabee.Extensions
 
         public static string GetStringByAscii(this byte[] bytes) => bytes.GetString(Encoding.ASCII);
 
-        public static string GetStringByBigEndianUnicode(this byte[] bytes) => bytes.GetString(Encoding.BigEndianUnicode);
+        public static string GetStringByBigEndianUnicode(this byte[] bytes) =>
+            bytes.GetString(Encoding.BigEndianUnicode);
 
         public static string GetStringByDefault(this byte[] bytes) => bytes.GetString(Encoding.Default);
 
@@ -33,5 +36,25 @@ namespace Zaabee.Extensions
         public static string GetString(this byte[] bytes, Encoding encoding = null) =>
             bytes is null ? throw new ArgumentNullException(nameof(bytes)) :
             encoding is null ? Encoding.UTF8.GetString(bytes) : encoding.GetString(bytes);
+
+        public static MemoryStream ToStream(this byte[] bytes)
+        {
+            var ms = new MemoryStream();
+            bytes.WriteTo(ms);
+            return ms;
+        }
+
+        public static async Task<MemoryStream> ToStreamAsync(this byte[] bytes)
+        {
+            var ms = new MemoryStream();
+            await bytes.WriteToAsync(ms);
+            return ms;
+        }
+
+        public static void WriteTo(this byte[] bytes, Stream stream) =>
+            stream.Write(bytes, 0, bytes.Length);
+
+        public static Task WriteToAsync(this byte[] bytes, Stream stream) =>
+            stream.WriteAsync(bytes, 0, bytes.Length);
     }
 }

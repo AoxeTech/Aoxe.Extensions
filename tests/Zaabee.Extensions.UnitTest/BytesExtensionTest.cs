@@ -1,4 +1,7 @@
+using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Zaabee.Extensions.UnitTest
@@ -79,6 +82,55 @@ namespace Zaabee.Extensions.UnitTest
             var bytesDecodeByBytes = bytesToBase64Bytes.DecodeBase64ToBytes();
             var stringDecodeByBytes = bytesToBase64Bytes.DecodeBase64ToString();
             Assert.Equal(bytesDecodeByBytes.GetStringByUtf8(), stringDecodeByBytes);
+        }
+
+        [Fact]
+        public void ToStreamTest()
+        {
+            const string str = "Alice";
+            var bytes = str.ToBytes(Encoding.UTF8);
+            var ms = bytes.ToStream();
+            var result = ms.ReadToEnd();
+            Assert.True(Equal(bytes, result));
+        }
+
+        [Fact]
+        public async Task ToStreamTestAsync()
+        {
+            const string str = "Alice";
+            var bytes = str.ToBytes(Encoding.UTF8);
+            var ms = await bytes.ToStreamAsync();
+            var result = await ms.ReadToEndAsync();
+            Assert.True(Equal(bytes, result));
+        }
+
+        [Fact]
+        public void CopyToTest()
+        {
+            const string str = "Alice";
+            var bytes = str.ToBytes(Encoding.UTF8);
+            var ms = new MemoryStream();
+            bytes.WriteTo(ms);
+            var result = ms.ReadToEnd();
+            Assert.True(Equal(bytes, result));
+        }
+
+        [Fact]
+        public async Task CopyToTestAsync()
+        {
+            const string str = "Alice";
+            var bytes = str.ToBytes(Encoding.UTF8);
+            var ms = new MemoryStream();
+            await bytes.WriteToAsync(ms);
+            var result = await ms.ReadToEndAsync();
+            Assert.True(Equal(bytes, result));
+        }
+
+        private static bool Equal(byte[] first, byte[] second)
+        {
+            if (first is null || second is null) return false;
+            if (first.Length != second.Length) return false;
+            return !first.Where((t, i) => t != second[i]).Any();
         }
     }
 }
