@@ -41,6 +41,7 @@ namespace Zaabee.Extensions
         {
             var ms = new MemoryStream();
             bytes.WriteTo(ms);
+            ms.Seek(0, SeekOrigin.Begin);
             return ms;
         }
 
@@ -48,6 +49,7 @@ namespace Zaabee.Extensions
         {
             var ms = new MemoryStream();
             await bytes.WriteToAsync(ms);
+            ms.Seek(0, SeekOrigin.Begin);
             return ms;
         }
 
