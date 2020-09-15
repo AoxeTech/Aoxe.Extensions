@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Zaabee.Extensions
@@ -53,10 +54,21 @@ namespace Zaabee.Extensions
             return ms;
         }
 
+        public static async Task<MemoryStream> ToStreamAsync(this byte[] bytes, CancellationToken cancellationToken)
+        {
+            var ms = new MemoryStream();
+            await bytes.WriteToAsync(ms, cancellationToken);
+            ms.Seek(0, SeekOrigin.Begin);
+            return ms;
+        }
+
         public static void WriteTo(this byte[] bytes, Stream stream) =>
             stream.Write(bytes, 0, bytes.Length);
 
         public static Task WriteToAsync(this byte[] bytes, Stream stream) =>
             stream.WriteAsync(bytes, 0, bytes.Length);
+
+        public static Task WriteToAsync(this byte[] bytes, Stream stream, CancellationToken cancellationToken) =>
+            stream.WriteAsync(bytes, 0, bytes.Length, cancellationToken);
     }
 }

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -105,6 +106,16 @@ namespace Zaabee.Extensions.UnitTest
         }
 
         [Fact]
+        public async Task ToStreamTestWithCancellationTokenAsync()
+        {
+            const string str = "Alice";
+            var bytes = str.ToBytes(Encoding.UTF8);
+            var ms = await bytes.ToStreamAsync(CancellationToken.None);
+            var result = await ms.ReadToEndAsync(bytes.Length, CancellationToken.None);
+            Assert.True(Equal(bytes, result));
+        }
+
+        [Fact]
         public void WriteToTest()
         {
             const string str = "Alice";
@@ -123,6 +134,17 @@ namespace Zaabee.Extensions.UnitTest
             var ms = new MemoryStream();
             await bytes.WriteToAsync(ms);
             var result = await ms.ReadToEndAsync();
+            Assert.True(Equal(bytes, result));
+        }
+
+        [Fact]
+        public async Task WriteToTestWithCancellationTokenAsync()
+        {
+            const string str = "Alice";
+            var bytes = str.ToBytes(Encoding.UTF8);
+            var ms = new MemoryStream();
+            await bytes.WriteToAsync(ms, CancellationToken.None);
+            var result = await ms.ReadToEndAsync(bytes.Length, CancellationToken.None);
             Assert.True(Equal(bytes, result));
         }
 

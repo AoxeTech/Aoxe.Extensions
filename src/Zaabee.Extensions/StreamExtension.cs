@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Zaabee.Extensions
@@ -17,6 +18,10 @@ namespace Zaabee.Extensions
         public static Task<int> TryReadAsync(this Stream stream, byte[] buffer, int offset, int count) =>
             stream.CanRead ? stream.ReadAsync(buffer, offset, count) : default;
 
+        public static Task<int> TryReadAsync(this Stream stream, byte[] buffer, int offset, int count,
+            CancellationToken cancellationToken) =>
+            stream.CanRead ? stream.ReadAsync(buffer, offset, count, cancellationToken) : default;
+
         public static int TryReadByte(this Stream stream) => stream.CanRead ? stream.ReadByte() : default;
 
         public static bool TryWrite(this Stream stream, byte[] buffer, int offset, int count)
@@ -28,6 +33,13 @@ namespace Zaabee.Extensions
         public static Task<bool> TryWriteAsync(this Stream stream, byte[] buffer, int offset, int count)
         {
             if (stream.CanWrite) stream.WriteAsync(buffer, offset, count);
+            return Task.FromResult(stream.CanWrite);
+        }
+
+        public static Task<bool> TryWriteAsync(this Stream stream, byte[] buffer, int offset, int count,
+            CancellationToken cancellationToken)
+        {
+            if (stream.CanWrite) stream.WriteAsync(buffer, offset, count, cancellationToken);
             return Task.FromResult(stream.CanWrite);
         }
 
@@ -78,6 +90,33 @@ namespace Zaabee.Extensions
 
             using var memoryStream = new MemoryStream();
             await stream.CopyToAsync(memoryStream);
+            return memoryStream.ToArray();
+        }
+
+        public static async Task<byte[]> ReadToEndAsync(this Stream stream, int buffSize)
+        {
+            switch (stream)
+            {
+                case null: return new byte[0];
+                case MemoryStream ms: return ms.ToArray();
+            }
+
+            using var memoryStream = new MemoryStream();
+            await stream.CopyToAsync(memoryStream, buffSize);
+            return memoryStream.ToArray();
+        }
+
+        public static async Task<byte[]> ReadToEndAsync(this Stream stream, int buffSize,
+            CancellationToken cancellationToken)
+        {
+            switch (stream)
+            {
+                case null: return new byte[0];
+                case MemoryStream ms: return ms.ToArray();
+            }
+
+            using var memoryStream = new MemoryStream();
+            await stream.CopyToAsync(memoryStream, buffSize, cancellationToken);
             return memoryStream.ToArray();
         }
     }

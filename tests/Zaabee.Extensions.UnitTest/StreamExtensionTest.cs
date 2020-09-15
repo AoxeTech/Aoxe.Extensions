@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using Zaabee.Extensions.UnitTest.Commons;
@@ -59,6 +60,19 @@ namespace Zaabee.Extensions.UnitTest
         }
 
         [Fact]
+        public async Task TryReadWriteWithCancellationTokenAsyncTest()
+        {
+            var ms = new MemoryStream();
+            var bytes = new byte[1024];
+            var result = new byte[1024];
+            for (var i = 0; i < bytes.Length; i++) bytes[i] = (byte) (i % (byte.MaxValue + 1));
+            Assert.True(await ms.TryWriteAsync(bytes, 0, 1024, CancellationToken.None));
+            Assert.Equal(0, ms.TrySeek(0, SeekOrigin.Begin));
+            Assert.Equal(1024, await ms.TryReadAsync(result, 0, 1024, CancellationToken.None));
+            Assert.True(BytesEqual(bytes, result));
+        }
+
+        [Fact]
         public void TryWriteReadByteTest()
         {
             var ms = new MemoryStream();
@@ -100,7 +114,7 @@ namespace Zaabee.Extensions.UnitTest
             Assert.Empty(ms.ReadToEnd());
             ms = new MemoryStream();
             Assert.Empty(ms.ReadToEnd());
-            
+
             var msBytes = new byte[1024];
             for (var i = 0; i < msBytes.Length; i++) msBytes[i] = (byte) (i % (byte.MaxValue + 1));
             for (var i = 0; i < msBytes.Length; i++) ms.TryWriteByte(msBytes[i]);
@@ -124,7 +138,7 @@ namespace Zaabee.Extensions.UnitTest
             Assert.Empty(await ms.ReadToEndAsync());
             ms = new MemoryStream();
             Assert.Empty(await ms.ReadToEndAsync());
-            
+
             var msBytes = new byte[1024];
             for (var i = 0; i < msBytes.Length; i++) msBytes[i] = (byte) (i % (byte.MaxValue + 1));
             for (var i = 0; i < msBytes.Length; i++) ms.TryWriteByte(msBytes[i]);
@@ -138,6 +152,30 @@ namespace Zaabee.Extensions.UnitTest
             for (var i = 0; i < nsBytes.Length; i++) ns.TryWriteByte(nsBytes[i]);
             Assert.Equal(0, ns.TrySeek(0, SeekOrigin.Begin));
             var nsResult = await ns.ReadToEndAsync();
+            Assert.True(BytesEqual(nsBytes, nsResult));
+        }
+
+        [Fact]
+        public async Task ReadToEndWithCancellationTokenTestAsync()
+        {
+            MemoryStream ms = null;
+            Assert.Empty(await ms.ReadToEndAsync(0, CancellationToken.None));
+            ms = new MemoryStream();
+            Assert.Empty(await ms.ReadToEndAsync(0, CancellationToken.None));
+
+            var msBytes = new byte[1024];
+            for (var i = 0; i < msBytes.Length; i++) msBytes[i] = (byte) (i % (byte.MaxValue + 1));
+            for (var i = 0; i < msBytes.Length; i++) ms.TryWriteByte(msBytes[i]);
+            Assert.Equal(0, ms.TrySeek(0, SeekOrigin.Begin));
+            var msResult = await ms.ReadToEndAsync(msBytes.Length);
+            Assert.True(BytesEqual(msBytes, msResult));
+
+            var ns = new FakeNetworkStream(new MemoryStream());
+            var nsBytes = new byte[1024];
+            for (var i = 0; i < nsBytes.Length; i++) nsBytes[i] = (byte) (i % (byte.MaxValue + 1));
+            for (var i = 0; i < nsBytes.Length; i++) ns.TryWriteByte(nsBytes[i]);
+            Assert.Equal(0, ns.TrySeek(0, SeekOrigin.Begin));
+            var nsResult = await ns.ReadToEndAsync(nsBytes.Length, CancellationToken.None);
             Assert.True(BytesEqual(nsBytes, nsResult));
         }
 
