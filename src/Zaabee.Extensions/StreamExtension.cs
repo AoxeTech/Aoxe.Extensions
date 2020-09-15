@@ -93,7 +93,7 @@ namespace Zaabee.Extensions
             return memoryStream.ToArray();
         }
 
-        public static async Task<byte[]> ReadToEndAsync(this Stream stream, int buffSize)
+        public static async Task<byte[]> ReadToEndAsync(this Stream stream, int bufferSize)
         {
             switch (stream)
             {
@@ -102,11 +102,11 @@ namespace Zaabee.Extensions
             }
 
             using var memoryStream = new MemoryStream();
-            await stream.CopyToAsync(memoryStream, buffSize);
+            await stream.CopyToAsync(memoryStream, bufferSize);
             return memoryStream.ToArray();
         }
 
-        public static async Task<byte[]> ReadToEndAsync(this Stream stream, int buffSize,
+        public static async Task<byte[]> ReadToEndAsync(this Stream stream, int bufferSize,
             CancellationToken cancellationToken)
         {
             switch (stream)
@@ -116,7 +116,7 @@ namespace Zaabee.Extensions
             }
 
             using var memoryStream = new MemoryStream();
-            await stream.CopyToAsync(memoryStream, buffSize, cancellationToken);
+            await stream.CopyToAsync(memoryStream, bufferSize, cancellationToken);
             return memoryStream.ToArray();
         }
     }
