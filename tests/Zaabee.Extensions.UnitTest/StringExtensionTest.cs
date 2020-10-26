@@ -360,6 +360,29 @@ namespace Zaabee.Extensions.UnitTest
 
         #endregion
 
+        #region Format
+
+        [Theory]
+        [InlineData("{0:D3}", 2, "002")]
+        [InlineData("{0:G}", 2, "2")]
+        [InlineData("{0:N}", 250000, "250,000.00")]
+        [InlineData("{0:X000}", 12, "C")]
+        [InlineData("{0:000.000}", 12.2, "012.200")]
+        [InlineData("Hello {0}", "John", "Hello John")]
+        public void FormatTestWithOneArg(string format, object arg0, string result)
+        {
+            Assert.Equal(result, format.Format(arg0));
+        }
+
+        [Theory]
+        [InlineData("{0} {1}", "Hello", "John", "Hello John")]
+        public void FormatTestWithTwoArgs(string format, object arg0, object arg1, string result)
+        {
+            Assert.Equal(result, format.Format(arg0, arg1));
+        }
+
+        #endregion
+
         [Theory]
         [InlineData("123,3234.aada：asdhaslkd", "1233234aadaasdhaslkd")]
         public void GetLetterOrDigitTest(string first, string second) =>

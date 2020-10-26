@@ -36,10 +36,10 @@ namespace Zaabee.Extensions
                 return res.StringJoin(separator);
             });
 
-        private static string GetDescription(MemberInfo field)
-        {
-            var att = Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute), false);
-            return att is null ? field.Name : ((DescriptionAttribute) att).Description;
-        }
+        private static string GetDescription(MemberInfo field) =>
+            !(Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute), false)
+                is DescriptionAttribute att)
+                ? field.Name
+                : att.Description;
     }
 }

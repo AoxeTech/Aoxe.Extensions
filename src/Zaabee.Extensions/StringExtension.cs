@@ -124,9 +124,12 @@ namespace Zaabee.Extensions
             Convert.FromBase64String(s);
 
         public static string FromBase64ToString(this string s, Encoding encoding = null) =>
-            Convert.FromBase64String(s).GetString(encoding);
+            s.FromBase64ToBytes().GetString(encoding);
 
         #endregion
+
+        public static string Format(this string format, params object[] args) =>
+            string.Format(format, args);
 
         public static string GetLetterOrDigit(this string source) =>
             new string(source.Where(char.IsLetterOrDigit).ToArray());
@@ -142,7 +145,7 @@ namespace Zaabee.Extensions
         
         public static int ToInt(this string value, int fromBase)
         {
-            if (value.IsNullOrWhiteSpace()) return 0;
+            if (value.IsNullOrWhiteSpace()) return default;
 
             var isMinus = false;
             if (value[0] is '-')
@@ -166,7 +169,7 @@ namespace Zaabee.Extensions
 
         public static long ToLong(this string value, int fromBase)
         {
-            if (value.IsNullOrWhiteSpace()) return 0L;
+            if (value.IsNullOrWhiteSpace()) return default;
 
             var isMinus = false;
             if (value[0] is '-')

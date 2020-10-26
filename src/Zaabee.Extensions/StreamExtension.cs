@@ -71,39 +71,51 @@ namespace Zaabee.Extensions
         {
             switch (stream)
             {
-                case null: return new byte[0];
-                case MemoryStream ms: return ms.ToArray();
+                case null:
+                    return new byte[0];
+                case MemoryStream ms:
+                    return ms.ToArray();
+                default:
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        stream.CopyTo(memoryStream);
+                        return memoryStream.ToArray();
+                    }
             }
-
-            using var memoryStream = new MemoryStream();
-            stream.CopyTo(memoryStream);
-            return memoryStream.ToArray();
         }
 
         public static async Task<byte[]> ReadToEndAsync(this Stream stream)
         {
             switch (stream)
             {
-                case null: return new byte[0];
-                case MemoryStream ms: return ms.ToArray();
+                case null:
+                    return new byte[0];
+                case MemoryStream ms:
+                    return ms.ToArray();
+                default:
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await stream.CopyToAsync(memoryStream);
+                        return memoryStream.ToArray();
+                    }
             }
-
-            using var memoryStream = new MemoryStream();
-            await stream.CopyToAsync(memoryStream);
-            return memoryStream.ToArray();
         }
 
         public static async Task<byte[]> ReadToEndAsync(this Stream stream, int bufferSize)
         {
             switch (stream)
             {
-                case null: return new byte[0];
-                case MemoryStream ms: return ms.ToArray();
+                case null:
+                    return new byte[0];
+                case MemoryStream ms:
+                    return ms.ToArray();
+                default:
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await stream.CopyToAsync(memoryStream, bufferSize);
+                        return memoryStream.ToArray();
+                    }
             }
-
-            using var memoryStream = new MemoryStream();
-            await stream.CopyToAsync(memoryStream, bufferSize);
-            return memoryStream.ToArray();
         }
 
         public static async Task<byte[]> ReadToEndAsync(this Stream stream, int bufferSize,
@@ -111,13 +123,17 @@ namespace Zaabee.Extensions
         {
             switch (stream)
             {
-                case null: return new byte[0];
-                case MemoryStream ms: return ms.ToArray();
+                case null:
+                    return new byte[0];
+                case MemoryStream ms:
+                    return ms.ToArray();
+                default:
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await stream.CopyToAsync(memoryStream, bufferSize, cancellationToken);
+                        return memoryStream.ToArray();
+                    }
             }
-
-            using var memoryStream = new MemoryStream();
-            await stream.CopyToAsync(memoryStream, bufferSize, cancellationToken);
-            return memoryStream.ToArray();
         }
     }
 }

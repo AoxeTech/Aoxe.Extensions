@@ -26,7 +26,7 @@ namespace Zaabee.Extensions
         public static string ToBase64String(this byte[] bytes) => Convert.ToBase64String(bytes);
 
         public static byte[] ToBase64Bytes(this byte[] bytes, Encoding encoding = null) =>
-            Convert.ToBase64String(bytes).ToBytes(encoding);
+            bytes.ToBase64String().ToBytes(encoding);
 
         public static byte[] DecodeBase64ToBytes(this byte[] bytes, Encoding encoding = null) =>
             Convert.FromBase64String(bytes.GetString(encoding));
@@ -42,7 +42,7 @@ namespace Zaabee.Extensions
         {
             var ms = new MemoryStream();
             bytes.WriteTo(ms);
-            ms.Seek(0, SeekOrigin.Begin);
+            ms.TrySeek(0, SeekOrigin.Begin);
             return ms;
         }
 
@@ -50,7 +50,7 @@ namespace Zaabee.Extensions
         {
             var ms = new MemoryStream();
             await bytes.WriteToAsync(ms);
-            ms.Seek(0, SeekOrigin.Begin);
+            ms.TrySeek(0, SeekOrigin.Begin);
             return ms;
         }
 
@@ -58,7 +58,7 @@ namespace Zaabee.Extensions
         {
             var ms = new MemoryStream();
             await bytes.WriteToAsync(ms, cancellationToken);
-            ms.Seek(0, SeekOrigin.Begin);
+            ms.TrySeek(0, SeekOrigin.Begin);
             return ms;
         }
 
