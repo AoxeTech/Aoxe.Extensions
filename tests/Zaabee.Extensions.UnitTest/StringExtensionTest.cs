@@ -87,15 +87,6 @@ namespace Zaabee.Extensions.UnitTest
         [InlineData("Carol")]
         [InlineData("Dave")]
         [InlineData("Eve")]
-        public void ToUtf7BytesTest(string str) =>
-            Assert.True(BytesEqual(str.ToUtf7Bytes(), Encoding.UTF7.GetBytes(str)));
-
-        [Theory]
-        [InlineData("Alice")]
-        [InlineData("Bob")]
-        [InlineData("Carol")]
-        [InlineData("Dave")]
-        [InlineData("Eve")]
         public void ToUnicodeBytesTest(string str) =>
             Assert.True(BytesEqual(str.ToUnicodeBytes(), Encoding.Unicode.GetBytes(str)));
 

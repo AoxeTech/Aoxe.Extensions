@@ -1,17 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>latest</LangVersion>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageVersion>2020.6.0</PackageVersion>
-    <Version>2020.6.0</Version>
-    <Authors>Mutuduxf</Authors>
-    <Company>Mutuduxf</Company>
-    <PackageTags>Zaabee Extensions</PackageTags>
-    <Description>Exteinsions for C#</Description>
-    <PackageProjectUrl>https://github.com/Mutuduxf/Zaabee.Extensions</PackageProjectUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
+        <LangVersion>latest</LangVersion>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageVersion>2020.7.0</PackageVersion>
+        <Version>2020.7.0</Version>
+        <Authors>Mutuduxf</Authors>
+        <Company>Mutuduxf</Company>
+        <PackageTags>Zaabee Extensions</PackageTags>
+        <Description>Exteinsions for C#</Description>
+        <PackageProjectUrl>https://github.com/Mutuduxf/Zaabee.Extensions</PackageProjectUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    </PropertyGroup>
 
 </Project>

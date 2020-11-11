@@ -19,8 +19,6 @@ namespace Zaabee.Extensions
 
         public static string GetStringByUtf32(this byte[] bytes) => bytes.GetString(Encoding.UTF32);
 
-        public static string GetStringByUtf7(this byte[] bytes) => bytes.GetString(Encoding.UTF7);
-
         public static string GetStringByUnicode(this byte[] bytes) => bytes.GetString(Encoding.Unicode);
 
         public static string ToBase64String(this byte[] bytes) => Convert.ToBase64String(bytes);

@@ -72,7 +72,7 @@ namespace Zaabee.Extensions
             switch (stream)
             {
                 case null:
-                    return new byte[0];
+                    return Array.Empty<byte>();
                 case MemoryStream ms:
                     return ms.ToArray();
                 default:
@@ -89,11 +89,15 @@ namespace Zaabee.Extensions
             switch (stream)
             {
                 case null:
-                    return new byte[0];
+                    return Array.Empty<byte>();
                 case MemoryStream ms:
                     return ms.ToArray();
                 default:
+#if NET5_0
+                    await using (var memoryStream = new MemoryStream())
+#else
                     using (var memoryStream = new MemoryStream())
+#endif
                     {
                         await stream.CopyToAsync(memoryStream);
                         return memoryStream.ToArray();
@@ -106,11 +110,15 @@ namespace Zaabee.Extensions
             switch (stream)
             {
                 case null:
-                    return new byte[0];
+                    return Array.Empty<byte>();
                 case MemoryStream ms:
                     return ms.ToArray();
                 default:
+#if NET5_0
+                    await using (var memoryStream = new MemoryStream())
+#else
                     using (var memoryStream = new MemoryStream())
+#endif
                     {
                         await stream.CopyToAsync(memoryStream, bufferSize);
                         return memoryStream.ToArray();
@@ -124,11 +132,15 @@ namespace Zaabee.Extensions
             switch (stream)
             {
                 case null:
-                    return new byte[0];
+                    return Array.Empty<byte>();
                 case MemoryStream ms:
                     return ms.ToArray();
                 default:
+#if NET5_0
+                    await using (var memoryStream = new MemoryStream())
+#else
                     using (var memoryStream = new MemoryStream())
+#endif
                     {
                         await stream.CopyToAsync(memoryStream, bufferSize, cancellationToken);
                         return memoryStream.ToArray();

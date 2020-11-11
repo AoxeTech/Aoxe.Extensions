@@ -10,7 +10,7 @@ namespace Zaabee.Extensions
 
         public static object GetDefaultValue(this Type type) =>
             type.IsValueType
-                ? ValueTypeCache.GetOrAdd(type, _ => Activator.CreateInstance(type))
+                ? ValueTypeCache.GetOrAdd(type, Activator.CreateInstance)
                 : null;
 
         public static bool IsNumericType(this Type type) =>

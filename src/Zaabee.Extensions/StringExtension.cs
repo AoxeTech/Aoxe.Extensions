@@ -29,8 +29,6 @@ namespace Zaabee.Extensions
 
         public static byte[] ToUtf32Bytes(this string value) => value.ToBytes(Encoding.UTF32);
 
-        public static byte[] ToUtf7Bytes(this string value) => value.ToBytes(Encoding.UTF7);
-
         public static byte[] ToUnicodeBytes(this string value) => value.ToBytes(Encoding.Unicode);
 
         public static byte[] ToBytes(this string value, Encoding encoding = null) =>

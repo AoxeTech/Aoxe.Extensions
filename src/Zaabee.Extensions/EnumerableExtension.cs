@@ -30,6 +30,6 @@ namespace Zaabee.Extensions
             });
         }
 
-        public static bool IsNullOrEmpty<T>(this IEnumerable<T> src) => src is null || src.Count() is 0;
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> src) => src is null || !src.Any();
     }
 }

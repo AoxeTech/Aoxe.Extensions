@@ -50,14 +50,6 @@ namespace Zaabee.Extensions.UnitTest
         }
 
         [Fact]
-        public void GetStringByUtf7Test()
-        {
-            const string str = "Alice";
-            var bytes = str.ToBytes(Encoding.UTF7);
-            Assert.Equal(str, bytes.GetStringByUtf7());
-        }
-
-        [Fact]
         public void GetStringByUnicodeTest()
         {
             const string str = "Alice";
