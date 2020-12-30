@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using Zaabee.Extensions.Commons;
 
@@ -5,6 +7,19 @@ namespace Zaabee.Extensions.UnitTest
 {
     public class IntExtensionTest
     {
+        [Theory]
+        [InlineData(10)]
+        public void GetEnumeratorTest(int num)
+        {
+            var nums = Enumerable.Range(0, num).ToList();
+            var result = new List<int>();
+            foreach (var i in num)
+                result.Add(i);
+            Assert.Equal(nums.Count, result.Count);
+            for (var i = 0; i < nums.Count; i++)
+                Assert.Equal(nums[i], result[i]);
+        }
+
         [Theory]
         [InlineData(int.MaxValue, 32)]
         [InlineData(int.MaxValue, 36)]

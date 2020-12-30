@@ -1,17 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
+        <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>latest</LangVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageVersion>2020.7.0</PackageVersion>
-        <Version>2020.7.0</Version>
+        <PackageVersion>2020.8.0</PackageVersion>
+        <Version>2020.8.0</Version>
         <Authors>Mutuduxf</Authors>
         <Company>Mutuduxf</Company>
         <PackageTags>Zaabee Extensions</PackageTags>
         <Description>Exteinsions for C#</Description>
         <PackageProjectUrl>https://github.com/Mutuduxf/Zaabee.Extensions</PackageProjectUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
 </Project>
