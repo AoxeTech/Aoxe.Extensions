@@ -7,11 +7,9 @@ namespace Zaabee.Extensions
 {
     public static class EnumExtension
     {
-        private static readonly ConcurrentDictionary<Enum, string> DescriptionCache =
-            new ConcurrentDictionary<Enum, string>();
+        private static readonly ConcurrentDictionary<Enum, string> DescriptionCache = new();
 
-        private static readonly ConcurrentDictionary<Tuple<Enum, string>, string> DescriptionsCache =
-            new ConcurrentDictionary<Tuple<Enum, string>, string>();
+        private static readonly ConcurrentDictionary<Tuple<Enum, string>, string> DescriptionsCache = new();
 
         public static string GetDescription(this Enum enumerationValue) =>
             DescriptionCache.GetOrAdd(enumerationValue, key =>

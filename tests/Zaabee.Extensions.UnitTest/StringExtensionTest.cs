@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Xunit;
 using Zaabee.Extensions.Commons;
+using Zaabee.Extensions.UnitTest.Commons;
 
 namespace Zaabee.Extensions.UnitTest
 {

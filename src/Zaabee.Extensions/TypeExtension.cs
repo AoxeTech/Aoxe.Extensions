@@ -5,8 +5,7 @@ namespace Zaabee.Extensions
 {
     public static class TypeExtension
     {
-        private static readonly ConcurrentDictionary<Type, object> ValueTypeCache =
-            new ConcurrentDictionary<Type, object>();
+        private static readonly ConcurrentDictionary<Type, object> ValueTypeCache = new();
 
         public static object GetDefaultValue(this Type type) =>
             type.IsValueType

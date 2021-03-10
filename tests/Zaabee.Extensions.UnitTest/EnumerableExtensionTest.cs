@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
+using Zaabee.Extensions.UnitTest.Commons;
 
 namespace Zaabee.Extensions.UnitTest
 {
@@ -22,11 +23,11 @@ namespace Zaabee.Extensions.UnitTest
         {
             var testModels = new List<TestModel>
             {
-                new TestModel {Name = "Alice"},
-                new TestModel {Name = "Alice"},
-                new TestModel {Name = "Alice"},
-                new TestModel {Name = "Alice"},
-                new TestModel {Name = "Alice"}
+                new() {Name = "Alice"},
+                new() {Name = "Alice"},
+                new() {Name = "Alice"},
+                new() {Name = "Alice"},
+                new() {Name = "Alice"}
             };
             var enumerable = testModels.AsEnumerable();
             enumerable.ForEach(p => p.Name = "Bob");
@@ -41,11 +42,11 @@ namespace Zaabee.Extensions.UnitTest
         {
             var testModels = new List<TestModel>
             {
-                new TestModel {Name = "Alice", Birthday = new DateTime(2000, 1, 1)},
-                new TestModel {Name = "Alice", Birthday = new DateTime(2000, 1, 1)},
-                new TestModel {Name = "Alice", Birthday = new DateTime(2000, 1, 1)},
-                new TestModel {Name = "Alice", Birthday = new DateTime(2000, 1, 1)},
-                new TestModel {Name = "Alice", Birthday = new DateTime(2000, 1, 1)}
+                new () {Name = "Alice", Birthday = new DateTime(2000, 1, 1)},
+                new () {Name = "Alice", Birthday = new DateTime(2000, 1, 1)},
+                new () {Name = "Alice", Birthday = new DateTime(2000, 1, 1)},
+                new () {Name = "Alice", Birthday = new DateTime(2000, 1, 1)},
+                new () {Name = "Alice", Birthday = new DateTime(2000, 1, 1)}
             };
             var enumerable = testModels.AsEnumerable();
             var result = enumerable.ForEachLazy(p => p.Name = "Bob")

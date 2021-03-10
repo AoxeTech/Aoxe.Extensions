@@ -1,6 +1,6 @@
 using System;
 
-namespace Zaabee.Extensions.UnitTest
+namespace Zaabee.Extensions.UnitTest.Commons
 {
     public class TestModel
     {
