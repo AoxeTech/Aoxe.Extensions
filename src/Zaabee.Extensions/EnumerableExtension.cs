@@ -6,6 +6,19 @@ namespace Zaabee.Extensions
 {
     public static class EnumerableExtension
     {
+        public static int IndexOf<T>(this IEnumerable<T> source, T value, IEqualityComparer<T> comparer = null)
+        {
+            var index = 0;
+            comparer ??= EqualityComparer<T>.Default; // or pass in as a parameter
+            foreach (var item in source)
+            {
+                if (comparer.Equals(item, value)) return index;
+                index++;
+            }
+
+            return -1;
+        }
+
         public static IList<T> ToList<T>(this IEnumerable<T> src, Func<T, bool> func)
         {
             if (src is null) throw new ArgumentNullException(nameof(src));
