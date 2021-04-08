@@ -8,7 +8,7 @@ namespace Zaabee.Extensions
         {
             if (ex.InnerException is null) return ex;
             var inmostException = ex.InnerException;
-            while (inmostException.InnerException != null)
+            while (inmostException.InnerException is not null)
                 inmostException = inmostException.InnerException;
             return inmostException;
         }
