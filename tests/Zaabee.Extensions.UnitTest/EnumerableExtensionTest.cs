@@ -29,6 +29,15 @@ namespace Zaabee.Extensions.UnitTest
         }
 
         [Fact]
+        public void NotContainsTest()
+        {
+            IEnumerable<int> testInts = Enumerable.Range(0, 10).ToList();
+            Assert.False(testInts.NotContains(0));
+            Assert.False(testInts.NotContains(9));
+            Assert.True(testInts.NotContains(10));
+        }
+
+        [Fact]
         public void ToListTest()
         {
             var i = new List<int> {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
