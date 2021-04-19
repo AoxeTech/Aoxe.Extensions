@@ -19,6 +19,9 @@ namespace Zaabee.Extensions
             return -1;
         }
 
+        public static bool NotContains<T>(this IEnumerable<T> source, T item) =>
+            !source.Contains(item);
+
         public static IList<T> ToList<T>(this IEnumerable<T> src, Func<T, bool> func)
         {
             if (src is null) throw new ArgumentNullException(nameof(src));
