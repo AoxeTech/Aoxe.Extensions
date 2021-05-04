@@ -6,6 +6,17 @@ namespace Zaabee.Extensions
 {
     public static class EnumerableExtension
     {
+        public static void AddRange<T>(this IList<T> source, IEnumerable<T> collections)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (collections == null) throw new ArgumentNullException(nameof(collections));
+
+            if (source is List<T> list) list.AddRange(collections);
+            else
+                foreach (var item in collections)
+                    source.Add(item);
+        }
+
         public static int IndexOf<T>(this IEnumerable<T> source, T value, IEqualityComparer<T> comparer = null)
         {
             var index = 0;

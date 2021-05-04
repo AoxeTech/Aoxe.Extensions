@@ -8,6 +8,23 @@ namespace Zaabee.Extensions.UnitTest
 {
     public class EnumerableExtensionTest
     {
+        [Fact]
+        public void AddRangeTest()
+        {
+            IList<int> list = new List<int>();
+            var myCollection = new MyCollection<int>();
+            var collection = Enumerable.Range(0, 5).ToList();
+            list.AddRange(collection);
+            myCollection.AddRange(collection);
+            Assert.Equal(list.Count, myCollection.Count);
+            Assert.True(list.All(p => myCollection.Contains(p)));
+
+            IList<int> nullList = null;
+            Assert.Throws<ArgumentNullException>(() => nullList.AddRange(collection));
+            nullList = new List<int>();
+            Assert.Throws<ArgumentNullException>(() => nullList.AddRange(null));
+        }
+
         [Theory]
         [InlineData(10, 5)]
         public void IndexOfTest(int total, int index)
