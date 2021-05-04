@@ -17,7 +17,7 @@ namespace Zaabee.Extensions.UnitTest
             Assert.True(ms.IsNullOrEmpty());
             ms = new MemoryStream();
             Assert.True(ms.IsNullOrEmpty());
-            ms.Write(new[] {(byte) 0, (byte) 1});
+            ms.Write(new[] {(byte) 0, (byte) 1}, 0, 2);
             Assert.False(ms.IsNullOrEmpty());
         }
 
