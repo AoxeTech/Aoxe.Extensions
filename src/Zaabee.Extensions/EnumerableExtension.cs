@@ -8,8 +8,8 @@ namespace Zaabee.Extensions
     {
         public static void AddRange<T>(this IList<T> source, IEnumerable<T> collections)
         {
-            if (source == null) throw new ArgumentNullException(nameof(source));
-            if (collections == null) throw new ArgumentNullException(nameof(collections));
+            if (source is null) throw new ArgumentNullException(nameof(source));
+            if (collections is null) throw new ArgumentNullException(nameof(collections));
 
             if (source is List<T> list) list.AddRange(collections);
             else
