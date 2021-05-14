@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Zaabee.Extensions
 {
-    public static class EnumerableExtension
+    public static partial class ZaabeeExtension
     {
         public static void AddRange<T>(this IList<T> source, IEnumerable<T> collections)
         {

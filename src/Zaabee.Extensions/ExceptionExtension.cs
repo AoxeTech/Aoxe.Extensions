@@ -2,7 +2,7 @@ using System;
 
 namespace Zaabee.Extensions
 {
-    public static class ExceptionExtension
+    public static partial class ZaabeeExtension
     {
         public static Exception GetInmostException(this Exception ex)
         {

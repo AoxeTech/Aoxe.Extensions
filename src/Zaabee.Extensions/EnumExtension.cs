@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Zaabee.Extensions
 {
-    public static class EnumExtension
+    public static partial class ZaabeeExtension
     {
         private static readonly ConcurrentDictionary<Enum, string> DescriptionCache = new();
 

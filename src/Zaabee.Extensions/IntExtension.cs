@@ -6,7 +6,7 @@ using Zaabee.Extensions.Commons;
 
 namespace Zaabee.Extensions
 {
-    public static class IntExtension
+    public static partial class ZaabeeExtension
     {
         public static IEnumerator<int> GetEnumerator(this int dec) =>
             Enumerable.Range(0, dec).GetEnumerator();

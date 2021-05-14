@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Zaabee.Extensions
 {
-    public static class AsyncExtension
+    public static partial class ZaabeeExtension
     {
         private static readonly TaskFactory TaskFactory =
             new(CancellationToken.None,

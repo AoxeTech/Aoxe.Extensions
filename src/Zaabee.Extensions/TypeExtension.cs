@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 
 namespace Zaabee.Extensions
 {
-    public static class TypeExtension
+    public static partial class ZaabeeExtension
     {
         private static readonly ConcurrentDictionary<Type, object> ValueTypeCache = new();
 

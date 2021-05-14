@@ -1,6 +1,6 @@
 namespace Zaabee.Extensions
 {
-    public static class NullableExtension
+    public static partial class ZaabeeExtension
     {
         public static bool IsNull<T>(this T? param) where T : struct => param is null;
 

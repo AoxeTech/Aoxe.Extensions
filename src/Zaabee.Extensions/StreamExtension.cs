@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Zaabee.Extensions
 {
-    public static class StreamExtension
+    public static partial class ZaabeeExtension
     {
         public static bool IsNullOrEmpty(this Stream stream) => stream is null || stream.Length is 0;
 

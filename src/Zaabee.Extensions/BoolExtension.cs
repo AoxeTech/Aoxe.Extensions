@@ -2,7 +2,7 @@ using System;
 
 namespace Zaabee.Extensions
 {
-    public static class BoolExtension
+    public static partial class ZaabeeExtension
     {
         public static void IfTrueThenThrow<TException>(this bool b, TException exception)
             where TException : Exception

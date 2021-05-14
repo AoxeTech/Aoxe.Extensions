@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Zaabee.Extensions
 {
-    public static class DateTimeOffsetExtension
+    public static partial class ZaabeeExtension
     {
         public static IEnumerable<DateTimeOffset> EachSecondTo(this DateTimeOffset timeFrom, DateTimeOffset timeTo)
         {

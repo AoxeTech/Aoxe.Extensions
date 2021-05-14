@@ -5,7 +5,7 @@ using Zaabee.Extensions.Commons;
 
 namespace Zaabee.Extensions
 {
-    public static class LongExtension
+    public static partial class ZaabeeExtension
     {
         public static string ToString(this long dec, NumerationSystem numerationSystem) =>
             dec.ToString((int) numerationSystem);

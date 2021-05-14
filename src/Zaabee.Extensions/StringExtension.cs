@@ -6,7 +6,7 @@ using Zaabee.Extensions.Commons;
 
 namespace Zaabee.Extensions
 {
-    public static class StringExtension
+    public static partial class ZaabeeExtension
     {
         private static readonly Encoding Utf8Encoding = Encoding.UTF8;
 

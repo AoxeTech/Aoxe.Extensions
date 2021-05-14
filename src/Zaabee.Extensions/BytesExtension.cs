@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Zaabee.Extensions
 {
-    public static class BytesExtension
+    public static partial class ZaabeeExtension
     {
         public static string GetStringByUtf8(this byte[] bytes) => bytes.GetString(Encoding.UTF8);
 
