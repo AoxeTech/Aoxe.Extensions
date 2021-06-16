@@ -35,8 +35,8 @@ namespace Zaabee.Extensions
             });
 
         private static string GetDescription(MemberInfo field) =>
-            !(Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute), false)
-                is DescriptionAttribute att)
+            Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute), false)
+                is not DescriptionAttribute att
                 ? field.Name
                 : att.Description;
     }
