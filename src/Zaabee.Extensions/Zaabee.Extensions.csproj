@@ -3,8 +3,8 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageVersion>2021.3.6</PackageVersion>
-        <Version>2021.3.6</Version>
+        <PackageVersion>2021.3.7</PackageVersion>
+        <Version>2021.3.7</Version>
         <Authors>Mutuduxf</Authors>
         <Company>Mutuduxf</Company>
         <PackageTags>Zaabee Extensions</PackageTags>

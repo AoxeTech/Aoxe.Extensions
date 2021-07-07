@@ -11,7 +11,7 @@ namespace Zaabee.Extensions
                 timeTo.Hour, timeTo.Minute, timeTo.Second, timeTo.Offset);
             for (var time = new DateTimeOffset(timeFrom.Year, timeFrom.Month, timeFrom.Day,
                     timeFrom.Hour, timeFrom.Minute, timeFrom.Second, timeFrom.Offset);
-                time <= dateTime;
+                time < dateTime;
                 time = time.AddSeconds(1))
                 yield return time;
         }
@@ -22,7 +22,7 @@ namespace Zaabee.Extensions
                 timeTo.Hour, timeTo.Minute, 0, timeTo.Offset);
             for (var time = new DateTimeOffset(timeFrom.Year, timeFrom.Month, timeFrom.Day,
                     timeFrom.Hour, timeFrom.Minute, 0, timeFrom.Offset);
-                time <= dateTime;
+                time < dateTime;
                 time = time.AddMinutes(1))
                 yield return time;
         }
@@ -33,7 +33,7 @@ namespace Zaabee.Extensions
                 timeTo.Hour, 0, 0, timeTo.Offset);
             for (var time = new DateTimeOffset(timeFrom.Year, timeFrom.Month, timeFrom.Day,
                     timeFrom.Hour, 0, 0, timeFrom.Offset);
-                time <= dateTime;
+                time < dateTime;
                 time = time.AddHours(1))
                 yield return time;
         }
@@ -47,7 +47,7 @@ namespace Zaabee.Extensions
         public static IEnumerable<DateTimeOffset> EachMonthTo(this DateTimeOffset dateFrom, DateTimeOffset dateTo)
         {
             for (var date = dateFrom.Date;
-                date <= dateTo.Date || date.Month == dateTo.Month;
+                date < dateTo.Date || date.Month == dateTo.Month;
                 date = date.AddMonths(1))
                 yield return date;
         }
