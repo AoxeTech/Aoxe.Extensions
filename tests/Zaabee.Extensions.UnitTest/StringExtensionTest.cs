@@ -147,14 +147,16 @@ namespace Zaabee.Extensions.UnitTest
         [InlineData(float.MaxValue)]
         [InlineData(float.MinValue)]
         [InlineData(0)]
-        public void ParseFloatTest(float value) => Assert.Equal(value, value.ToString(CultureInfo.InvariantCulture).ParseFloat());
+        public void ParseFloatTest(float value) =>
+            Assert.Equal(value, value.ToString(CultureInfo.InvariantCulture).ParseFloat());
 
         [Theory]
         [InlineData(double.MaxValue)]
         [InlineData(double.MinValue)]
         [InlineData(0)]
-        public void ParseDoubleTest(double value) => Assert.Equal(value, value.ToString(CultureInfo.InvariantCulture).ParseDouble());
-        
+        public void ParseDoubleTest(double value) =>
+            Assert.Equal(value, value.ToString(CultureInfo.InvariantCulture).ParseDouble());
+
         [Fact]
         public void ParseDecimalTest()
         {
@@ -171,8 +173,8 @@ namespace Zaabee.Extensions.UnitTest
         [Fact]
         public void ParseDateTimeTest()
         {
-            var maxDateTime = new DateTime(9999,12,31,23,59,59);
-            var minDateTime = new DateTime(0001,01,01,00,00,00);
+            var maxDateTime = new DateTime(9999, 12, 31, 23, 59, 59);
+            var minDateTime = new DateTime(0001, 01, 01, 00, 00, 00);
             Assert.Equal(maxDateTime, maxDateTime.ToString(CultureInfo.InvariantCulture).ParseDateTime());
             Assert.Equal(minDateTime, minDateTime.ToString(CultureInfo.InvariantCulture).ParseDateTime());
         }
@@ -312,8 +314,8 @@ namespace Zaabee.Extensions.UnitTest
         [Fact]
         public void TryParseDateTimeTest()
         {
-            var maxDateTime = new DateTime(9999,12,31,23,59,59);
-            var minDateTime = new DateTime(0001,01,01,00,00,00);
+            var maxDateTime = new DateTime(9999, 12, 31, 23, 59, 59);
+            var minDateTime = new DateTime(0001, 01, 01, 00, 00, 00);
             Assert.Equal(maxDateTime, maxDateTime.ToString(CultureInfo.InvariantCulture).TryParseDateTime());
             Assert.Equal(minDateTime, minDateTime.ToString(CultureInfo.InvariantCulture).TryParseDateTime());
             Assert.Equal(default, string.Empty.TryParseDateTime());
@@ -345,9 +347,9 @@ namespace Zaabee.Extensions.UnitTest
         [InlineData("Eve")]
         public void Base64Test(string value)
         {
-            Assert.Equal(value,value.ToBase64String().FromBase64ToString());
-            Assert.Equal(value.ToBase64Bytes(),value.ToBase64String().ToBytes());
-            Assert.True(BytesEqual(value.ToBytes(),value.ToBase64String().FromBase64ToBytes()));
+            Assert.Equal(value, value.ToBase64String().FromBase64ToString());
+            Assert.Equal(value.ToBase64Bytes(), value.ToBase64String().ToBytes());
+            Assert.True(BytesEqual(value.ToBytes(), value.ToBase64String().FromBase64ToBytes()));
         }
 
         #endregion
@@ -407,8 +409,8 @@ namespace Zaabee.Extensions.UnitTest
             var str = value.ToString(numerationSystem);
             var result = str.ToInt(numerationSystem);
             Assert.Equal(value, result);
-            Assert.Equal(0,"".ToInt(numerationSystem));
-            Assert.Throws<ArgumentException>(()=>"!@#".ToInt(numerationSystem));
+            Assert.Equal(0, "".ToInt(numerationSystem));
+            Assert.Throws<ArgumentException>(() => "!@#".ToInt(numerationSystem));
         }
 
         [Theory]
@@ -431,8 +433,8 @@ namespace Zaabee.Extensions.UnitTest
             var str = value.ToString(numerationSystem);
             var result = str.ToLong(numerationSystem);
             Assert.Equal(value, result);
-            Assert.Equal(0,"".ToLong(numerationSystem));
-            Assert.Throws<ArgumentException>(()=>"!@#".ToLong(numerationSystem));
+            Assert.Equal(0, "".ToLong(numerationSystem));
+            Assert.Throws<ArgumentException>(() => "!@#".ToLong(numerationSystem));
         }
 
         private static bool BytesEqual(byte[] first, byte[] second)

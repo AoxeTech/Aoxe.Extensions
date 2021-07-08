@@ -33,7 +33,7 @@ namespace Zaabee.Extensions.UnitTest
             var result = str.ToInt(radix);
             Assert.Equal(value, result);
         }
-        
+
         [Theory]
         [InlineData(int.MaxValue, NumerationSystem.Binary)]
         [InlineData(int.MaxValue, NumerationSystem.Decimalism)]

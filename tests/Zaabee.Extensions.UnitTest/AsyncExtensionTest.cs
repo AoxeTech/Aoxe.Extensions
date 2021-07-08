@@ -10,7 +10,7 @@ namespace Zaabee.Extensions.UnitTest
         {
             var bytes = new byte[1024];
             var ms = new MemoryStream();
-            ms.WriteAsync(bytes,0,1024).RunSync();
+            ms.WriteAsync(bytes, 0, 1024).RunSync();
             Assert.Equal(0, ms.ReadAsync(bytes, 0, 1024).RunSync());
         }
     }

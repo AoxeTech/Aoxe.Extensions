@@ -18,7 +18,7 @@ namespace Zaabee.Extensions.UnitTest
             var result = str.ToLong(radix);
             Assert.Equal(value, result);
         }
-        
+
         [Theory]
         [InlineData(long.MaxValue, NumerationSystem.Binary)]
         [InlineData(long.MaxValue, NumerationSystem.Decimalism)]
