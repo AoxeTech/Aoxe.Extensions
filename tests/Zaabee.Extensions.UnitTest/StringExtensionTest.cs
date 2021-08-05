@@ -12,6 +12,20 @@ namespace Zaabee.Extensions.UnitTest
     public class StringExtensionTest
     {
         [Theory]
+        [InlineData("apple,banana,pear", "apple")]
+        public void TrimStart(string target, string trimString)
+        {
+            Assert.Equal(",banana,pear", target.TrimStart(trimString));
+        }
+
+        [Theory]
+        [InlineData("apple,banana,pear","pear")]
+        public void TrimEnd(string target, string trimString)
+        {
+            Assert.Equal("apple,banana,",target.TrimEnd(trimString));
+        }
+
+        [Theory]
         [InlineData("")]
         [InlineData(null)]
         [InlineData("Alice")]
