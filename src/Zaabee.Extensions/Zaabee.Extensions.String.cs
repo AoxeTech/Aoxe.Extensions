@@ -9,7 +9,7 @@ namespace Zaabee.Extensions
     public static partial class ZaabeeExtension
     {
         private static readonly Encoding Utf8Encoding = Encoding.UTF8;
-        
+
         public static string TrimStart(this string target, string trimString)
         {
             if (string.IsNullOrEmpty(trimString)) return target;
@@ -20,7 +20,7 @@ namespace Zaabee.Extensions
 
             return result;
         }
-        
+
         public static string TrimEnd(this string target, string trimString)
         {
             if (string.IsNullOrEmpty(trimString)) return target;
@@ -32,26 +32,34 @@ namespace Zaabee.Extensions
             return result;
         }
 
-        public static bool IsNullOrEmpty(this string value) => string.IsNullOrEmpty(value);
+        public static bool IsNullOrEmpty(this string value) =>
+            string.IsNullOrEmpty(value);
 
-        public static bool IsNullOrWhiteSpace(this string value) => string.IsNullOrWhiteSpace(value);
+        public static bool IsNullOrWhiteSpace(this string value) =>
+            string.IsNullOrWhiteSpace(value);
 
         public static string StringJoin<T>(this IEnumerable<T> values, string separator) =>
             string.Join(separator, values);
 
         #region Bytes
 
-        public static byte[] ToUtf8Bytes(this string value) => value.ToBytes(Encoding.UTF8);
+        public static byte[] ToUtf8Bytes(this string value) =>
+            value.ToBytes(Encoding.UTF8);
 
-        public static byte[] ToAsciiBytes(this string value) => value.ToBytes(Encoding.ASCII);
+        public static byte[] ToAsciiBytes(this string value) =>
+            value.ToBytes(Encoding.ASCII);
 
-        public static byte[] ToBigEndianUnicodeBytes(this string value) => value.ToBytes(Encoding.BigEndianUnicode);
+        public static byte[] ToBigEndianUnicodeBytes(this string value) =>
+            value.ToBytes(Encoding.BigEndianUnicode);
 
-        public static byte[] ToDefaultBytes(this string value) => value.ToBytes(Encoding.Default);
+        public static byte[] ToDefaultBytes(this string value) =>
+            value.ToBytes(Encoding.Default);
 
-        public static byte[] ToUtf32Bytes(this string value) => value.ToBytes(Encoding.UTF32);
+        public static byte[] ToUtf32Bytes(this string value) =>
+            value.ToBytes(Encoding.UTF32);
 
-        public static byte[] ToUnicodeBytes(this string value) => value.ToBytes(Encoding.Unicode);
+        public static byte[] ToUnicodeBytes(this string value) =>
+            value.ToBytes(Encoding.Unicode);
 
         public static byte[] ToBytes(this string value, Encoding encoding = null) =>
             value is null ? throw new ArgumentNullException(nameof(value)) :
@@ -62,64 +70,92 @@ namespace Zaabee.Extensions
 
         #region Parse
 
-        public static sbyte ParseSbyte(this string s) => sbyte.Parse(s);
+        public static sbyte ParseSbyte(this string s) =>
+            sbyte.Parse(s);
 
-        public static byte ParseByte(this string s) => byte.Parse(s);
+        public static byte ParseByte(this string s) =>
+            byte.Parse(s);
 
-        public static short ParseShort(this string s) => short.Parse(s);
+        public static short ParseShort(this string s) =>
+            short.Parse(s);
 
-        public static ushort ParseUshort(this string s) => ushort.Parse(s);
+        public static ushort ParseUshort(this string s) =>
+            ushort.Parse(s);
 
-        public static int ParseInt(this string s) => int.Parse(s);
+        public static int ParseInt(this string s) =>
+            int.Parse(s);
 
-        public static uint ParseUint(this string s) => uint.Parse(s);
+        public static uint ParseUint(this string s) =>
+            uint.Parse(s);
 
-        public static long ParseLong(this string s) => long.Parse(s);
+        public static long ParseLong(this string s) =>
+            long.Parse(s);
 
-        public static ulong ParseUlong(this string s) => ulong.Parse(s);
+        public static ulong ParseUlong(this string s) =>
+            ulong.Parse(s);
 
-        public static float ParseFloat(this string s) => float.Parse(s);
+        public static float ParseFloat(this string s) =>
+            float.Parse(s);
 
-        public static double ParseDouble(this string s) => double.Parse(s);
-        
-        public static decimal ParseDecimal(this string s) => decimal.Parse(s);
+        public static double ParseDouble(this string s) =>
+            double.Parse(s);
 
-        public static bool ParseBool(this string s) => bool.Parse(s);
+        public static decimal ParseDecimal(this string s) =>
+            decimal.Parse(s);
 
-        public static DateTime ParseDateTime(this string s) => DateTime.Parse(s);
+        public static bool ParseBool(this string s) =>
+            bool.Parse(s);
 
-        public static DateTimeOffset ParseDateTimeOffset(this string s) => DateTimeOffset.Parse(s);
+        public static DateTime ParseDateTime(this string s) =>
+            DateTime.Parse(s);
+
+        public static DateTimeOffset ParseDateTimeOffset(this string s) =>
+            DateTimeOffset.Parse(s);
 
         public static object ParseEnum(this string value, Type enumType) =>
-            enumType is null ? throw new ArgumentNullException(nameof(enumType)) : Enum.Parse(enumType, value);
+            enumType is null
+                ? throw new ArgumentNullException(nameof(enumType))
+                : Enum.Parse(enumType, value);
 
         #endregion
 
         #region TryParse
 
-        public static sbyte TryParseSbyte(this string s) => sbyte.TryParse(s, out var result) ? result : default;
+        public static sbyte TryParseSbyte(this string s) =>
+            sbyte.TryParse(s, out var result) ? result : default;
 
-        public static byte TryParseByte(this string s) => byte.TryParse(s, out var result) ? result : default;
+        public static byte TryParseByte(this string s) =>
+            byte.TryParse(s, out var result) ? result : default;
 
-        public static short TryParseShort(this string s) => short.TryParse(s, out var result) ? result : default;
+        public static short TryParseShort(this string s) =>
+            short.TryParse(s, out var result) ? result : default;
 
-        public static ushort TryParseUshort(this string s) => ushort.TryParse(s, out var result) ? result : default;
+        public static ushort TryParseUshort(this string s) =>
+            ushort.TryParse(s, out var result) ? result : default;
 
-        public static int TryParseInt(this string s) => int.TryParse(s, out var result) ? result : default;
+        public static int TryParseInt(this string s) =>
+            int.TryParse(s, out var result) ? result : default;
 
-        public static uint TryParseUint(this string s) => uint.TryParse(s, out var result) ? result : default;
+        public static uint TryParseUint(this string s) =>
+            uint.TryParse(s, out var result) ? result : default;
 
-        public static long TryParseLong(this string s) => long.TryParse(s, out var result) ? result : default;
+        public static long TryParseLong(this string s) =>
+            long.TryParse(s, out var result) ? result : default;
 
-        public static ulong TryParseUlong(this string s) => ulong.TryParse(s, out var result) ? result : default;
+        public static ulong TryParseUlong(this string s) =>
+            ulong.TryParse(s, out var result) ? result : default;
 
-        public static float TryParseFloat(this string s) => float.TryParse(s, out var result) ? result : default;
+        public static float TryParseFloat(this string s) =>
+            float.TryParse(s, out var result) ? result : default;
 
-        public static double TryParseDouble(this string s) => double.TryParse(s, out var result) ? result : default;
+        public static double TryParseDouble(this string s) =>
+            double.TryParse(s, out var result) ? result : default;
 
-        public static decimal TryParseDecimal(this string s) => decimal.TryParse(s, out var result) ? result : default;
+        public static decimal TryParseDecimal(this string s) =>
+            decimal.TryParse(s, out var result) ? result : default;
 
-        public static bool TryParseBool(this string s) => bool.TryParse(s, out var result) ? result : default;
+        public static bool TryParseBool(this string s) =>
+            bool.TryParse(s, out var result) ? result : default;
 
         public static DateTime TryParseDateTime(this string s) =>
             DateTime.TryParse(s, out var result) ? result : default;
@@ -158,11 +194,11 @@ namespace Zaabee.Extensions
             string.IsNullOrEmpty(str) || string.IsNullOrEmpty(oldValue) ? str : str.Replace(oldValue, newValue);
 
         public static int ToInt(this string value, NumerationSystem numerationSystem) =>
-            value.ToInt((int) numerationSystem);
-        
+            value.ToInt((int)numerationSystem);
+
         public static long ToLong(this string value, NumerationSystem numerationSystem) =>
-            value.ToLong((int) numerationSystem);
-        
+            value.ToLong((int)numerationSystem);
+
         public static int ToInt(this string value, int fromBase)
         {
             if (value.IsNullOrWhiteSpace()) return default;
@@ -180,7 +216,7 @@ namespace Zaabee.Extensions
             if (fromBase <= 36) value = value.ToLower();
 
             var result = value
-                .Select((t, i) => Consts.LetterAndDigit.IndexOf(t) * (int) Math.Pow(fromBase, value.Length - i - 1))
+                .Select((t, i) => Consts.LetterAndDigit.IndexOf(t) * (int)Math.Pow(fromBase, value.Length - i - 1))
                 .Sum();
 
             result = isMinus ? 0 - result : result;
@@ -204,7 +240,7 @@ namespace Zaabee.Extensions
             if (fromBase <= 36) value = value.ToLower();
 
             var result = value
-                .Select((t, i) => Consts.LetterAndDigit.IndexOf(t) * (long) Math.Pow(fromBase, value.Length - i - 1))
+                .Select((t, i) => Consts.LetterAndDigit.IndexOf(t) * (long)Math.Pow(fromBase, value.Length - i - 1))
                 .Sum();
 
             result = isMinus ? 0 - result : result;

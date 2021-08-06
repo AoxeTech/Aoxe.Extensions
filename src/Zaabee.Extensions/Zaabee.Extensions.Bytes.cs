@@ -8,20 +8,26 @@ namespace Zaabee.Extensions
 {
     public static partial class ZaabeeExtension
     {
-        public static string GetStringByUtf8(this byte[] bytes) => bytes.GetString(Encoding.UTF8);
+        public static string GetStringByUtf8(this byte[] bytes) =>
+            bytes.GetString(Encoding.UTF8);
 
-        public static string GetStringByAscii(this byte[] bytes) => bytes.GetString(Encoding.ASCII);
+        public static string GetStringByAscii(this byte[] bytes) =>
+            bytes.GetString(Encoding.ASCII);
 
         public static string GetStringByBigEndianUnicode(this byte[] bytes) =>
             bytes.GetString(Encoding.BigEndianUnicode);
 
-        public static string GetStringByDefault(this byte[] bytes) => bytes.GetString(Encoding.Default);
+        public static string GetStringByDefault(this byte[] bytes) =>
+            bytes.GetString(Encoding.Default);
 
-        public static string GetStringByUtf32(this byte[] bytes) => bytes.GetString(Encoding.UTF32);
+        public static string GetStringByUtf32(this byte[] bytes) =>
+            bytes.GetString(Encoding.UTF32);
 
-        public static string GetStringByUnicode(this byte[] bytes) => bytes.GetString(Encoding.Unicode);
+        public static string GetStringByUnicode(this byte[] bytes) =>
+            bytes.GetString(Encoding.Unicode);
 
-        public static string ToBase64String(this byte[] bytes) => Convert.ToBase64String(bytes);
+        public static string ToBase64String(this byte[] bytes) =>
+            Convert.ToBase64String(bytes);
 
         public static byte[] ToBase64Bytes(this byte[] bytes, Encoding encoding = null) =>
             bytes.ToBase64String().ToBytes(encoding);

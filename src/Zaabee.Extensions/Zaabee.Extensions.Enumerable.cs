@@ -11,7 +11,8 @@ namespace Zaabee.Extensions
             if (source is null) throw new ArgumentNullException(nameof(source));
             if (collections is null) throw new ArgumentNullException(nameof(collections));
 
-            if (source is List<T> list) list.AddRange(collections);
+            if (source is List<T> list)
+                list.AddRange(collections);
             else
                 foreach (var item in collections)
                     source.Add(item);

@@ -7,7 +7,8 @@ namespace Zaabee.Extensions
 {
     public static partial class ZaabeeExtension
     {
-        public static bool IsNullOrEmpty(this Stream stream) => stream is null || stream.Length is 0;
+        public static bool IsNullOrEmpty(this Stream stream) =>
+            stream is null || stream.Length is 0;
 
         public static long TrySeek(this Stream stream, long offset, SeekOrigin seekOrigin) =>
             stream.CanSeek ? stream.Seek(offset, seekOrigin) : default;
@@ -22,7 +23,8 @@ namespace Zaabee.Extensions
             CancellationToken cancellationToken) =>
             stream.CanRead ? stream.ReadAsync(buffer, offset, count, cancellationToken) : default;
 
-        public static int TryReadByte(this Stream stream) => stream.CanRead ? stream.ReadByte() : default;
+        public static int TryReadByte(this Stream stream) =>
+            stream.CanRead ? stream.ReadByte() : default;
 
         public static bool TryWrite(this Stream stream, byte[] buffer, int offset, int count)
         {
