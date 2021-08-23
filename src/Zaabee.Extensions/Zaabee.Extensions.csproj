@@ -7,7 +7,7 @@
         <Version>2021.4.0</Version>
         <Authors>Mutuduxf</Authors>
         <Company>Mutuduxf</Company>
-        <PackageTags>Zaabee Extensions</PackageTags>
+        <PackageTags>Zaabee;Extensions</PackageTags>
         <Description>Exteinsions for C#</Description>
         <PackageProjectUrl>https://github.com/Mutuduxf/Zaabee.Extensions</PackageProjectUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
