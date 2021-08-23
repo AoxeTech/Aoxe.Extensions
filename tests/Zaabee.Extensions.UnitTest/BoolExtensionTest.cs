@@ -29,5 +29,29 @@ namespace Zaabee.Extensions.UnitTest
             false.IfFalse(() => i++);
             Assert.Equal(2, i);
         }
+
+        [Fact]
+        public void IfTrueElse()
+        {
+            var i = 1;
+            true.IfTrueElse(() => i++, () => i--);
+            Assert.Equal(2, i);
+
+            var j = 1;
+            false.IfTrueElse(() => j++, () => j--);
+            Assert.Equal(0, j);
+        }
+
+        [Fact]
+        public void IfFalseElse()
+        {
+            var i = 1;
+            false.IfFalseElse(() => i++, () => i--);
+            Assert.Equal(2, i);
+
+            var j = 1;
+            true.IfFalseElse(() => j++, () => j--);
+            Assert.Equal(0, j);
+        }
     }
 }
