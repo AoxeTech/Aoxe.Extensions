@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Zaabee.Extensions.UnitTest
@@ -31,27 +32,63 @@ namespace Zaabee.Extensions.UnitTest
         }
 
         [Fact]
-        public void IfTrueElse()
+        public void IfTrueElseAction()
         {
-            var i = 1;
-            true.IfTrueElse(() => i++, () => i--);
-            Assert.Equal(2, i);
+            var a = 0;
+            var b = "123";
 
-            var j = 1;
-            false.IfTrueElse(() => j++, () => j--);
-            Assert.Equal(0, j);
+            true.IfTrueElse(() => a++, () => b = "456");
+            Assert.Equal(1, a);
+            Assert.Equal("123", b);
+
+            var c = 0;
+            var d = "123";
+
+            false.IfTrueElse(() => c++, () => d = "456");
+            Assert.Equal(0, c);
+            Assert.Equal("456", d);
         }
 
         [Fact]
-        public void IfFalseElse()
+        public void IfFalseElseAction()
         {
-            var i = 1;
-            false.IfFalseElse(() => i++, () => i--);
-            Assert.Equal(2, i);
+            var a = 0;
+            var b = "123";
 
-            var j = 1;
-            true.IfFalseElse(() => j++, () => j--);
-            Assert.Equal(0, j);
+            true.IfFalseElse(() => a++, () => b = "456");
+            Assert.Equal(0, a);
+            Assert.Equal("456", b);
+
+            var c = 0;
+            var d = "123";
+
+            false.IfFalseElse(() => c++, () => d = "456");
+            Assert.Equal(1, c);
+            Assert.Equal("123", d);
+        }
+
+        [Fact]
+        public void IfTrueElseFunc()
+        {
+            const int i = 1;
+            var s0 = true.IfTrueElse(() => i + 1, () => i - 1);
+            Assert.Equal(2, s0);
+
+            const int j = 1;
+            var s1 = false.IfTrueElse(() => j + 1, () => j - 1);
+            Assert.Equal(0, s1);
+        }
+
+        [Fact]
+        public void IfFalseElseFunc()
+        {
+            const int i = 1;
+            var s0 = false.IfFalseElse(() => i + 1, () => i - 1);
+            Assert.Equal(2, s0);
+
+            const int j = 1;
+            var s1 = true.IfFalseElse(() => j + 1, () => j - 1);
+            Assert.Equal(0, s1);
         }
     }
 }
