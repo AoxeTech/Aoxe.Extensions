@@ -40,7 +40,8 @@ namespace Zaabee.Extensions
 
         public static string GetString(this byte[] bytes, Encoding encoding = null) =>
             bytes is null ? throw new ArgumentNullException(nameof(bytes)) :
-            encoding is null ? Encoding.UTF8.GetString(bytes) : encoding.GetString(bytes);
+            encoding is null ? Encoding.UTF8.GetString(bytes) :
+            encoding.GetString(bytes);
 
         public static MemoryStream ToStream(this byte[] bytes)
         {

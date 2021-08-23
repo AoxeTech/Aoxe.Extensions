@@ -25,5 +25,17 @@ namespace Zaabee.Extensions
         {
             if (!b) action();
         }
+
+        public static void IfTrueElse(this bool b, Action actionTrue, Action actionElse)
+        {
+            if (b) actionTrue();
+            else actionElse();
+        }
+
+        public static void IfFalseElse(this bool b, Action actionFalse, Action actionElse)
+        {
+            if (!b) actionFalse();
+            else actionElse();
+        }
     }
 }
