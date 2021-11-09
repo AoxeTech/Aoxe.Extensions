@@ -25,7 +25,7 @@ namespace Zaabee.Extensions.UnitTest
         {
             const string target = "apple,banana,pear";
             const string trimString = "pear";
-            Assert.Equal("apple,banana,",target.TrimEnd(trimString));
+            Assert.Equal("apple,banana,", target.TrimEnd(trimString));
             Assert.Equal(target, target.TrimEnd(string.Empty));
         }
 
@@ -49,7 +49,7 @@ namespace Zaabee.Extensions.UnitTest
         [InlineData(" or ")]
         public void StringJoinTest(string separator)
         {
-            var stringList = new List<string> {"Alice", "Bob", "Carol", "Dave", "Eve"};
+            var stringList = new List<string> { "Alice", "Bob", "Carol", "Dave", "Eve" };
             Assert.Equal(stringList.StringJoin(separator), string.Join(separator, stringList));
         }
 
@@ -165,22 +165,34 @@ namespace Zaabee.Extensions.UnitTest
         [InlineData(float.MaxValue)]
         [InlineData(float.MinValue)]
         [InlineData(0)]
-        public void ParseFloatTest(float value) =>
+        public void ParseFloatTest(float value)
+        {
+#if NET48
+            Assert.Equal(value, value.ToString("R").ParseFloat());
+#else
             Assert.Equal(value, value.ToString(CultureInfo.InvariantCulture).ParseFloat());
+#endif
+        }
 
         [Theory]
         [InlineData(double.MaxValue)]
         [InlineData(double.MinValue)]
         [InlineData(0)]
-        public void ParseDoubleTest(double value) =>
+        public void ParseDoubleTest(double value)
+        {
+#if NET48
+            Assert.Equal(value, value.ToString("R").ParseDouble());
+#else
             Assert.Equal(value, value.ToString(CultureInfo.InvariantCulture).ParseDouble());
+#endif
+        }
 
         [Fact]
         public void ParseDecimalTest()
         {
             Assert.Equal(decimal.MaxValue, decimal.MaxValue.ToString(CultureInfo.InvariantCulture).ParseDecimal());
             Assert.Equal(decimal.MinValue, decimal.MinValue.ToString(CultureInfo.InvariantCulture).ParseDecimal());
-            Assert.Equal(0, 0.ToString().ParseDecimal());
+            Assert.Equal(0M, 0M.ToString(CultureInfo.InvariantCulture).ParseDecimal());
         }
 
         [Theory]
@@ -207,8 +219,12 @@ namespace Zaabee.Extensions.UnitTest
         }
 
         [Fact]
-        public void ParseEnumTest() =>
+        public void ParseEnumTest()
+        {
             Assert.Equal(TestEnum.Create, TestEnum.Create.ToString().ParseEnum(typeof(TestEnum)));
+            Assert.Equal(TestEnum.Create, TestEnum.Create.ToString().ToLower().ParseEnum(typeof(TestEnum), true));
+            Assert.Throws<ArgumentException>(() => TestEnum.Create.ToString().ToLower().ParseEnum(typeof(TestEnum)));
+        }
 
         #endregion
 
@@ -220,8 +236,8 @@ namespace Zaabee.Extensions.UnitTest
             Assert.Equal(sbyte.MaxValue, sbyte.MaxValue.ToString().TryParseSbyte());
             Assert.Equal(sbyte.MinValue, sbyte.MinValue.ToString().TryParseSbyte());
             Assert.Equal(0, 0.ToString().TryParseSbyte());
-            Assert.Equal(0, (sbyte.MaxValue + 1).ToString().TryParseSbyte());
-            Assert.Equal(0, (sbyte.MinValue - 1).ToString().TryParseSbyte());
+            Assert.Equal(default, string.Empty.TryParseSbyte());
+            Assert.Equal(1, string.Empty.TryParseSbyte(1));
         }
 
         [Fact]
@@ -230,8 +246,8 @@ namespace Zaabee.Extensions.UnitTest
             Assert.Equal(byte.MaxValue, byte.MaxValue.ToString().TryParseByte());
             Assert.Equal(byte.MinValue, byte.MinValue.ToString().TryParseByte());
             Assert.Equal(0, 0.ToString().TryParseByte());
-            Assert.Equal(0, (byte.MaxValue + 1).ToString().TryParseByte());
-            Assert.Equal(0, (byte.MinValue - 1).ToString().TryParseByte());
+            Assert.Equal(default, string.Empty.TryParseByte());
+            Assert.Equal(1, string.Empty.TryParseByte(1));
         }
 
         [Fact]
@@ -240,8 +256,8 @@ namespace Zaabee.Extensions.UnitTest
             Assert.Equal(short.MaxValue, short.MaxValue.ToString().TryParseShort());
             Assert.Equal(short.MinValue, short.MinValue.ToString().TryParseShort());
             Assert.Equal(0, 0.ToString().TryParseShort());
-            Assert.Equal(0, (short.MaxValue + 1).ToString().TryParseShort());
-            Assert.Equal(0, (short.MinValue - 1).ToString().TryParseShort());
+            Assert.Equal(default, string.Empty.TryParseShort());
+            Assert.Equal(1, string.Empty.TryParseShort(1));
         }
 
         [Fact]
@@ -250,8 +266,8 @@ namespace Zaabee.Extensions.UnitTest
             Assert.Equal(ushort.MaxValue, ushort.MaxValue.ToString().TryParseUshort());
             Assert.Equal(ushort.MinValue, ushort.MinValue.ToString().TryParseUshort());
             Assert.Equal(0, 0.ToString().TryParseUshort());
-            Assert.Equal(0, (ushort.MaxValue + 1).ToString().TryParseUshort());
-            Assert.Equal(0, (ushort.MinValue - 1).ToString().TryParseUshort());
+            Assert.Equal(default, string.Empty.TryParseUshort());
+            Assert.Equal(1, string.Empty.TryParseUshort(1));
         }
 
         [Fact]
@@ -260,8 +276,8 @@ namespace Zaabee.Extensions.UnitTest
             Assert.Equal(int.MaxValue, int.MaxValue.ToString().TryParseInt());
             Assert.Equal(int.MinValue, int.MinValue.ToString().TryParseInt());
             Assert.Equal(0, 0.ToString().TryParseInt());
-            Assert.Equal(0, (int.MaxValue + 1L).ToString().TryParseInt());
-            Assert.Equal(0, (int.MinValue - 1L).ToString().TryParseInt());
+            Assert.Equal(default, string.Empty.TryParseInt());
+            Assert.Equal(1, string.Empty.TryParseInt(1));
         }
 
         [Fact]
@@ -270,8 +286,8 @@ namespace Zaabee.Extensions.UnitTest
             Assert.Equal(uint.MaxValue, uint.MaxValue.ToString().TryParseUint());
             Assert.Equal(uint.MinValue, uint.MinValue.ToString().TryParseUint());
             Assert.Equal(0U, 0.ToString().TryParseUint());
-            Assert.Equal(0U, (uint.MaxValue + 1L).ToString().TryParseUint());
-            Assert.Equal(0U, (uint.MinValue - 1L).ToString().TryParseUint());
+            Assert.Equal(default, string.Empty.TryParseUint());
+            Assert.Equal(1U, string.Empty.TryParseUint(1));
         }
 
         [Fact]
@@ -280,8 +296,8 @@ namespace Zaabee.Extensions.UnitTest
             Assert.Equal(long.MaxValue, long.MaxValue.ToString().TryParseLong());
             Assert.Equal(long.MinValue, long.MinValue.ToString().TryParseLong());
             Assert.Equal(0L, 0.ToString().TryParseLong());
-            Assert.Equal(0L, (long.MaxValue + 1M).ToString(CultureInfo.InvariantCulture).TryParseLong());
-            Assert.Equal(0L, (long.MinValue - 1M).ToString(CultureInfo.InvariantCulture).TryParseLong());
+            Assert.Equal(default, string.Empty.TryParseLong());
+            Assert.Equal(1L, string.Empty.TryParseLong(1));
         }
 
         [Fact]
@@ -289,27 +305,39 @@ namespace Zaabee.Extensions.UnitTest
         {
             Assert.Equal(ulong.MaxValue, ulong.MaxValue.ToString().TryParseUlong());
             Assert.Equal(ulong.MinValue, ulong.MinValue.ToString().TryParseUlong());
-            Assert.Equal(0M, 0.ToString().TryParseUlong());
-            Assert.Equal(0M, (ulong.MaxValue + 1M).ToString(CultureInfo.InvariantCulture).TryParseUlong());
-            Assert.Equal(0M, (ulong.MinValue - 1M).ToString(CultureInfo.InvariantCulture).TryParseUlong());
+            Assert.Equal(0UL, 0.ToString().TryParseUlong());
+            Assert.Equal(default, string.Empty.TryParseUlong());
+            Assert.Equal(1UL, string.Empty.TryParseUlong(1));
         }
 
         [Fact]
         public void TryParseFloatTest()
         {
+#if  NET48
+            Assert.Equal(float.MaxValue, float.MaxValue.ToString("R").TryParseFloat());
+            Assert.Equal(float.MinValue, float.MinValue.ToString("R").TryParseFloat());
+#else
             Assert.Equal(float.MaxValue, float.MaxValue.ToString(CultureInfo.InvariantCulture).TryParseFloat());
             Assert.Equal(float.MinValue, float.MinValue.ToString(CultureInfo.InvariantCulture).TryParseFloat());
+#endif
             Assert.Equal(0F, 0.ToString().TryParseFloat());
-            Assert.Equal(0F, string.Empty.ToString(CultureInfo.InvariantCulture).TryParseFloat());
+            Assert.Equal(default, string.Empty.TryParseFloat());
+            Assert.Equal(1F, string.Empty.TryParseFloat(1));
         }
 
         [Fact]
         public void TryParseDoubleTest()
         {
+#if  NET48
+            Assert.Equal(double.MaxValue, double.MaxValue.ToString("R").TryParseDouble());
+            Assert.Equal(double.MinValue, double.MinValue.ToString("R").TryParseDouble());
+#else
             Assert.Equal(double.MaxValue, double.MaxValue.ToString(CultureInfo.InvariantCulture).TryParseDouble());
             Assert.Equal(double.MinValue, double.MinValue.ToString(CultureInfo.InvariantCulture).TryParseDouble());
+#endif
             Assert.Equal(0D, 0.ToString().TryParseDouble());
-            Assert.Equal(0D, string.Empty.ToString(CultureInfo.InvariantCulture).TryParseDouble());
+            Assert.Equal(default, string.Empty.TryParseDouble());
+            Assert.Equal(1D, string.Empty.TryParseDouble(1));
         }
 
         [Fact]
@@ -318,7 +346,8 @@ namespace Zaabee.Extensions.UnitTest
             Assert.Equal(decimal.MaxValue, decimal.MaxValue.ToString(CultureInfo.InvariantCulture).TryParseDecimal());
             Assert.Equal(decimal.MinValue, decimal.MinValue.ToString(CultureInfo.InvariantCulture).TryParseDecimal());
             Assert.Equal(0M, 0.ToString().TryParseDecimal());
-            Assert.Equal(0M, string.Empty.TryParseDecimal());
+            Assert.Equal(default, string.Empty.TryParseDecimal());
+            Assert.Equal(1M, string.Empty.TryParseDecimal(1));
         }
 
         [Fact]
@@ -327,6 +356,8 @@ namespace Zaabee.Extensions.UnitTest
             Assert.True(true.ToString().TryParseBool());
             Assert.False(false.ToString().TryParseBool());
             Assert.False(0.ToString().TryParseBool());
+            Assert.False(string.Empty.TryParseBool());
+            Assert.True(string.Empty.TryParseBool(true));
         }
 
         [Fact]
@@ -337,6 +368,8 @@ namespace Zaabee.Extensions.UnitTest
             Assert.Equal(maxDateTime, maxDateTime.ToString(CultureInfo.InvariantCulture).TryParseDateTime());
             Assert.Equal(minDateTime, minDateTime.ToString(CultureInfo.InvariantCulture).TryParseDateTime());
             Assert.Equal(default, string.Empty.TryParseDateTime());
+            Assert.Equal(maxDateTime, string.Empty.TryParseDateTime(maxDateTime));
+            Assert.Equal(minDateTime, string.Empty.TryParseDateTime(minDateTime));
         }
 
         [Fact]
@@ -347,6 +380,8 @@ namespace Zaabee.Extensions.UnitTest
             Assert.Equal(maxDateTimeOffset, maxDateTimeOffset.ToString().TryParseDateTimeOffset());
             Assert.Equal(minDateTimeOffset, minDateTimeOffset.ToString().TryParseDateTimeOffset());
             Assert.Equal(default, string.Empty.TryParseDateTimeOffset());
+            Assert.Equal(maxDateTimeOffset, string.Empty.TryParseDateTimeOffset(maxDateTimeOffset));
+            Assert.Equal(minDateTimeOffset, string.Empty.TryParseDateTimeOffset(minDateTimeOffset));
         }
 
         [Fact]
@@ -457,7 +492,7 @@ namespace Zaabee.Extensions.UnitTest
 
         private static bool BytesEqual(byte[] first, byte[] second)
         {
-            if (first == null || second == null) return false;
+            if (first is null || second is null) return false;
             if (first.Length != second.Length) return false;
             return !first.Where((t, i) => t != second[i]).Any();
         }
