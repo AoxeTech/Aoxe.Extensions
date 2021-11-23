@@ -115,10 +115,10 @@ public static partial class ZaabeeExtension
             case MemoryStream ms:
                 return ms.ToArray();
             default:
-#if NET5_0
-                await using (var memoryStream = new MemoryStream())
-#else
+#if NETSTANDARD2_0
                 using (var memoryStream = new MemoryStream())
+#else
+                await using (var memoryStream = new MemoryStream())
 #endif
                 {
                     await stream.CopyToAsync(memoryStream, bufferSize, cancellationToken);
