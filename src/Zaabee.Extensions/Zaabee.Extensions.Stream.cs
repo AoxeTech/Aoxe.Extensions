@@ -88,17 +88,17 @@ public static partial class ZaabeeExtension
             case MemoryStream ms:
                 return ms.ToArray();
             default:
-#if (NETCOREAPP3_1 || NET5_0 || NET6_0)
-                    await using (var memoryStream = new MemoryStream())
-#else
+#if NETSTANDARD2_0
                 using (var memoryStream = new MemoryStream())
+#else
+                await using (var memoryStream = new MemoryStream())
 #endif
                 {
 
-#if (NETCOREAPP3_1 || NET5_0 || NET6_0)
-                    await stream.CopyToAsync(memoryStream, cancellationToken);
-#else
+#if NETSTANDARD2_0
                     await stream.CopyToAsync(memoryStream);
+#else
+                    await stream.CopyToAsync(memoryStream, cancellationToken);
 #endif
                     return memoryStream.ToArray();
                 }
