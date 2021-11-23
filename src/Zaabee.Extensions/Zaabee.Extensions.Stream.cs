@@ -116,7 +116,7 @@ public static partial class ZaabeeExtension
                 return ms.ToArray();
             default:
 #if NET5_0
-                    await using (var memoryStream = new MemoryStream())
+                await using (var memoryStream = new MemoryStream())
 #else
                 using (var memoryStream = new MemoryStream())
 #endif
