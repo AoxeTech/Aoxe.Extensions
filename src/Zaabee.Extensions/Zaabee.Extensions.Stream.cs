@@ -79,7 +79,7 @@ public static partial class ZaabeeExtension
         }
     }
 
-    public static async Task<byte[]> ReadToEndAsync(this Stream? stream)
+    public static async Task<byte[]> ReadToEndAsync(this Stream? stream, CancellationToken cancellationToken = default)
     {
         switch (stream)
         {
@@ -88,13 +88,18 @@ public static partial class ZaabeeExtension
             case MemoryStream ms:
                 return ms.ToArray();
             default:
-#if NET5_0
+#if (NETCOREAPP3_1 || NET5_0 || NET6_0)
                     await using (var memoryStream = new MemoryStream())
 #else
                 using (var memoryStream = new MemoryStream())
 #endif
                 {
+
+#if (NETCOREAPP3_1 || NET5_0 || NET6_0)
+                    await stream.CopyToAsync(memoryStream, cancellationToken);
+#else
                     await stream.CopyToAsync(memoryStream);
+#endif
                     return memoryStream.ToArray();
                 }
         }
