@@ -63,7 +63,7 @@ public class EnumerableExtensionTest
             new() {Name = "Alice"}
         };
         var enumerable = testModels.AsEnumerable();
-        enumerable.ForEach(p => p.Name = "Bob");
+        enumerable.ForEach(p => p!.Name = "Bob");
         Assert.True(enumerable.All(p => p.Name == "Bob"));
         enumerable.ForEach(null);
     }
@@ -80,10 +80,10 @@ public class EnumerableExtensionTest
             new() {Name = "Alice", Birthday = new DateTime(2000, 1, 1)}
         };
         var enumerable = testModels.AsEnumerable();
-        var result = enumerable.ForEachLazy(p => p.Name = "Bob")
-            .ForEachLazy(p => p.Birthday = new DateTime(2001, 1, 1))
+        var result = enumerable.ForEachLazy(p => p!.Name = "Bob")
+            .ForEachLazy(p => p!.Birthday = new DateTime(2001, 1, 1))
             .ToList();
-        Assert.True(result.All(p => p.Name == "Bob" && p.Birthday == new DateTime(2001, 1, 1)));
+        Assert.True(result.All(p => p!.Name == "Bob" && p.Birthday == new DateTime(2001, 1, 1)));
         enumerable.ForEachLazy(null);
     }
 

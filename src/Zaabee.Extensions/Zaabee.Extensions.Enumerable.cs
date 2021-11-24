@@ -18,10 +18,10 @@ public static partial class ZaabeeExtension
         }
     }
 
-    public static int IndexOf<T>(this IEnumerable<T> source, T value, IEqualityComparer<T>? comparer = null)
+    public static int IndexOf<T>(this IEnumerable<T?> source, T? value, IEqualityComparer<T?>? comparer = null)
     {
         var index = 0;
-        comparer ??= EqualityComparer<T>.Default; // or pass in as a parameter
+        comparer ??= EqualityComparer<T?>.Default; // or pass in as a parameter
         foreach (var item in source)
         {
             if (comparer.Equals(item, value)) return index;
@@ -34,16 +34,16 @@ public static partial class ZaabeeExtension
     public static bool NotContains<T>(this IEnumerable<T> source, T item) =>
         !source.Contains(item);
 
-    public static IList<T> ToList<T>(this IEnumerable<T> src, Func<T, bool>? func) =>
+    public static IList<T?> ToList<T>(this IEnumerable<T?> src, Func<T?, bool>? func) =>
         func is null ? src.ToList() : src.Where(func).ToList();
 
-    public static void ForEach<T>(this IEnumerable<T> src, Action<T>? action)
+    public static void ForEach<T>(this IEnumerable<T?> src, Action<T?>? action)
     {
         if (action is null) return;
         foreach (var i in src) action(i);
     }
 
-    public static IEnumerable<T> ForEachLazy<T>(this IEnumerable<T> src, Action<T>? action)
+    public static IEnumerable<T?> ForEachLazy<T>(this IEnumerable<T?> src, Action<T?>? action)
     {
         if (action is null) return src;
         return src.Select(i =>
