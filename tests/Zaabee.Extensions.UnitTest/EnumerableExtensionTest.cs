@@ -12,9 +12,6 @@ public class EnumerableExtensionTest
         myCollection.AddRange(collection);
         Assert.Equal(list.Count, myCollection.Count);
         Assert.True(list.All(p => myCollection.Contains(p)));
-
-        IList<int>? nullList = null;
-        Assert.Throws<ArgumentNullException>(() => nullList.AddRange(collection));
     }
 
     [Theory]

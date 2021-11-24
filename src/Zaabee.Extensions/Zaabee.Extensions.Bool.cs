@@ -42,9 +42,9 @@ public static partial class ZaabeeExtension
         else actionElse();
     }
 
-    public static TResult IfTrueElse<TResult>(this bool b, Func<TResult> funcTrue, Func<TResult> funcElse) =>
+    public static TResult? IfTrueElse<TResult>(this bool b, Func<TResult> funcTrue, Func<TResult> funcElse) =>
         b ? funcTrue() : funcElse();
 
-    public static TResult IfFalseElse<TResult>(this bool b, Func<TResult> funcFalse, Func<TResult> funcElse) =>
+    public static TResult? IfFalseElse<TResult>(this bool b, Func<TResult> funcFalse, Func<TResult> funcElse) =>
         !b ? funcFalse() : funcElse();
 }

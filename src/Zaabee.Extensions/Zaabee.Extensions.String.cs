@@ -153,7 +153,7 @@ public static partial class ZaabeeExtension
     public static DateTimeOffset TryParseDateTimeOffset(this string s, DateTimeOffset @default = default) =>
         DateTimeOffset.TryParse(s, out var result) ? result : @default;
 
-    public static TEnum TryParseEnum<TEnum>(this string value, TEnum @default = default)
+    public static TEnum TryParseEnum<TEnum>(this string? value, TEnum @default = default)
         where TEnum : struct, Enum =>
         Enum.TryParse(value, out TEnum result) ? result : @default;
 

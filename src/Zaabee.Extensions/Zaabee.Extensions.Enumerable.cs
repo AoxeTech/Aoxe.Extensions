@@ -2,12 +2,10 @@ namespace Zaabee.Extensions;
 
 public static partial class ZaabeeExtension
 {
-    public static void AddRange<T>(this IList<T>? source, IEnumerable<T> collections)
+    public static void AddRange<T>(this IList<T> source, IEnumerable<T> collections)
     {
         switch (source)
         {
-            case null:
-                throw new ArgumentNullException(nameof(source));
             case List<T> list:
                 list.AddRange(collections);
                 break;
