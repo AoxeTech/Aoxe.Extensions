@@ -2,14 +2,15 @@ namespace Zaabee.Extensions;
 
 public static partial class ZaabeeExtension
 {
-    private static readonly ConcurrentDictionary<Type, object?> ValueTypeCache = new();
+    public static object? CreateInstance(this Type type, params object?[]? args) =>
+        Activator.CreateInstance(type, args);
 
-    public static object? GetDefaultValue(this Type type) =>
-        type.IsValueType
-            ? ValueTypeCache.GetOrAdd(type, Activator.CreateInstance)
-            : null;
+    public static bool IsNullableType(this Type? type) =>
+        type is not null
+        && type.IsGenericType
+        && type.GetGenericTypeDefinition() == typeof(Nullable<>);
 
-    public static bool IsNumericType(this Type? type) =>
+    public static bool IsNumericType(this Type type) =>
         Type.GetTypeCode(type) switch
         {
             TypeCode.Byte => true,
