@@ -10,4 +10,3 @@ global using System.Threading;
 global using System.Threading.Tasks;
 global using Xunit;
 global using Zaabee.Extensions.UnitTest.Commons;
-global using Zaabee.Extensions.Commons;

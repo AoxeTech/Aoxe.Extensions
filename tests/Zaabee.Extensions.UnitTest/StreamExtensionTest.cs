@@ -32,9 +32,9 @@ public class StreamExtensionTest
         var bytes = new byte[1024];
         var result = new byte[1024];
         for (var i = 0; i < bytes.Length; i++) bytes[i] = (byte) (i % (byte.MaxValue + 1));
-        Assert.True(ms.TryWrite(bytes, 0, 1024));
+        Assert.True(ms.TryWrite(bytes));
         Assert.Equal(0, ms.TrySeek(0, SeekOrigin.Begin));
-        Assert.Equal(1024, ms.TryRead(result, 0, 1024));
+        Assert.Equal(1024, ms.TryRead(result));
         Assert.True(BytesEqual(bytes, result));
     }
 
@@ -45,9 +45,9 @@ public class StreamExtensionTest
         var bytes = new byte[1024];
         var result = new byte[1024];
         for (var i = 0; i < bytes.Length; i++) bytes[i] = (byte) (i % (byte.MaxValue + 1));
-        Assert.True(await ms.TryWriteAsync(bytes, 0, 1024));
+        Assert.True(await ms.TryWriteAsync(bytes));
         Assert.Equal(0, ms.TrySeek(0, SeekOrigin.Begin));
-        Assert.Equal(1024, await ms.TryReadAsync(result, 0, 1024));
+        Assert.Equal(1024, await ms.TryReadAsync(result));
         Assert.True(BytesEqual(bytes, result));
     }
 

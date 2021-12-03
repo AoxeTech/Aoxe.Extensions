@@ -85,17 +85,27 @@ public class BytesExtensionTest
     {
         const string str = "Alice";
         var bytes = str.ToBytes(Encoding.UTF8);
-        var ms = await bytes.ToStreamAsync();
-        var result = await ms.ReadToEndAsync();
+        var ms = await bytes.ToStreamAsync(CancellationToken.None);
+        var result = await ms.ReadToEndAsync(bytes.Length, CancellationToken.None);
         Assert.True(TestHelper.BytesEqual(bytes, result));
     }
 
     [Fact]
-    public async Task ToStreamTestWithCancellationTokenAsync()
+    public void TryToStreamTest()
     {
         const string str = "Alice";
         var bytes = str.ToBytes(Encoding.UTF8);
-        var ms = await bytes.ToStreamAsync(CancellationToken.None);
+        var ms = bytes.TryToStream();
+        var result = ms.ReadToEnd();
+        Assert.True(TestHelper.BytesEqual(bytes, result));
+    }
+
+    [Fact]
+    public async Task TryToStreamTestAsync()
+    {
+        const string str = "Alice";
+        var bytes = str.ToBytes(Encoding.UTF8);
+        var ms = await bytes.TryToStreamAsync(CancellationToken.None);
         var result = await ms.ReadToEndAsync(bytes.Length, CancellationToken.None);
         Assert.True(TestHelper.BytesEqual(bytes, result));
     }
@@ -117,18 +127,29 @@ public class BytesExtensionTest
         const string str = "Alice";
         var bytes = str.ToBytes(Encoding.UTF8);
         var ms = new MemoryStream();
-        await bytes.WriteToAsync(ms);
-        var result = await ms.ReadToEndAsync();
+        await bytes.WriteToAsync(ms, CancellationToken.None);
+        var result = await ms.ReadToEndAsync(bytes.Length, CancellationToken.None);
         Assert.True(TestHelper.BytesEqual(bytes, result));
     }
 
     [Fact]
-    public async Task WriteToTestWithCancellationTokenAsync()
+    public void TryWriteToTest()
     {
         const string str = "Alice";
         var bytes = str.ToBytes(Encoding.UTF8);
         var ms = new MemoryStream();
-        await bytes.WriteToAsync(ms, CancellationToken.None);
+        bytes.TryWriteTo(ms);
+        var result = ms.ReadToEnd();
+        Assert.True(TestHelper.BytesEqual(bytes, result));
+    }
+
+    [Fact]
+    public async Task TryWriteToTestAsync()
+    {
+        const string str = "Alice";
+        var bytes = str.ToBytes(Encoding.UTF8);
+        var ms = new MemoryStream();
+        await bytes.TryWriteToAsync(ms, CancellationToken.None);
         var result = await ms.ReadToEndAsync(bytes.Length, CancellationToken.None);
         Assert.True(TestHelper.BytesEqual(bytes, result));
     }
