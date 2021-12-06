@@ -35,14 +35,11 @@ public static partial class ZaabeeExtension
             default:
 #if NETSTANDARD2_0
                 using (var memoryStream = new MemoryStream())
-#else
-                await using (var memoryStream = new MemoryStream())
-#endif
                 {
-
-#if NETSTANDARD2_0
                     await stream.CopyToAsync(memoryStream);
 #else
+                await using (var memoryStream = new MemoryStream())
+                {
                     await stream.CopyToAsync(memoryStream, cancellationToken);
 #endif
                     return memoryStream.ToArray();

@@ -10,8 +10,11 @@ public static partial class ZaabeeExtension
 
         var result = target;
         while (result.StartsWith(trimString))
+#if NETSTANDARD2_0
             result = result.Substring(trimString!.Length);
-
+#else
+            result = result[trimString.Length..];
+#endif
         return result;
     }
 
@@ -21,7 +24,11 @@ public static partial class ZaabeeExtension
 
         var result = target;
         while (result.EndsWith(trimString))
+#if NETSTANDARD2_0
             result = result.Substring(0, result.Length - trimString!.Length);
+#else
+            result = result[..^trimString.Length];
+#endif
 
         return result;
     }
@@ -39,7 +46,7 @@ public static partial class ZaabeeExtension
         string.Format(format, args);
 
     public static string GetLetterOrDigit(this string source) =>
-        new string(source.Where(char.IsLetterOrDigit).ToArray());
+        new(source.Where(char.IsLetterOrDigit).ToArray());
 
     public static string? TryReplace(this string? str, string oldValue, string? newValue) =>
         string.IsNullOrEmpty(str) ? str : str!.Replace(oldValue, newValue);

@@ -10,7 +10,11 @@ public static partial class ZaabeeExtension
         CancellationToken cancellationToken = default)
     {
         var canWrite = stream is not null && stream.CanWrite;
+#if NETSTANDARD2_0
         if (canWrite) await stream!.WriteAsync(buffer, offset, count, cancellationToken);
+#else
+        if (canWrite) await stream!.WriteAsync(buffer.AsMemory(offset, count), cancellationToken);
+#endif
         return canWrite;
     }
 }

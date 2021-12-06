@@ -24,10 +24,10 @@ public static partial class ZaabeeExtension
         if (!b) action();
     }
 
-    public static TResult? IfTrue<TResult>(this bool b, Func<TResult> func) =>
+    public static TResult? IfTrue<TResult>(this bool b, Func<TResult?> func) =>
         b ? func() : default;
 
-    public static TResult? IfFalse<TResult>(this bool b, Func<TResult> func) =>
+    public static TResult? IfFalse<TResult>(this bool b, Func<TResult?> func) =>
         !b ? func() : default;
 
     public static void IfTrueElse(this bool b, Action actionTrue, Action actionElse)
@@ -42,9 +42,9 @@ public static partial class ZaabeeExtension
         else actionElse();
     }
 
-    public static TResult? IfTrueElse<TResult>(this bool b, Func<TResult> funcTrue, Func<TResult> funcElse) =>
+    public static TResult? IfTrueElse<TResult>(this bool b, Func<TResult?> funcTrue, Func<TResult?> funcElse) =>
         b ? funcTrue() : funcElse();
 
-    public static TResult? IfFalseElse<TResult>(this bool b, Func<TResult> funcFalse, Func<TResult> funcElse) =>
+    public static TResult? IfFalseElse<TResult>(this bool b, Func<TResult?> funcFalse, Func<TResult?> funcElse) =>
         !b ? funcFalse() : funcElse();
 }
