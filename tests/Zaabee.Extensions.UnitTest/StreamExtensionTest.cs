@@ -31,10 +31,12 @@ public class StreamExtensionTest
         var ms = new MemoryStream();
         var bytes = new byte[1024];
         var result = new byte[1024];
-        for (var i = 0; i < bytes.Length; i++) bytes[i] = (byte) (i % (byte.MaxValue + 1));
+        for (var i = 0; i < bytes.Length; i++) bytes[i] = (byte)(i % (byte.MaxValue + 1));
         Assert.True(ms.TryWrite(bytes));
         Assert.Equal(0, ms.TrySeek(0, SeekOrigin.Begin));
         Assert.Equal(1024, ms.TryRead(result));
+        Assert.Equal(0, ms.TrySeek(0, SeekOrigin.Begin));
+        Assert.Equal(1024, ms.TryRead(result, 0, result.Length));
         Assert.True(BytesEqual(bytes, result));
     }
 
