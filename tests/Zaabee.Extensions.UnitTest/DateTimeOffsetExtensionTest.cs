@@ -2,101 +2,103 @@ namespace Zaabee.Extensions.UnitTest;
 
 public class DateTimeOffsetExtensionTest
 {
-    [Fact]
-    public void EachSecondToTest()
+    [Theory]
+    [InlineData(-1024)]
+    [InlineData(0)]
+    [InlineData(1024)]
+    public void EachSecondToTest(int seconds)
     {
-        var dateFrom = DateTimeOffset.Now;
-        var compareTime = new DateTimeOffset(dateFrom.Year, dateFrom.Month, dateFrom.Day,
-            dateFrom.Hour, dateFrom.Minute, dateFrom.Second, DateTimeOffset.Now.Offset);
-        var dateTo = DateTimeOffset.Now.AddDays(1).AddMinutes(-1);
-        var results = dateFrom.EachSecondTo(dateTo);
-        foreach (var result in results)
+        var dateFrom = new DateTimeOffset(new DateTime(1900, 1, 1));
+        var dateTo = dateFrom.AddSeconds(seconds);
+        var dates = dateFrom.EachSecondTo(dateTo).ToList();
+        if (seconds < 0)
+            Assert.Empty(dates);
+        else
+            Assert.Equal(seconds + 1, dates.Count);
+        foreach (var result in dates)
         {
-            Assert.Equal(compareTime, result);
-            compareTime = compareTime.AddSeconds(1);
+            Assert.Equal(dateFrom, result);
+            dateFrom = dateFrom.AddSeconds(1);
         }
     }
 
-    [Fact]
-    public void EachMinuteToTest()
+    [Theory]
+    [InlineData(-1024)]
+    [InlineData(0)]
+    [InlineData(1024)]
+    public void EachMinuteToTest(int minutes)
     {
-        var dateFrom = DateTimeOffset.Now;
-        var compareTime = new DateTimeOffset(dateFrom.Year, dateFrom.Month, dateFrom.Day,
-            dateFrom.Hour, dateFrom.Minute, 0, DateTimeOffset.Now.Offset);
-        var dateTo = DateTimeOffset.Now.AddDays(1).AddMinutes(-1);
-        var results = dateFrom.EachMinuteTo(dateTo);
-        foreach (var result in results)
+        var dateFrom = new DateTimeOffset(new DateTime(1900, 1, 1));
+        var dateTo = dateFrom.AddMinutes(minutes);
+        var dates = dateFrom.EachMinuteTo(dateTo).ToList();
+        if (minutes < 0)
+            Assert.Empty(dates);
+        else
+            Assert.Equal(minutes + 1, dates.Count);
+        foreach (var result in dates)
         {
-            Assert.Equal(compareTime, result);
-            compareTime = compareTime.AddMinutes(1);
+            Assert.Equal(dateFrom, result);
+            dateFrom = dateFrom.AddMinutes(1);
         }
     }
 
-    [Fact]
-    public void EachHourToTest()
+    [Theory]
+    [InlineData(-1024)]
+    [InlineData(0)]
+    [InlineData(1024)]
+    public void EachHourToTest(int hours)
     {
-        var dateFrom = DateTimeOffset.Now;
-        var compareTime = new DateTimeOffset(dateFrom.Year, dateFrom.Month, dateFrom.Day,
-            dateFrom.Hour, 0, 0, DateTimeOffset.Now.Offset);
-        var dateTo = DateTimeOffset.Now.AddDays(1).AddMinutes(-1);
-        var results = dateFrom.EachHourTo(dateTo);
-        foreach (var result in results)
+        var dateFrom = new DateTimeOffset(new DateTime(1900, 1, 1));
+        var dateTo = dateFrom.AddHours(hours);
+        var dates = dateFrom.EachHourTo(dateTo).ToList();
+        if (hours < 0)
+            Assert.Empty(dates);
+        else
+            Assert.Equal(hours + 1, dates.Count);
+        foreach (var result in dates)
         {
-            Assert.Equal(compareTime, result);
-            compareTime = compareTime.AddHours(1);
+            Assert.Equal(dateFrom, result);
+            dateFrom = dateFrom.AddHours(1);
         }
     }
 
-    [Fact]
-    public void EachDayToTest()
+    [Theory]
+    [InlineData(-1024)]
+    [InlineData(0)]
+    [InlineData(1024)]
+    public void EachDayToTest(int days)
     {
-        var dateFrom = DateTimeOffset.Now;
-        var dateTo = DateTimeOffset.Now.AddDays(7).AddHours(-1);
-        var results = dateFrom.EachDayTo(dateTo);
-        foreach (var result in results)
+        var dateFrom = new DateTimeOffset(new DateTime(1900, 1, 1));
+        var dateTo = dateFrom.AddDays(days);
+        var dates = dateFrom.EachDayTo(dateTo).ToList();
+        if (days < 0)
+            Assert.Empty(dates);
+        else
+            Assert.Equal(days + 1, dates.Count);
+        foreach (var result in dates)
         {
-            Assert.Equal(dateFrom.Date, result);
+            Assert.Equal(dateFrom, result);
             dateFrom = dateFrom.AddDays(1);
         }
     }
 
     [Theory]
-    [InlineData(-1)]
-    [InlineData(-7)]
     [InlineData(-1024)]
-    public void EachDayDateToLessThanDateFromTest(int days)
-    {
-        var dateFrom = DateTimeOffset.Now;
-        var dateTo = DateTimeOffset.Now.AddDays(days);
-        var results = dateFrom.EachDayTo(dateTo);
-        Assert.Empty(results);
-    }
-
-    [Theory]
-    [InlineData(1)]
-    [InlineData(7)]
+    [InlineData(0)]
     [InlineData(1024)]
     public void EachMonthToTest(int months)
     {
-        var dateFrom = DateTimeOffset.Now;
-        var dateTo = DateTimeOffset.Now.AddMonths(months).AddDays(-1);
-        var results = dateFrom.EachMonthTo(dateTo);
-        foreach (var result in results)
+        var dateFrom = new DateTimeOffset(new DateTime(1900, 1, 1));
+        var dateTo = dateFrom.AddMonths(months);
+        var dates = dateFrom.EachMonthTo(dateTo).ToList();
+        if (months < 0)
+            Assert.Empty(dates);
+        else
+            Assert.Equal(months + 1, dates.Count);
+        foreach (var result in dates)
         {
-            Assert.Equal(dateFrom.Date, result);
+            Assert.Equal(dateFrom, result);
             dateFrom = dateFrom.AddMonths(1);
         }
-    }
-
-    [Theory]
-    [InlineData(-1)]
-    [InlineData(-7)]
-    [InlineData(-1024)]
-    public void EachMonthDateToLessThanDateFromTest(int months)
-    {
-        var dateFrom = DateTimeOffset.Now;
-        var dateTo = DateTimeOffset.Now.AddMonths(months);
-        var results = dateFrom.EachMonthTo(dateTo);
-        Assert.Empty(results);
     }
 }

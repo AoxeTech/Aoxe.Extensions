@@ -2,50 +2,43 @@ namespace Zaabee.Extensions;
 
 public static partial class ZaabeeExtension
 {
-    public static IEnumerable<DateTime> EachSecondTo(this DateTime timeFrom, DateTime timeTo)
+    public static IEnumerable<DateTime> EachSecondTo(this DateTime from, DateTime to)
     {
-        var dateTime = new DateTime(timeTo.Year, timeTo.Month, timeTo.Day,
-            timeTo.Hour, timeTo.Minute, timeTo.Second);
-        for (var time = new DateTime(timeFrom.Year, timeFrom.Month, timeFrom.Day,
-                 timeFrom.Hour, timeFrom.Minute, timeFrom.Second);
-             time <= dateTime;
-             time = time.AddSeconds(1))
-            yield return time;
+        for (var dateTime = new DateTime(from.Year, from.Month, from.Day, from.Hour, from.Minute, from.Second);
+             dateTime <= to;
+             dateTime = dateTime.AddSeconds(1))
+            yield return dateTime;
     }
 
-    public static IEnumerable<DateTime> EachMinuteTo(this DateTime timeFrom, DateTime timeTo)
+    public static IEnumerable<DateTime> EachMinuteTo(this DateTime from, DateTime to)
     {
-        var dateTime = new DateTime(timeTo.Year, timeTo.Month, timeTo.Day,
-            timeTo.Hour, timeTo.Minute, 0);
-        for (var time = new DateTime(timeFrom.Year, timeFrom.Month, timeFrom.Day,
-                 timeFrom.Hour, timeFrom.Minute, 0);
-             time <= dateTime;
-             time = time.AddMinutes(1))
-            yield return time;
+        for (var dateTime = new DateTime(from.Year, from.Month, from.Day, from.Hour, from.Minute, 0);
+             dateTime <= to;
+             dateTime = dateTime.AddMinutes(1))
+            yield return dateTime;
     }
 
-    public static IEnumerable<DateTime> EachHourTo(this DateTime timeFrom, DateTime timeTo)
+    public static IEnumerable<DateTime> EachHourTo(this DateTime from, DateTime to)
     {
-        var dateTime = new DateTime(timeTo.Year, timeTo.Month, timeTo.Day,
-            timeTo.Hour, 0, 0);
-        for (var time = new DateTime(timeFrom.Year, timeFrom.Month, timeFrom.Day,
-                 timeFrom.Hour, 0, 0);
-             time <= dateTime;
-             time = time.AddHours(1))
-            yield return time;
+        for (var dateTime = new DateTime(from.Year, from.Month, from.Day, from.Hour, 0, 0);
+             dateTime <= to;
+             dateTime = dateTime.AddHours(1))
+            yield return dateTime;
     }
 
-    public static IEnumerable<DateTime> EachDayTo(this DateTime dateFrom, DateTime dateTo)
+    public static IEnumerable<DateTime> EachDayTo(this DateTime from, DateTime to)
     {
-        for (var date = dateFrom.Date; date.Date <= dateTo.Date; date = date.AddDays(1))
-            yield return date;
+        for (var dateTime = new DateTime(from.Year, from.Month, from.Day);
+             dateTime <= to;
+             dateTime = dateTime.AddDays(1))
+            yield return dateTime;
     }
 
-    public static IEnumerable<DateTime> EachMonthTo(this DateTime dateFrom, DateTime dateTo)
+    public static IEnumerable<DateTime> EachMonthTo(this DateTime from, DateTime to)
     {
-        for (var date = dateFrom.Date;
-             date.Date <= dateTo.Date || date.Month == dateTo.Month;
-             date = date.AddMonths(1))
-            yield return date;
+        for (var dateTime = new DateTime(from.Year, from.Month, 1);
+             dateTime <= to;
+             dateTime = dateTime.AddMonths(1))
+            yield return dateTime;
     }
 }
