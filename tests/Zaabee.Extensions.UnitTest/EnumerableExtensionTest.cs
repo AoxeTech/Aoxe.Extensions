@@ -19,7 +19,7 @@ public class EnumerableExtensionTest
     public void IndexOfTest(int total, int index)
     {
         IEnumerable<TestModel> testModels = Enumerable.Range(0, total)
-            .Select(_ => new TestModel {Name = "Alice"}).ToList();
+            .Select(_ => new TestModel { Name = "Alice" }).ToList();
         var testModel = testModels.Skip(index).First();
         Assert.Equal(index, testModels.IndexOf(testModel));
     }
@@ -29,8 +29,8 @@ public class EnumerableExtensionTest
     public void IndexOfNotExistTest(int total)
     {
         IEnumerable<TestModel> testModels = Enumerable.Range(0, total)
-            .Select(_ => new TestModel {Name = "Alice"}).ToList();
-        var testModel = new TestModel {Name = "Bob"};
+            .Select(_ => new TestModel { Name = "Alice" }).ToList();
+        var testModel = new TestModel { Name = "Bob" };
         Assert.Equal(-1, testModels.IndexOf(testModel));
     }
 
@@ -46,7 +46,7 @@ public class EnumerableExtensionTest
     [Fact]
     public void ToListTest()
     {
-        var i = new List<int> {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
+        var i = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
         var even = i.ToList(p => p % 2 == 0);
         Assert.True(even.All(p => p % 2 == 0));
     }
