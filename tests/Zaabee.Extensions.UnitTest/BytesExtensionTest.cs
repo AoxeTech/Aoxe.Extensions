@@ -71,6 +71,16 @@ public class BytesExtensionTest
     }
 
     [Fact]
+    public void ToMemoryStreamTest()
+    {
+        const string str = "Alice";
+        var bytes = str.GetBytes(Encoding.UTF8);
+        var ms = bytes.ToMemoryStream();
+        var result = ms.ReadToEnd();
+        Assert.True(TestHelper.BytesEqual(bytes, result));
+    }
+
+    [Fact]
     public void WriteToTest()
     {
         const string str = "Alice";
