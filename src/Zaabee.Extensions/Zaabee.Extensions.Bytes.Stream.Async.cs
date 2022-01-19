@@ -2,24 +2,6 @@ namespace Zaabee.Extensions;
 
 public static partial class ZaabeeExtension
 {
-    public static async Task<MemoryStream> ToStreamAsync(this byte[] buffer,
-        CancellationToken cancellationToken = default)
-    {
-        var ms = new MemoryStream();
-        await buffer.WriteToAsync(ms, cancellationToken);
-        ms.Seek(0, SeekOrigin.Begin);
-        return ms;
-    }
-
-    public static async Task<MemoryStream> TryToStreamAsync(this byte[] buffer,
-        CancellationToken cancellationToken = default)
-    {
-        var ms = new MemoryStream();
-        await buffer.TryWriteToAsync(ms, cancellationToken);
-        ms.Seek(0, SeekOrigin.Begin);
-        return ms;
-    }
-
     public static async Task WriteToAsync(this byte[] buffer, Stream stream,
         CancellationToken cancellationToken = default) =>
 #if NETSTANDARD2_0

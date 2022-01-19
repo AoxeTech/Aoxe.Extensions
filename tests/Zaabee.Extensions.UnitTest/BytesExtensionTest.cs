@@ -71,46 +71,6 @@ public class BytesExtensionTest
     }
 
     [Fact]
-    public void ToStreamTest()
-    {
-        const string str = "Alice";
-        var bytes = str.GetBytes(Encoding.UTF8);
-        var ms = bytes.ToStream();
-        var result = ms.ReadToEnd();
-        Assert.True(TestHelper.BytesEqual(bytes, result));
-    }
-
-    [Fact]
-    public async Task ToStreamTestAsync()
-    {
-        const string str = "Alice";
-        var bytes = str.GetBytes(Encoding.UTF8);
-        var ms = await bytes.ToStreamAsync(CancellationToken.None);
-        var result = await ms.ReadToEndAsync(bytes.Length, CancellationToken.None);
-        Assert.True(TestHelper.BytesEqual(bytes, result));
-    }
-
-    [Fact]
-    public void TryToStreamTest()
-    {
-        const string str = "Alice";
-        var bytes = str.GetBytes(Encoding.UTF8);
-        var ms = bytes.TryToStream();
-        var result = ms.ReadToEnd();
-        Assert.True(TestHelper.BytesEqual(bytes, result));
-    }
-
-    [Fact]
-    public async Task TryToStreamTestAsync()
-    {
-        const string str = "Alice";
-        var bytes = str.GetBytes(Encoding.UTF8);
-        var ms = await bytes.TryToStreamAsync(CancellationToken.None);
-        var result = await ms.ReadToEndAsync(bytes.Length, CancellationToken.None);
-        Assert.True(TestHelper.BytesEqual(bytes, result));
-    }
-
-    [Fact]
     public void WriteToTest()
     {
         const string str = "Alice";
