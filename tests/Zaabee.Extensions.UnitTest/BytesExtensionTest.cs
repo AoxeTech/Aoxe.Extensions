@@ -6,7 +6,7 @@ public class BytesExtensionTest
     public void GetStringByUtf8Test()
     {
         const string str = "Alice";
-        var bytes = str.ToBytes(Encoding.UTF8);
+        var bytes = str.GetBytes(Encoding.UTF8);
         Assert.Equal(str, bytes.GetStringByUtf8());
     }
 
@@ -14,7 +14,7 @@ public class BytesExtensionTest
     public void GetStringByAsciiTest()
     {
         const string str = "Alice";
-        var bytes = str.ToBytes(Encoding.ASCII);
+        var bytes = str.GetBytes(Encoding.ASCII);
         Assert.Equal(str, bytes.GetStringByAscii());
     }
 
@@ -22,7 +22,7 @@ public class BytesExtensionTest
     public void GetStringByBigEndianUnicodeTest()
     {
         const string str = "Alice";
-        var bytes = str.ToBytes(Encoding.BigEndianUnicode);
+        var bytes = str.GetBytes(Encoding.BigEndianUnicode);
         Assert.Equal(str, bytes.GetStringByBigEndianUnicode());
     }
 
@@ -30,7 +30,7 @@ public class BytesExtensionTest
     public void GetStringByDefaultTest()
     {
         const string str = "Alice";
-        var bytes = str.ToBytes(Encoding.Default);
+        var bytes = str.GetBytes(Encoding.Default);
         Assert.Equal(str, bytes.GetStringByDefault());
     }
 
@@ -38,7 +38,7 @@ public class BytesExtensionTest
     public void GetStringByUtf32Test()
     {
         const string str = "Alice";
-        var bytes = str.ToBytes(Encoding.UTF32);
+        var bytes = str.GetBytes(Encoding.UTF32);
         Assert.Equal(str, bytes.GetStringByUtf32());
     }
 
@@ -46,7 +46,7 @@ public class BytesExtensionTest
     public void GetStringByUnicodeTest()
     {
         const string str = "Alice";
-        var bytes = str.ToBytes(Encoding.Unicode);
+        var bytes = str.GetBytes(Encoding.Unicode);
         Assert.Equal(str, bytes.GetStringByUnicode());
     }
 
@@ -54,7 +54,7 @@ public class BytesExtensionTest
     public void Base64Test()
     {
         const string str = "Alice";
-        var bytes = str.ToBytes(Encoding.UTF8);
+        var bytes = str.GetBytes(Encoding.UTF8);
 
         var bytesToBase64String = bytes.ToBase64String();
         var stringToBase64String = str.ToBase64String();
@@ -74,7 +74,7 @@ public class BytesExtensionTest
     public void ToStreamTest()
     {
         const string str = "Alice";
-        var bytes = str.ToBytes(Encoding.UTF8);
+        var bytes = str.GetBytes(Encoding.UTF8);
         var ms = bytes.ToStream();
         var result = ms.ReadToEnd();
         Assert.True(TestHelper.BytesEqual(bytes, result));
@@ -84,7 +84,7 @@ public class BytesExtensionTest
     public async Task ToStreamTestAsync()
     {
         const string str = "Alice";
-        var bytes = str.ToBytes(Encoding.UTF8);
+        var bytes = str.GetBytes(Encoding.UTF8);
         var ms = await bytes.ToStreamAsync(CancellationToken.None);
         var result = await ms.ReadToEndAsync(bytes.Length, CancellationToken.None);
         Assert.True(TestHelper.BytesEqual(bytes, result));
@@ -94,7 +94,7 @@ public class BytesExtensionTest
     public void TryToStreamTest()
     {
         const string str = "Alice";
-        var bytes = str.ToBytes(Encoding.UTF8);
+        var bytes = str.GetBytes(Encoding.UTF8);
         var ms = bytes.TryToStream();
         var result = ms.ReadToEnd();
         Assert.True(TestHelper.BytesEqual(bytes, result));
@@ -104,7 +104,7 @@ public class BytesExtensionTest
     public async Task TryToStreamTestAsync()
     {
         const string str = "Alice";
-        var bytes = str.ToBytes(Encoding.UTF8);
+        var bytes = str.GetBytes(Encoding.UTF8);
         var ms = await bytes.TryToStreamAsync(CancellationToken.None);
         var result = await ms.ReadToEndAsync(bytes.Length, CancellationToken.None);
         Assert.True(TestHelper.BytesEqual(bytes, result));
@@ -114,7 +114,7 @@ public class BytesExtensionTest
     public void WriteToTest()
     {
         const string str = "Alice";
-        var bytes = str.ToBytes(Encoding.UTF8);
+        var bytes = str.GetBytes(Encoding.UTF8);
         var ms = new MemoryStream();
         bytes.WriteTo(ms);
         var result = ms.ReadToEnd();
@@ -125,7 +125,7 @@ public class BytesExtensionTest
     public async Task WriteToTestAsync()
     {
         const string str = "Alice";
-        var bytes = str.ToBytes(Encoding.UTF8);
+        var bytes = str.GetBytes(Encoding.UTF8);
         var ms = new MemoryStream();
         await bytes.WriteToAsync(ms, CancellationToken.None);
         var result = await ms.ReadToEndAsync(bytes.Length, CancellationToken.None);
@@ -136,7 +136,7 @@ public class BytesExtensionTest
     public void TryWriteToTest()
     {
         const string str = "Alice";
-        var bytes = str.ToBytes(Encoding.UTF8);
+        var bytes = str.GetBytes(Encoding.UTF8);
         var ms = new MemoryStream();
         bytes.TryWriteTo(ms);
         var result = ms.ReadToEnd();
@@ -147,7 +147,7 @@ public class BytesExtensionTest
     public async Task TryWriteToTestAsync()
     {
         const string str = "Alice";
-        var bytes = str.ToBytes(Encoding.UTF8);
+        var bytes = str.GetBytes(Encoding.UTF8);
         var ms = new MemoryStream();
         await bytes.TryWriteToAsync(ms, CancellationToken.None);
         var result = await ms.ReadToEndAsync(bytes.Length, CancellationToken.None);

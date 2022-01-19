@@ -52,8 +52,8 @@ public class StringExtensionTest
     [InlineData("Carol")]
     [InlineData("Dave")]
     [InlineData("Eve")]
-    public void ToUtf8BytesTest(string str) =>
-        Assert.True(TestHelper.BytesEqual(str.ToUtf8Bytes(), Encoding.UTF8.GetBytes(str)));
+    public void GetUtf8BytesTest(string str) =>
+        Assert.True(TestHelper.BytesEqual(str.GetUtf8Bytes(), Encoding.UTF8.GetBytes(str)));
 
     [Theory]
     [InlineData("Alice")]
@@ -61,8 +61,8 @@ public class StringExtensionTest
     [InlineData("Carol")]
     [InlineData("Dave")]
     [InlineData("Eve")]
-    public void ToAsciiBytesTest(string str) =>
-        Assert.True(TestHelper.BytesEqual(str.ToAsciiBytes(), Encoding.ASCII.GetBytes(str)));
+    public void GetAsciiBytesTest(string str) =>
+        Assert.True(TestHelper.BytesEqual(str.GetAsciiBytes(), Encoding.ASCII.GetBytes(str)));
 
     [Theory]
     [InlineData("Alice")]
@@ -70,8 +70,8 @@ public class StringExtensionTest
     [InlineData("Carol")]
     [InlineData("Dave")]
     [InlineData("Eve")]
-    public void ToBigEndianUnicodeBytesTest(string str) =>
-        Assert.True(TestHelper.BytesEqual(str.ToBigEndianUnicodeBytes(), Encoding.BigEndianUnicode.GetBytes(str)));
+    public void GetBigEndianUnicodeBytesTest(string str) =>
+        Assert.True(TestHelper.BytesEqual(str.GetBigEndianUnicodeBytes(), Encoding.BigEndianUnicode.GetBytes(str)));
 
     [Theory]
     [InlineData("Alice")]
@@ -79,8 +79,8 @@ public class StringExtensionTest
     [InlineData("Carol")]
     [InlineData("Dave")]
     [InlineData("Eve")]
-    public void ToDefaultBytesTest(string str) =>
-        Assert.True(TestHelper.BytesEqual(str.ToDefaultBytes(), Encoding.Default.GetBytes(str)));
+    public void GetDefaultBytesTest(string str) =>
+        Assert.True(TestHelper.BytesEqual(str.GetDefaultBytes(), Encoding.Default.GetBytes(str)));
 
     [Theory]
     [InlineData("Alice")]
@@ -88,8 +88,8 @@ public class StringExtensionTest
     [InlineData("Carol")]
     [InlineData("Dave")]
     [InlineData("Eve")]
-    public void ToUtf32BytesTest(string str) =>
-        Assert.True(TestHelper.BytesEqual(str.ToUtf32Bytes(), Encoding.UTF32.GetBytes(str)));
+    public void GetUtf32BytesTest(string str) =>
+        Assert.True(TestHelper.BytesEqual(str.GetUtf32Bytes(), Encoding.UTF32.GetBytes(str)));
 
     [Theory]
     [InlineData("Alice")]
@@ -97,8 +97,8 @@ public class StringExtensionTest
     [InlineData("Carol")]
     [InlineData("Dave")]
     [InlineData("Eve")]
-    public void ToUnicodeBytesTest(string str) =>
-        Assert.True(TestHelper.BytesEqual(str.ToUnicodeBytes(), Encoding.Unicode.GetBytes(str)));
+    public void GetUnicodeBytesTest(string str) =>
+        Assert.True(TestHelper.BytesEqual(str.GetUnicodeBytes(), Encoding.Unicode.GetBytes(str)));
 
     #endregion
 
@@ -392,8 +392,8 @@ public class StringExtensionTest
     public void Base64Test(string value)
     {
         Assert.Equal(value, value.ToBase64String().FromBase64ToString());
-        Assert.Equal(value.ToBase64Bytes(), value.ToBase64String().ToBytes());
-        Assert.True(TestHelper.BytesEqual(value.ToBytes(), value.ToBase64String().FromBase64ToBytes()));
+        Assert.Equal(value.ToBase64Bytes(), value.ToBase64String().GetBytes());
+        Assert.True(TestHelper.BytesEqual(value.GetBytes(), value.ToBase64String().FromBase64ToBytes()));
     }
 
     #endregion
