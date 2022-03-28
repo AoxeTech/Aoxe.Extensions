@@ -1,4 +1,4 @@
-#if !NET48 && !NETCOREAPP3_1 && !NET5_0
+#if !NET48 && !NETCOREAPP3_1
 namespace Zaabee.Extensions.UnitTest;
 
 public class TimeOnlyExtensionsTest
