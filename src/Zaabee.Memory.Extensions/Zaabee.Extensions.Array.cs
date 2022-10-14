@@ -1,6 +1,6 @@
 namespace Zaabee.Memory.Extensions;
 
-public static partial class SpanExtensions
+public static partial class ZaabeeExtension
 {
     public static Span<T> ToSpan<T>(this T[] bytes) =>
         new(bytes);
