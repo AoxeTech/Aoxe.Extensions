@@ -13,4 +13,7 @@ public static partial class ZaabeeExtension
 
     public static bool IsNullOrEmpty<T>(this IEnumerable<T?>? src) =>
         src is null || !src.Any();
+
+    public static T IfNull<T>(this T? value, T defaultValue) =>
+        value is null ? defaultValue : value;
 }
