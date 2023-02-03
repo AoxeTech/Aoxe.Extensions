@@ -10,11 +10,11 @@ public static partial class ZaabeeExtension
                 list.AddRange(collections);
                 break;
             default:
-                {
-                    foreach (var item in collections)
-                        source.Add(item);
-                    break;
-                }
+            {
+                foreach (var item in collections)
+                    source.Add(item);
+                break;
+            }
         }
     }
 
@@ -59,7 +59,7 @@ public static partial class ZaabeeExtension
         var table = new DataTable();
         foreach (PropertyDescriptor prop in properties)
             table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
-        foreach (var item in data)
+        foreach (var item in data.Where(p => p is not null))
         {
             var row = table.NewRow();
             foreach (PropertyDescriptor prop in properties)
@@ -69,4 +69,4 @@ public static partial class ZaabeeExtension
 
         return table;
     }
-}
+} 
