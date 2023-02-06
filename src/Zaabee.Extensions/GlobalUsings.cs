@@ -3,6 +3,7 @@ global using System.Collections.Concurrent;
 global using System.Collections.Generic;
 global using System.ComponentModel;
 global using System.Data;
+global using System.Dynamic;
 global using System.IO;
 global using System.Linq;
 global using System.Reflection;

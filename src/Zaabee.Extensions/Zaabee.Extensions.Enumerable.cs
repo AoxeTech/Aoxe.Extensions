@@ -59,14 +59,16 @@ public static partial class ZaabeeExtension
         var table = new DataTable();
         foreach (PropertyDescriptor prop in properties)
             table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
-        foreach (var item in data.Where(p => p is not null))
+        foreach (var item in data)
         {
             var row = table.NewRow();
             foreach (PropertyDescriptor prop in properties)
-                row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+                row[prop.Name] = item is null
+                    ? DBNull.Value
+                    : prop.GetValue(item) ?? DBNull.Value;
             table.Rows.Add(row);
         }
 
         return table;
     }
-} 
+}
