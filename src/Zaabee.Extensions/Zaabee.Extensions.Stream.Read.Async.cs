@@ -11,11 +11,7 @@ public static partial class ZaabeeExtension
         CancellationToken cancellationToken = default) =>
         stream is not null && stream.CanRead
             ? stream.ReadAsync(buffer, cancellationToken)
-#if NETCOREAPP3_1
-            : new ValueTask<int>(0);
-#else
             : ValueTask.FromResult(0);
-#endif
 #endif
 
     public static Task<int> TryReadAsync(this Stream? stream, byte[] buffer, int offset, int count,

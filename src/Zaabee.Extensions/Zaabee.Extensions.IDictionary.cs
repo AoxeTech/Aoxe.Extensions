@@ -20,11 +20,7 @@ public static partial class ZaabeeExtension
         return eoDynamic;
     }
 
-#if NETSTANDARD2_0
-    public static T ToObject<T>(this IDictionary<string, object> source) where T : class, new()
-#else
     public static T ToObject<T>(this IDictionary<string, object?> source) where T : class, new()
-#endif
     {
         var someObject = new T();
         var someObjectType = someObject.GetType();

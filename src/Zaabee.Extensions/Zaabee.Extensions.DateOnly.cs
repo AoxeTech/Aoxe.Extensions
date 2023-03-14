@@ -1,4 +1,4 @@
-#if !NETSTANDARD2_0 && !NETCOREAPP3_1
+#if !NETSTANDARD2_0
 namespace Zaabee.Extensions;
 
 public static partial class ZaabeeExtension
