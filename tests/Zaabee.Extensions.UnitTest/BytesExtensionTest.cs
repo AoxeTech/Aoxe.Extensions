@@ -51,6 +51,15 @@ public class BytesExtensionTest
     }
 
     [Fact]
+    public void ToHexStringTest()
+    {
+        const string str = "Alice";
+        var bytes = str.GetBytes(Encoding.UTF8);
+        var hexString = bytes.ToHexString();
+        Assert.Equal("416C696365", hexString);
+    }
+
+    [Fact]
     public void Base64Test()
     {
         const string str = "Alice";

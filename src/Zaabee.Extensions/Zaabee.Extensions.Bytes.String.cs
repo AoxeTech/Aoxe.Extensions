@@ -22,4 +22,16 @@ public static partial class ZaabeeExtension
 
     public static string GetString(this byte[] bytes, Encoding? encoding = null) =>
         (encoding ?? Encoding.UTF8).GetString(bytes);
+
+    public static string ToHexString(this byte[] hash)
+    {
+#if NETSTANDARD2_0
+        var hex = new StringBuilder(hash.Length * 2);
+        foreach (var b in hash)
+            hex.Append($"{b:X2}");
+        return hex.ToString();
+#else
+        return Convert.ToHexString(hash);
+#endif
+    }
 }
