@@ -432,4 +432,13 @@ public class StringExtensionTest
     [InlineData("     ", " ", "", "")]
     public void TryReplaceTest(string str, string first, string second, string result) =>
         Assert.Equal(str.TryReplace(first, second), result);
+
+    [Theory]
+    [InlineData("1F3870BE274F6C49B3E31A0C6728957F")]
+    public void HexTest(string hexString)
+    {
+        var bytes = hexString.FromHexString();
+        var result = bytes.ToHexString();
+        Assert.Equal(hexString, result);
+    }
 }
