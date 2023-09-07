@@ -197,6 +197,62 @@ public class StreamExtensionTest
         Assert.True(BytesEqual(nsBytes, nsResult));
     }
 
+    [Fact]
+    public void WriteAndReadString()
+    {
+        const string str = "Zaabee";
+        var ms = new MemoryStream();
+        ms.Write(str);
+        var result = ms.ReadString();
+        Assert.Equal(str, result);
+    }
+
+    [Fact]
+    public void TryWriteAndReadString()
+    {
+        const string str = "Zaabee";
+        var ms = new MemoryStream();
+        Assert.True(ms.TryWrite(str));
+        var result = ms.ReadString();
+        Assert.Equal(str, result);
+    }
+
+    [Fact]
+    public async Task WriteAndReadStringAsync()
+    {
+        const string str = "Zaabee";
+        var ms = new MemoryStream();
+        await ms.WriteAsync(str);
+        var result = await ms.ReadStringAsync();
+        Assert.Equal(str, result);
+    }
+
+    [Fact]
+    public async Task TryWriteAndReadStringAsync()
+    {
+        const string str = "Zaabee";
+        var ms = new MemoryStream();
+        Assert.True(await ms.TryWriteAsync(str));
+        var result = await ms.ReadStringAsync();
+        Assert.Equal(str, result);
+    }
+    
+    [Fact]
+    public void WriteStringIntoNullStream()
+    {
+        const string str = "Zaabee";
+        MemoryStream? ms = null;
+        ms.Write(str);
+    }
+    
+    [Fact]
+    public async Task WriteStringIntoNullStreamAsync()
+    {
+        const string str = "Zaabee";
+        MemoryStream? ms = null;
+        await ms.WriteAsync(str);
+    }
+
     private static bool BytesEqual(byte[] first, byte[] second)
     {
         if (first.IsNullOrEmpty() || second.IsNullOrEmpty()) return false;

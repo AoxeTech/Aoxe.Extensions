@@ -26,4 +26,22 @@ public static partial class ZaabeeExtension
 #endif
         return canWrite;
     }
+
+    public static Task WriteAsync(
+        this Stream? stream,
+        string str,
+        Encoding? encoding = null,
+        CancellationToken cancellationToken = default)
+    {
+        if (stream is null) return Task.CompletedTask;
+        var bytes = str.GetBytes(encoding ?? Encoding.UTF8);
+        return stream.WriteAsync(bytes, 0, bytes.Length, cancellationToken);
+    }
+
+    public static async Task<bool> TryWriteAsync(
+        this Stream? stream,
+        string str,
+        Encoding? encoding = null,
+        CancellationToken cancellationToken = default) =>
+        await stream.TryWriteAsync(str.GetBytes(encoding ?? Encoding.UTF8), cancellationToken);
 }
