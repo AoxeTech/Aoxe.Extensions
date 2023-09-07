@@ -16,13 +16,14 @@ public class BoolExtensionTest
     {
         var i = 1;
 
+        true.IfTrue(Action);
+        Assert.Equal(2, i);
+        return;
+
         void Action()
         {
             i++;
         }
-
-        true.IfTrue(Action);
-        Assert.Equal(2, i);
     }
 
     [Fact]
@@ -30,13 +31,14 @@ public class BoolExtensionTest
     {
         var i = 1;
 
+        false.IfFalse(Action);
+        Assert.Equal(2, i);
+        return;
+
         void Action()
         {
             i++;
         }
-
-        false.IfFalse(Action);
-        Assert.Equal(2, i);
     }
 
     [Fact]
