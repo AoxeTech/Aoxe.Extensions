@@ -421,6 +421,59 @@ public class StringExtensionTest
 
     #endregion
 
+    #region stream
+
+    [Fact]
+    public void ToMemoryStreamTest()
+    {
+        const string str = "Alice";
+        var ms = str.ToMemoryStream();
+        var result = ms.ReadToEnd().GetString();
+        Assert.Equal(str, result);
+    }
+
+    [Fact]
+    public void WriteToTest()
+    {
+        const string str = "Alice";
+        var ms = new MemoryStream();
+        str.WriteTo(ms);
+        var result = ms.ReadToEnd().GetString();
+        Assert.Equal(str, result);
+    }
+
+    [Fact]
+    public async Task WriteToTestAsync()
+    {
+        const string str = "Alice";
+        var ms = new MemoryStream();
+        await str.WriteToAsync(ms);
+        var result = (await ms.ReadToEndAsync()).GetString();
+        Assert.Equal(str, result);
+    }
+
+    [Fact]
+    public void TryWriteToTest()
+    {
+        const string str = "Alice";
+        var ms = new MemoryStream();
+        str.TryWriteTo(ms);
+        var result = ms.ReadToEnd().GetString();
+        Assert.Equal(str, result);
+    }
+
+    [Fact]
+    public async Task TryWriteToTestAsync()
+    {
+        const string str = "Alice";
+        var ms = new MemoryStream();
+        await str.TryWriteToAsync(ms);
+        var result = (await ms.ReadToEndAsync()).GetString();
+        Assert.Equal(str, result);
+    }
+
+    #endregion
+
     [Theory]
     [InlineData("123,3234.aada：asdhaslkd", "1233234aadaasdhaslkd")]
     public void GetLetterOrDigitTest(string first, string second) =>
