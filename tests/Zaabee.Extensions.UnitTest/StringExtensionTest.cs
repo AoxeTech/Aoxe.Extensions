@@ -428,7 +428,7 @@ public class StringExtensionTest
     {
         const string str = "Alice";
         var ms = str.ToMemoryStream();
-        var result = ms.ReadToEnd().GetString();
+        var result = ms.ReadString();
         Assert.Equal(str, result);
     }
 
@@ -438,7 +438,7 @@ public class StringExtensionTest
         const string str = "Alice";
         var ms = new MemoryStream();
         str.WriteTo(ms);
-        var result = ms.ReadToEnd().GetString();
+        var result = ms.ReadString();
         Assert.Equal(str, result);
     }
 
@@ -448,7 +448,7 @@ public class StringExtensionTest
         const string str = "Alice";
         var ms = new MemoryStream();
         await str.WriteToAsync(ms);
-        var result = (await ms.ReadToEndAsync()).GetString();
+        var result = await ms.ReadStringAsync();
         Assert.Equal(str, result);
     }
 
@@ -458,7 +458,7 @@ public class StringExtensionTest
         const string str = "Alice";
         var ms = new MemoryStream();
         str.TryWriteTo(ms);
-        var result = ms.ReadToEnd().GetString();
+        var result = ms.ReadString();
         Assert.Equal(str, result);
     }
 
@@ -468,7 +468,7 @@ public class StringExtensionTest
         const string str = "Alice";
         var ms = new MemoryStream();
         await str.TryWriteToAsync(ms);
-        var result = (await ms.ReadToEndAsync()).GetString();
+        var result = await ms.ReadStringAsync();
         Assert.Equal(str, result);
     }
 
