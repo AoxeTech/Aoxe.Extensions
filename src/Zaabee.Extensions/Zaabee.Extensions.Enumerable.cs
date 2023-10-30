@@ -34,7 +34,7 @@ public static partial class ZaabeeExtension
     public static bool NotContains<T>(this IEnumerable<T> source, T item) =>
         !source.Contains(item);
 
-    public static IList<T?> ToList<T>(this IEnumerable<T?> src, Func<T?, bool>? func) =>
+    public static List<T?> ToList<T>(this IEnumerable<T?> src, Func<T?, bool>? func) =>
         func is null ? src.ToList() : src.Where(func).ToList();
 
     public static void ForEach<T>(this IEnumerable<T?> src, Action<T?>? action)
