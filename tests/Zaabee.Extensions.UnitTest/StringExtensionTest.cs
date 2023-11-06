@@ -3,7 +3,15 @@ namespace Zaabee.Extensions.UnitTest;
 public class StringExtensionTest
 {
     [Fact]
-    public void TrimStart()
+    public void ToHexTest()
+    {
+        const string str = "apple";
+        var result = str.ToHex();
+        Assert.NotEmpty(result);
+    }
+    
+    [Fact]
+    public void TrimStartTest()
     {
         const string target = "apple,banana,pear";
         const string trimString = "apple";
@@ -12,7 +20,7 @@ public class StringExtensionTest
     }
 
     [Fact]
-    public void TrimEnd()
+    public void TrimEndTest()
     {
         const string target = "apple,banana,pear";
         const string trimString = "pear";

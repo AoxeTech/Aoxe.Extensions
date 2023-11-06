@@ -4,6 +4,14 @@ public static partial class ZaabeeExtension
 {
     private static readonly Encoding Utf8Encoding = Encoding.UTF8;
 
+    public static string ToHex(this string str)
+    {
+        var sb = new StringBuilder();
+        foreach (var t in str)
+            sb.Append(Convert.ToInt32(t).ToString("X2"));
+        return sb.ToString();
+    }
+
     public static string TrimStart(this string target, string? trimString)
     {
         if (string.IsNullOrEmpty(trimString)) return target;
