@@ -3,6 +3,14 @@ namespace Zaabee.Extensions.UnitTest;
 public class BytesExtensionTest
 {
     [Fact]
+    public void CopyTest()
+    {
+        var bytes = new byte[] {1, 2, 3, 4, 5};
+        var cloneBytes = bytes.Copy();
+        Assert.True(TestHelper.BytesEqual(bytes, cloneBytes));
+    }
+    
+    [Fact]
     public void GetStringByUtf8Test()
     {
         const string str = "Alice";
@@ -101,7 +109,7 @@ public class BytesExtensionTest
     }
 
     [Fact]
-    public async Task WriteToTestAsync()
+    public async Task WriteToAsyncTest()
     {
         const string str = "Alice";
         var bytes = str.GetBytes(Encoding.UTF8);

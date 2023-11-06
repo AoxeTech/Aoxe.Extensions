@@ -3,6 +3,26 @@ namespace Zaabee.Extensions.UnitTest;
 public class StreamExtensionTest
 {
     [Fact]
+    public void ToMemoryStreamTest()
+    {
+        var bytes = new byte[1024];
+        for (var i = 0; i < bytes.Length; i++) bytes[i] = (byte)(i % (byte.MaxValue + 1));
+        var ms = new MemoryStream(bytes);
+        var result = ms.ToMemoryStream();
+        Assert.True(BytesEqual(bytes, result.ToArray()));
+    }
+
+    [Fact]
+    public async Task ToMemoryStreamAsyncTest()
+    {
+        var bytes = new byte[1024];
+        for (var i = 0; i < bytes.Length; i++) bytes[i] = (byte)(i % (byte.MaxValue + 1));
+        var ms = new MemoryStream(bytes);
+        var result = await ms.ToMemoryStreamAsync();
+        Assert.True(BytesEqual(bytes, result.ToArray()));
+    }
+
+    [Fact]
     public void IsNullOrEmptyTest()
     {
         MemoryStream? ms = null;
@@ -236,7 +256,7 @@ public class StreamExtensionTest
         var result = await ms.ReadStringAsync();
         Assert.Equal(str, result);
     }
-    
+
     [Fact]
     public void WriteStringIntoNullStream()
     {
@@ -244,7 +264,7 @@ public class StreamExtensionTest
         MemoryStream? ms = null;
         ms.Write(str);
     }
-    
+
     [Fact]
     public async Task WriteStringIntoNullStreamAsync()
     {

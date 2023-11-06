@@ -443,7 +443,7 @@ public class StringExtensionTest
     }
 
     [Fact]
-    public async Task WriteToTestAsync()
+    public async Task WriteToAsyncTest()
     {
         const string str = "Alice";
         var ms = new MemoryStream();
