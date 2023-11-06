@@ -3,10 +3,10 @@ namespace Zaabee.Extensions.UnitTest;
 public class BytesExtensionTest
 {
     [Fact]
-    public void CopyTest()
+    public void CloneNewTest()
     {
         var bytes = new byte[] {1, 2, 3, 4, 5};
-        var cloneBytes = bytes.Copy();
+        var cloneBytes = bytes.CloneNew();
         Assert.True(TestHelper.BytesEqual(bytes, cloneBytes));
     }
     

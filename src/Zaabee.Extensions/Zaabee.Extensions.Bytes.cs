@@ -2,9 +2,9 @@
 
 public static partial class ZaabeeExtension
 {
-    public static T[] Copy<T>(this T[] src)
+    public static byte[] CloneNew(this byte[] src)
     {
-        var dest = new T[src.Length];
+        var dest = new byte[src.Length];
         for (var i = 0; i < src.Length; i++) dest[i] = src[i];
         return dest;
     }
