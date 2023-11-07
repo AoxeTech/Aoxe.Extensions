@@ -4,7 +4,7 @@ public static partial class ZaabeeExtension
 {
     private static readonly Encoding Utf8Encoding = Encoding.UTF8;
 
-    public static string ToHex(this string str)
+    public static string ToHexString(this string str)
     {
         var sb = new StringBuilder();
         foreach (var t in str)
@@ -12,7 +12,7 @@ public static partial class ZaabeeExtension
         return sb.ToString();
     }
 
-    public static string FromHex(this string str)
+    public static string FromHexToString(this string str)
     {
         var sb = new StringBuilder();
         for (var i = 0; i < str.Length; i += 2)

@@ -23,7 +23,7 @@ public static partial class ZaabeeExtension
     public static byte[] GetBytes(this string value, Encoding? encoding = null) =>
         (encoding ?? Utf8Encoding).GetBytes(value);
 
-    public static byte[] FromHexString(this string hexString)
+    public static byte[] FromHex(this string hexString)
     {
 #if NETSTANDARD2_0
         var numberChars = hexString.Length;
@@ -34,5 +34,18 @@ public static partial class ZaabeeExtension
 #else
         return Convert.FromHexString(hexString);
 #endif
+    }
+    
+    public static byte[] ToHex(this string str)
+    {
+        var bytes = str.GetBytes();
+        var dest = new byte[bytes.Length * 2];
+        for (var i = 0; i < bytes.Length; i++)
+        {
+            var b = bytes[i];
+            dest[i * 2] = (byte) (b / 16);
+            dest[i * 2 + 1] = (byte) (b % 16);
+        }
+        return dest;
     }
 }

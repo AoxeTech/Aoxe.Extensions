@@ -34,4 +34,10 @@ public static partial class ZaabeeExtension
         return Convert.ToHexString(hash);
 #endif
     }
+
+    public static string FromHexToString(this byte[] hexBytes)
+    {
+        var rawBytes = hexBytes.FromHex();
+        return new string(rawBytes.Select(c => (char)c).ToArray());
+    }
 }

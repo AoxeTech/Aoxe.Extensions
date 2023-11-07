@@ -490,7 +490,7 @@ public class StringExtensionTest
     [InlineData("1F3870BE274F6C49B3E31A0C6728957F")]
     public void HexTest(string hexString)
     {
-        var bytes = hexString.FromHexString();
+        var bytes = hexString.FromHex();
         var result = bytes.ToHexString();
         Assert.Equal(hexString, result);
     }
@@ -499,9 +499,9 @@ public class StringExtensionTest
     [InlineData("apple")]
     public void HexBytesTest(string str)
     {
-        var hexString = str.ToHex();
+        var hexString = str.ToHexString();
         
-        var hexBytes = hexString.FromHexString();
+        var hexBytes = hexString.FromHex();
         var result = hexBytes.ToHexString();
         Assert.Equal(hexString, result);
     }
@@ -510,8 +510,8 @@ public class StringExtensionTest
     [InlineData("apple")]
     public void HexStringTest(string str)
     {
-        var hexString = str.ToHex();
-        var result = hexString.FromHex();
+        var hexString = str.ToHexString();
+        var result = hexString.FromHexToString();
         Assert.Equal(str, result);
     }
 }
