@@ -3,14 +3,6 @@ namespace Zaabee.Extensions.UnitTest;
 public class StringExtensionTest
 {
     [Fact]
-    public void ToHexTest()
-    {
-        const string str = "apple";
-        var result = str.ToHex();
-        Assert.NotEmpty(result);
-    }
-    
-    [Fact]
     public void TrimStartTest()
     {
         const string target = "apple,banana,pear";
@@ -501,5 +493,25 @@ public class StringExtensionTest
         var bytes = hexString.FromHexString();
         var result = bytes.ToHexString();
         Assert.Equal(hexString, result);
+    }
+
+    [Theory]
+    [InlineData("apple")]
+    public void HexBytesTest(string str)
+    {
+        var hexString = str.ToHex();
+        
+        var hexBytes = hexString.FromHexString();
+        var result = hexBytes.ToHexString();
+        Assert.Equal(hexString, result);
+    }
+
+    [Theory]
+    [InlineData("apple")]
+    public void HexStringTest(string str)
+    {
+        var hexString = str.ToHex();
+        var result = hexString.FromHex();
+        Assert.Equal(str, result);
     }
 }

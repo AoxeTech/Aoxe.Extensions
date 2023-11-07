@@ -12,6 +12,14 @@ public static partial class ZaabeeExtension
         return sb.ToString();
     }
 
+    public static string FromHex(this string str)
+    {
+        var sb = new StringBuilder();
+        for (var i = 0; i < str.Length; i += 2)
+            sb.Append((char)Convert.ToInt32(str.Substring(i, 2), 16));
+        return sb.ToString();
+    }
+
     public static string TrimStart(this string target, string? trimString)
     {
         if (string.IsNullOrEmpty(trimString)) return target;
