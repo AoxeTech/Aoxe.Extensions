@@ -98,7 +98,7 @@ public class TypeExtensionTest
     [InlineData(typeof(string), false)]
     [InlineData(typeof(TestModel), false)]
     [InlineData(null, false)]
-    public void IsNumericTypeTest(Type type, bool result)
+    public void IsNumericTypeTest(Type? type, bool result)
     {
         Assert.Equal(type.IsNumericType(), result);
     }

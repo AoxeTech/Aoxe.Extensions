@@ -10,7 +10,7 @@ public static partial class ZaabeeExtension
         && type.IsGenericType
         && type.GetGenericTypeDefinition() == typeof(Nullable<>);
 
-    public static bool IsNumericType(this Type type) =>
+    public static bool IsNumericType(this Type? type) =>
         Type.GetTypeCode(type) switch
         {
             TypeCode.Byte => true,
