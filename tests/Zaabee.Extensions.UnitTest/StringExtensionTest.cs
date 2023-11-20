@@ -24,14 +24,14 @@ public class StringExtensionTest
     [InlineData("")]
     [InlineData(null)]
     [InlineData("Alice")]
-    public void IsNullOrEmptyTest(string str) =>
+    public void IsNullOrEmptyTest(string? str) =>
         Assert.Equal(str.IsNullOrEmpty(), string.IsNullOrEmpty(str));
 
     [Theory]
     [InlineData("")]
     [InlineData(null)]
     [InlineData("Alice")]
-    public void IsNullOrWhiteSpaceTest(string str) =>
+    public void IsNullOrWhiteSpaceTest(string? str) =>
         Assert.Equal(str.IsNullOrWhiteSpace(), string.IsNullOrWhiteSpace(str));
 
     [Theory]
