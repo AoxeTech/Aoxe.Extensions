@@ -71,7 +71,12 @@ public class StringExtensionTest
     [InlineData("Dave")]
     [InlineData("Eve")]
     public void GetBigEndianUnicodeBytesTest(string str) =>
-        Assert.True(TestHelper.BytesEqual(str.GetBigEndianUnicodeBytes(), Encoding.BigEndianUnicode.GetBytes(str)));
+        Assert.True(
+            TestHelper.BytesEqual(
+                str.GetBigEndianUnicodeBytes(),
+                Encoding.BigEndianUnicode.GetBytes(str)
+            )
+        );
 
     [Theory]
     [InlineData("Alice")]
@@ -126,7 +131,8 @@ public class StringExtensionTest
     [InlineData(ushort.MaxValue)]
     [InlineData(ushort.MinValue)]
     [InlineData(0)]
-    public void ParseUshortTest(ushort value) => Assert.Equal(value, value.ToString().ParseUshort());
+    public void ParseUshortTest(ushort value) =>
+        Assert.Equal(value, value.ToString().ParseUshort());
 
     [Theory]
     [InlineData(int.MaxValue)]
@@ -181,8 +187,14 @@ public class StringExtensionTest
     [Fact]
     public void ParseDecimalTest()
     {
-        Assert.Equal(decimal.MaxValue, decimal.MaxValue.ToString(CultureInfo.InvariantCulture).ParseDecimal());
-        Assert.Equal(decimal.MinValue, decimal.MinValue.ToString(CultureInfo.InvariantCulture).ParseDecimal());
+        Assert.Equal(
+            decimal.MaxValue,
+            decimal.MaxValue.ToString(CultureInfo.InvariantCulture).ParseDecimal()
+        );
+        Assert.Equal(
+            decimal.MinValue,
+            decimal.MinValue.ToString(CultureInfo.InvariantCulture).ParseDecimal()
+        );
         Assert.Equal(0M, 0M.ToString(CultureInfo.InvariantCulture).ParseDecimal());
     }
 
@@ -196,8 +208,14 @@ public class StringExtensionTest
     {
         var maxDateTime = new DateTime(9999, 12, 31, 23, 59, 59);
         var minDateTime = new DateTime(0001, 01, 01, 00, 00, 00);
-        Assert.Equal(maxDateTime, maxDateTime.ToString(CultureInfo.InvariantCulture).ParseDateTime());
-        Assert.Equal(minDateTime, minDateTime.ToString(CultureInfo.InvariantCulture).ParseDateTime());
+        Assert.Equal(
+            maxDateTime,
+            maxDateTime.ToString(CultureInfo.InvariantCulture).ParseDateTime()
+        );
+        Assert.Equal(
+            minDateTime,
+            minDateTime.ToString(CultureInfo.InvariantCulture).ParseDateTime()
+        );
     }
 
     [Fact]
@@ -213,8 +231,13 @@ public class StringExtensionTest
     public void ParseEnumTest()
     {
         Assert.Equal(TestEnum.Create, TestEnum.Create.ToString().ParseEnum(typeof(TestEnum)));
-        Assert.Equal(TestEnum.Create, TestEnum.Create.ToString().ToLower().ParseEnum(typeof(TestEnum), true));
-        Assert.Throws<ArgumentException>(() => TestEnum.Create.ToString().ToLower().ParseEnum(typeof(TestEnum)));
+        Assert.Equal(
+            TestEnum.Create,
+            TestEnum.Create.ToString().ToLower().ParseEnum(typeof(TestEnum), true)
+        );
+        Assert.Throws<ArgumentException>(
+            () => TestEnum.Create.ToString().ToLower().ParseEnum(typeof(TestEnum))
+        );
     }
 
     #endregion
@@ -308,8 +331,14 @@ public class StringExtensionTest
         Assert.Equal(float.MaxValue, float.MaxValue.ToString("R").TryParseFloat());
         Assert.Equal(float.MinValue, float.MinValue.ToString("R").TryParseFloat());
 #else
-        Assert.Equal(float.MaxValue, float.MaxValue.ToString(CultureInfo.InvariantCulture).TryParseFloat());
-        Assert.Equal(float.MinValue, float.MinValue.ToString(CultureInfo.InvariantCulture).TryParseFloat());
+        Assert.Equal(
+            float.MaxValue,
+            float.MaxValue.ToString(CultureInfo.InvariantCulture).TryParseFloat()
+        );
+        Assert.Equal(
+            float.MinValue,
+            float.MinValue.ToString(CultureInfo.InvariantCulture).TryParseFloat()
+        );
 #endif
         Assert.Equal(0F, 0.ToString().TryParseFloat());
         Assert.Equal(default, string.Empty.TryParseFloat());
@@ -323,8 +352,14 @@ public class StringExtensionTest
         Assert.Equal(double.MaxValue, double.MaxValue.ToString("R").TryParseDouble());
         Assert.Equal(double.MinValue, double.MinValue.ToString("R").TryParseDouble());
 #else
-        Assert.Equal(double.MaxValue, double.MaxValue.ToString(CultureInfo.InvariantCulture).TryParseDouble());
-        Assert.Equal(double.MinValue, double.MinValue.ToString(CultureInfo.InvariantCulture).TryParseDouble());
+        Assert.Equal(
+            double.MaxValue,
+            double.MaxValue.ToString(CultureInfo.InvariantCulture).TryParseDouble()
+        );
+        Assert.Equal(
+            double.MinValue,
+            double.MinValue.ToString(CultureInfo.InvariantCulture).TryParseDouble()
+        );
 #endif
         Assert.Equal(0D, 0.ToString().TryParseDouble());
         Assert.Equal(default, string.Empty.TryParseDouble());
@@ -334,8 +369,14 @@ public class StringExtensionTest
     [Fact]
     public void TryParseDecimalTest()
     {
-        Assert.Equal(decimal.MaxValue, decimal.MaxValue.ToString(CultureInfo.InvariantCulture).TryParseDecimal());
-        Assert.Equal(decimal.MinValue, decimal.MinValue.ToString(CultureInfo.InvariantCulture).TryParseDecimal());
+        Assert.Equal(
+            decimal.MaxValue,
+            decimal.MaxValue.ToString(CultureInfo.InvariantCulture).TryParseDecimal()
+        );
+        Assert.Equal(
+            decimal.MinValue,
+            decimal.MinValue.ToString(CultureInfo.InvariantCulture).TryParseDecimal()
+        );
         Assert.Equal(0M, 0.ToString().TryParseDecimal());
         Assert.Equal(default, string.Empty.TryParseDecimal());
         Assert.Equal(1M, string.Empty.TryParseDecimal(1));
@@ -356,8 +397,14 @@ public class StringExtensionTest
     {
         var maxDateTime = new DateTime(9999, 12, 31, 23, 59, 59);
         var minDateTime = new DateTime(0001, 01, 01, 00, 00, 00);
-        Assert.Equal(maxDateTime, maxDateTime.ToString(CultureInfo.InvariantCulture).TryParseDateTime());
-        Assert.Equal(minDateTime, minDateTime.ToString(CultureInfo.InvariantCulture).TryParseDateTime());
+        Assert.Equal(
+            maxDateTime,
+            maxDateTime.ToString(CultureInfo.InvariantCulture).TryParseDateTime()
+        );
+        Assert.Equal(
+            minDateTime,
+            minDateTime.ToString(CultureInfo.InvariantCulture).TryParseDateTime()
+        );
         Assert.Equal(default, string.Empty.TryParseDateTime());
         Assert.Equal(maxDateTime, string.Empty.TryParseDateTime(maxDateTime));
         Assert.Equal(minDateTime, string.Empty.TryParseDateTime(minDateTime));
@@ -393,7 +440,9 @@ public class StringExtensionTest
     {
         Assert.Equal(value, value.ToBase64String().FromBase64ToString());
         Assert.Equal(value.ToBase64Bytes(), value.ToBase64String().GetBytes());
-        Assert.True(TestHelper.BytesEqual(value.GetBytes(), value.ToBase64String().FromBase64ToBytes()));
+        Assert.True(
+            TestHelper.BytesEqual(value.GetBytes(), value.ToBase64String().FromBase64ToBytes())
+        );
     }
 
     #endregion
@@ -479,7 +528,6 @@ public class StringExtensionTest
     public void GetLetterOrDigitTest(string first, string second) =>
         Assert.Equal(first.GetLetterOrDigit(), second);
 
-
     [Theory]
     [InlineData("abcdefg", "a", "1", "1bcdefg")]
     [InlineData("     ", " ", "", "")]
@@ -500,7 +548,7 @@ public class StringExtensionTest
     public void HexBytesTest(string str)
     {
         var hexString = str.ToHexString();
-        
+
         var hexBytes = hexString.FromHex();
         var result = hexBytes.ToHexString();
         Assert.Equal(hexString, result);

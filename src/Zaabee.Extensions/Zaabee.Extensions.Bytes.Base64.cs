@@ -2,8 +2,7 @@ namespace Zaabee.Extensions;
 
 public static partial class ZaabeeExtension
 {
-    public static string ToBase64String(this byte[] bytes) =>
-        Convert.ToBase64String(bytes);
+    public static string ToBase64String(this byte[] bytes) => Convert.ToBase64String(bytes);
 
     public static byte[] ToBase64Bytes(this byte[] bytes, Encoding? encoding = null) =>
         bytes.ToBase64String().GetBytes(encoding);

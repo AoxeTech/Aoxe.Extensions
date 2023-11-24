@@ -11,7 +11,11 @@ public static partial class ZaabeeExtension
 
     public static IEnumerable<DateOnly> EachMonthTo(this DateOnly dateFrom, DateOnly dateTo)
     {
-        for (var date = new DateOnly(dateFrom.Year, dateFrom.Month, 1); date <= dateTo; date = date.AddMonths(1))
+        for (
+            var date = new DateOnly(dateFrom.Year, dateFrom.Month, 1);
+            date <= dateTo;
+            date = date.AddMonths(1)
+        )
             yield return date;
     }
 }

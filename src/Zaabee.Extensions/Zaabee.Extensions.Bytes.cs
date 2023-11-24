@@ -5,7 +5,8 @@ public static partial class ZaabeeExtension
     public static byte[] CloneNew(this byte[] src)
     {
         var dest = new byte[src.Length];
-        for (var i = 0; i < src.Length; i++) dest[i] = src[i];
+        for (var i = 0; i < src.Length; i++)
+            dest[i] = src[i];
         return dest;
     }
 
@@ -15,8 +16,8 @@ public static partial class ZaabeeExtension
         for (var i = 0; i < src.Length; i++)
         {
             var b = src[i];
-            dest[i * 2] = (byte) (b / 16);
-            dest[i * 2 + 1] = (byte) (b % 16);
+            dest[i * 2] = (byte)(b / 16);
+            dest[i * 2 + 1] = (byte)(b % 16);
         }
         return dest;
     }
@@ -28,7 +29,7 @@ public static partial class ZaabeeExtension
         {
             var hi = dest[i * 2];
             var lo = dest[i * 2 + 1];
-            src[i] = (byte) (hi * 16 + lo);
+            src[i] = (byte)(hi * 16 + lo);
         }
         return src;
     }

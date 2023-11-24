@@ -2,10 +2,12 @@ namespace Zaabee.Extensions;
 
 public static partial class ZaabeeExtension
 {
-    public static async Task WriteToAsync(this string str,
+    public static async Task WriteToAsync(
+        this string str,
         Stream stream,
         Encoding? encoding = null,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         var buffer = str.GetBytes(encoding);
 #if NETSTANDARD2_0
@@ -15,10 +17,12 @@ public static partial class ZaabeeExtension
 #endif
     }
 
-    public static Task<bool> TryWriteToAsync(this string str,
+    public static Task<bool> TryWriteToAsync(
+        this string str,
         Stream stream,
         Encoding? encoding = null,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         var buffer = str.GetBytes(encoding);
         return stream.TryWriteAsync(buffer, 0, buffer.Length, cancellationToken);

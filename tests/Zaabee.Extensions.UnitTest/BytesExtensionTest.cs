@@ -141,7 +141,6 @@ public class BytesExtensionTest
         Assert.True(TestHelper.BytesEqual(bytes, result));
     }
 
-
     [Theory]
     [InlineData("apple")]
     public void HexTest(string str)
@@ -165,7 +164,7 @@ public class BytesExtensionTest
         var resultBytesOfHexStrFromRawBytes = hexStrFromRawBytes.FromHex();
         Assert.True(TestHelper.BytesEqual(rawBytes, resultBytesOfHexStrFromRawBytes));
         Assert.Equal(str, resultOfHexStrFromRawBytes);
-        
+
         var hexStrFromStr = str.ToHexString();
         var resultOfHexStrFromStr = hexStrFromStr.FromHexToString();
         var resultBytesOfHexStrFromStr = hexStrFromStr.FromHex();

@@ -11,6 +11,7 @@ public static partial class ZaabeeExtension
     public static async ValueTask<ReadOnlyMemory<byte>> ToReadOnlyMemoryAsync(this Stream stream) =>
         (await stream.ReadToEndAsync()).AsMemory();
 
-    public static async ValueTask<ReadOnlySequence<byte>> ToReadOnlySequenceAsync(this Stream stream) =>
-        (await stream.ReadToEndAsync()).ToReadOnlySequence();
+    public static async ValueTask<ReadOnlySequence<byte>> ToReadOnlySequenceAsync(
+        this Stream stream
+    ) => (await stream.ReadToEndAsync()).ToReadOnlySequence();
 }

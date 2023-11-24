@@ -18,8 +18,10 @@ public class EnumerableExtensionTest
     [InlineData(10, 5)]
     public void IndexOfTest(int total, int index)
     {
-        IEnumerable<TestModel> testModels = Enumerable.Range(0, total)
-            .Select(_ => new TestModel { Name = "Alice" }).ToList();
+        IEnumerable<TestModel> testModels = Enumerable
+            .Range(0, total)
+            .Select(_ => new TestModel { Name = "Alice" })
+            .ToList();
         var testModel = testModels.Skip(index).First();
         Assert.Equal(index, testModels.IndexOf(testModel));
     }
@@ -28,8 +30,10 @@ public class EnumerableExtensionTest
     [InlineData(10)]
     public void IndexOfNotExistTest(int total)
     {
-        IEnumerable<TestModel> testModels = Enumerable.Range(0, total)
-            .Select(_ => new TestModel { Name = "Alice" }).ToList();
+        IEnumerable<TestModel> testModels = Enumerable
+            .Range(0, total)
+            .Select(_ => new TestModel { Name = "Alice" })
+            .ToList();
         var testModel = new TestModel { Name = "Bob" };
         Assert.Equal(-1, testModels.IndexOf(testModel));
     }
@@ -56,11 +60,11 @@ public class EnumerableExtensionTest
     {
         var testModels = new List<TestModel>
         {
-            new() {Name = "Alice"},
-            new() {Name = "Alice"},
-            new() {Name = "Alice"},
-            new() {Name = "Alice"},
-            new() {Name = "Alice"}
+            new() { Name = "Alice" },
+            new() { Name = "Alice" },
+            new() { Name = "Alice" },
+            new() { Name = "Alice" },
+            new() { Name = "Alice" }
         };
         var enumerable = testModels.AsEnumerable();
         enumerable.ForEach(p => p!.Name = "Bob");
@@ -73,14 +77,15 @@ public class EnumerableExtensionTest
     {
         var testModels = new List<TestModel>
         {
-            new() {Name = "Alice", Birthday = new DateTime(2000, 1, 1)},
-            new() {Name = "Alice", Birthday = new DateTime(2000, 1, 1)},
-            new() {Name = "Alice", Birthday = new DateTime(2000, 1, 1)},
-            new() {Name = "Alice", Birthday = new DateTime(2000, 1, 1)},
-            new() {Name = "Alice", Birthday = new DateTime(2000, 1, 1)}
+            new() { Name = "Alice", Birthday = new DateTime(2000, 1, 1) },
+            new() { Name = "Alice", Birthday = new DateTime(2000, 1, 1) },
+            new() { Name = "Alice", Birthday = new DateTime(2000, 1, 1) },
+            new() { Name = "Alice", Birthday = new DateTime(2000, 1, 1) },
+            new() { Name = "Alice", Birthday = new DateTime(2000, 1, 1) }
         };
         var enumerable = testModels.AsEnumerable();
-        var result = enumerable.ForEachLazy(p => p!.Name = "Bob")
+        var result = enumerable
+            .ForEachLazy(p => p!.Name = "Bob")
             .ForEachLazy(p => p!.Birthday = new DateTime(2001, 1, 1))
             .ToList();
         Assert.True(result.All(p => p!.Name == "Bob" && p.Birthday == new DateTime(2001, 1, 1)));

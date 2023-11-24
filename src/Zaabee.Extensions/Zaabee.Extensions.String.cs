@@ -22,7 +22,8 @@ public static partial class ZaabeeExtension
 
     public static string TrimStart(this string target, string? trimString)
     {
-        if (string.IsNullOrEmpty(trimString)) return target;
+        if (string.IsNullOrEmpty(trimString))
+            return target;
 
         var result = target;
         while (result.StartsWith(trimString))
@@ -36,7 +37,8 @@ public static partial class ZaabeeExtension
 
     public static string TrimEnd(this string target, string? trimString)
     {
-        if (string.IsNullOrEmpty(trimString)) return target;
+        if (string.IsNullOrEmpty(trimString))
+            return target;
 
         var result = target;
         while (result.EndsWith(trimString))
@@ -49,11 +51,9 @@ public static partial class ZaabeeExtension
         return result;
     }
 
-    public static bool IsNullOrEmpty(this string? value) =>
-        string.IsNullOrEmpty(value);
+    public static bool IsNullOrEmpty(this string? value) => string.IsNullOrEmpty(value);
 
-    public static bool IsNullOrWhiteSpace(this string? value) =>
-        string.IsNullOrWhiteSpace(value);
+    public static bool IsNullOrWhiteSpace(this string? value) => string.IsNullOrWhiteSpace(value);
 
     public static string StringJoin<T>(this IEnumerable<T> values, string separator) =>
         string.Join(separator, values);

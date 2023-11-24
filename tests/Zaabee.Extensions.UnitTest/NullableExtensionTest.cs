@@ -40,7 +40,7 @@ public class NullableExtensionTest
         Assert.True(i2.IsNullOrDefault());
         Assert.False(i3.IsNullOrDefault());
     }
-    
+
     [Fact]
     public void IfNullTest()
     {

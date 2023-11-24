@@ -2,8 +2,7 @@ namespace Zaabee.Extensions;
 
 public static partial class ZaabeeExtension
 {
-    public static MemoryStream ToMemoryStream(this byte[] bytes) =>
-        new(bytes);
+    public static MemoryStream ToMemoryStream(this byte[] bytes) => new(bytes);
 
     public static void WriteTo(this byte[] buffer, Stream stream) =>
 #if NETSTANDARD2_0

@@ -2,8 +2,11 @@ namespace Zaabee.Extensions;
 
 public static partial class ZaabeeExtension
 {
-    public static async Task<bool> TryWriteAsync(this Stream? stream, byte[] buffer,
-        CancellationToken cancellationToken = default)
+    public static async Task<bool> TryWriteAsync(
+        this Stream? stream,
+        byte[] buffer,
+        CancellationToken cancellationToken = default
+    )
     {
         var canWrite = stream is not null && stream.CanWrite;
         if (canWrite)
@@ -15,14 +18,21 @@ public static partial class ZaabeeExtension
         return canWrite;
     }
 
-    public static async Task<bool> TryWriteAsync(this Stream? stream, byte[] buffer, int offset, int count,
-        CancellationToken cancellationToken = default)
+    public static async Task<bool> TryWriteAsync(
+        this Stream? stream,
+        byte[] buffer,
+        int offset,
+        int count,
+        CancellationToken cancellationToken = default
+    )
     {
         var canWrite = stream is not null && stream.CanWrite;
 #if NETSTANDARD2_0
-        if (canWrite) await stream!.WriteAsync(buffer, offset, count, cancellationToken);
+        if (canWrite)
+            await stream!.WriteAsync(buffer, offset, count, cancellationToken);
 #else
-        if (canWrite) await stream!.WriteAsync(buffer.AsMemory(offset, count), cancellationToken);
+        if (canWrite)
+            await stream!.WriteAsync(buffer.AsMemory(offset, count), cancellationToken);
 #endif
         return canWrite;
     }
@@ -31,9 +41,11 @@ public static partial class ZaabeeExtension
         this Stream? stream,
         string str,
         Encoding? encoding = null,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
-        if (stream is null) return Task.CompletedTask;
+        if (stream is null)
+            return Task.CompletedTask;
         var bytes = str.GetBytes(encoding ?? Encoding.UTF8);
         return stream.WriteAsync(bytes, 0, bytes.Length, cancellationToken);
     }
@@ -42,6 +54,6 @@ public static partial class ZaabeeExtension
         this Stream? stream,
         string str,
         Encoding? encoding = null,
-        CancellationToken cancellationToken = default) =>
-        await stream.TryWriteAsync(str.GetBytes(encoding ?? Encoding.UTF8), cancellationToken);
+        CancellationToken cancellationToken = default
+    ) => await stream.TryWriteAsync(str.GetBytes(encoding ?? Encoding.UTF8), cancellationToken);
 }

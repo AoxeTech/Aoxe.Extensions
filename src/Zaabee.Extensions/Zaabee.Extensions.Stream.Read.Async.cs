@@ -6,13 +6,14 @@ public static partial class ZaabeeExtension
     public static Task<int> TryReadAsync(
         this Stream? stream,
         byte[] buffer,
-        CancellationToken cancellationToken = default) =>
-        stream.TryReadAsync(buffer, 0, buffer.Length, cancellationToken);
+        CancellationToken cancellationToken = default
+    ) => stream.TryReadAsync(buffer, 0, buffer.Length, cancellationToken);
 #else
     public static ValueTask<int> TryReadAsync(
         this Stream? stream,
         byte[] buffer,
-        CancellationToken cancellationToken = default) =>
+        CancellationToken cancellationToken = default
+    ) =>
         stream is not null && stream.CanRead
             ? stream.ReadAsync(buffer, cancellationToken)
             : ValueTask.FromResult(0);
@@ -23,14 +24,16 @@ public static partial class ZaabeeExtension
         byte[] buffer,
         int offset,
         int count,
-        CancellationToken cancellationToken = default) =>
+        CancellationToken cancellationToken = default
+    ) =>
         stream is not null && stream.CanRead
             ? stream.ReadAsync(buffer, offset, count, cancellationToken)
             : Task.FromResult(0);
 
     public static async Task<byte[]> ReadToEndAsync(
         this Stream? stream,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         switch (stream)
         {
@@ -56,7 +59,8 @@ public static partial class ZaabeeExtension
     public static async Task<byte[]> ReadToEndAsync(
         this Stream? stream,
         int bufferSize,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         switch (stream)
         {
@@ -80,7 +84,8 @@ public static partial class ZaabeeExtension
     public static async Task<string> ReadStringAsync(
         this Stream? stream,
         Encoding? encoding = null,
-        CancellationToken cancellationToken = default) =>
+        CancellationToken cancellationToken = default
+    ) =>
         stream is null
             ? string.Empty
             : (await stream.ReadToEndAsync(cancellationToken)).GetString(encoding ?? Utf8Encoding);

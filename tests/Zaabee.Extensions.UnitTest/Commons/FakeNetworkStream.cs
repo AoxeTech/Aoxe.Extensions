@@ -24,14 +24,12 @@ internal class FakeNetworkStream : Stream
 
     public override void Flush() => Inner.Flush();
 
-    public override long Seek(long offset, SeekOrigin origin)
-        => Inner.Seek(offset, origin);
+    public override long Seek(long offset, SeekOrigin origin) => Inner.Seek(offset, origin);
 
-    public override void SetLength(long value)
-        => Inner.SetLength(value);
+    public override void SetLength(long value) => Inner.SetLength(value);
 
-    public override void Write(byte[] buffer, int offset, int count)
-        => Inner.Write(buffer, offset, count);
+    public override void Write(byte[] buffer, int offset, int count) =>
+        Inner.Write(buffer, offset, count);
 
     public override int Read(byte[] buffer, int offset, int count)
     {

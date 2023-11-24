@@ -20,7 +20,8 @@ public static partial class ZaabeeExtension
         return eoDynamic;
     }
 
-    public static T ToObject<T>(this IDictionary<string, object?> source) where T : class, new()
+    public static T ToObject<T>(this IDictionary<string, object?> source)
+        where T : class, new()
     {
         var someObject = new T();
         var someObjectType = someObject.GetType();
@@ -29,17 +30,25 @@ public static partial class ZaabeeExtension
         {
             var key = char.ToUpper(keyValuePare.Key[0]) + keyValuePare.Key.Substring(1);
             var targetProperty = someObjectType.GetProperty(key);
-            if (targetProperty is null) continue;
+            if (targetProperty is null)
+                continue;
 
             if (targetProperty.PropertyType == keyValuePare.Value?.GetType())
                 targetProperty.SetValue(someObject, keyValuePare.Value);
             else
             {
-                var parseMethod = targetProperty.PropertyType.GetMethod("TryParse",
-                    BindingFlags.Public | BindingFlags.Static, null,
-                    new[] { typeof(string), targetProperty.PropertyType.MakeByRefType() }, null);
+                var parseMethod = targetProperty
+                    .PropertyType
+                    .GetMethod(
+                        "TryParse",
+                        BindingFlags.Public | BindingFlags.Static,
+                        null,
+                        new[] { typeof(string), targetProperty.PropertyType.MakeByRefType() },
+                        null
+                    );
 
-                if (parseMethod is null) continue;
+                if (parseMethod is null)
+                    continue;
                 var parameters = new[] { keyValuePare.Value, null };
                 var success = (bool)(parseMethod.Invoke(null, parameters) ?? false);
                 if (success)
