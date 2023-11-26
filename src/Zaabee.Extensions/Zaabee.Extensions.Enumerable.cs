@@ -10,11 +10,11 @@ public static partial class ZaabeeExtension
                 list.AddRange(collections);
                 break;
             default:
-            {
-                foreach (var item in collections)
-                    source.Add(item);
-                break;
-            }
+                {
+                    foreach (var item in collections)
+                        source.Add(item);
+                    break;
+                }
         }
     }
 
