@@ -2,20 +2,30 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0;net6.0;net8.0;net9.0</TargetFrameworks>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageVersion>2024.1.5</PackageVersion>
-        <Version>2024.1.5</Version>
-        <Authors>Mutuduxf</Authors>
-        <Company>Mutuduxf</Company>
-        <PackageTags>Zaabee;Extensions</PackageTags>
+        <PackageVersion>2024.1.6</PackageVersion>
+        <Version>2024.1.6</Version>
         <Description>Exteinsions for C#</Description>
-        <PackageProjectUrl>https://github.com/PicoHex</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/PicoHex/Zaabee.Extensions</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
+        <PackageTags>Zaabee;Extensions</PackageTags>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
-        <Authors>Roman Du</Authors>
+        <PackageProjectUrl>https://github.com/PicoHex</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/PicoHex/Zaabee.Extensions</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <Authors>Mutuduxf</Authors>
     </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
 
 </Project>
