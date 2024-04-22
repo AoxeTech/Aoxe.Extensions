@@ -9,6 +9,7 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
         <PackageProjectUrl>https://github.com/PicoHex</PackageProjectUrl>
         <RepositoryUrl>https://github.com/PicoHex/Zaabee.Extensions</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
