@@ -6,12 +6,12 @@
         <Version>2024.1.4</Version>
         <Description>Exteinsions for System.Memory</Description>
         <PackageTags>Zaabee;Memory Extensions</PackageTags>
+        <PackageProjectUrl>https://github.com/PicoHex</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/PicoHex/Zaabee.Extensions</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <PackageProjectUrl>https://github.com/PicoHex</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/PicoHex/Zaabee.Extensions</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
