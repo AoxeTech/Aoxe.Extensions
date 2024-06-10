@@ -1,4 +1,4 @@
-namespace Zaabee.Extensions.UnitTest;
+namespace Aoxe.Extensions.UnitTest;
 
 public class DictionaryExtensionsTest
 {
@@ -8,7 +8,7 @@ public class DictionaryExtensionsTest
         var dictionary = new Dictionary<string, object?>
         {
             { "Id", Guid.NewGuid() },
-            { "Name", "Zaabee" },
+            { "Name", "Aoxe" },
             { "Birthday", DateTime.Now }
         };
         var dynamicObj = dictionary!.DictionaryToDynamic();
@@ -23,7 +23,7 @@ public class DictionaryExtensionsTest
         var dictionary = new Dictionary<string, object?>
         {
             { "Id", Guid.NewGuid() },
-            { "Name", "Zaabee" },
+            { "Name", "Aoxe" },
             { "Birthday", DateTime.Now }
         };
         var testModel = dictionary.ToObject<TestModel>();

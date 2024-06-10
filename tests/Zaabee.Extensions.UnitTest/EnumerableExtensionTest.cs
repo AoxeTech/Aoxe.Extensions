@@ -1,4 +1,4 @@
-namespace Zaabee.Extensions.UnitTest;
+namespace Aoxe.Extensions.UnitTest;
 
 public class EnumerableExtensionTest
 {
@@ -108,8 +108,8 @@ public class EnumerableExtensionTest
     {
         var objs = new List<TestModel>
         {
-            new() { Name = "Zaaby", Birthday = DateTime.UtcNow },
-            new() { Name = "Zaabee", Birthday = DateTime.UtcNow }
+            new() { Name = "Aoxe", Birthday = DateTime.UtcNow },
+            new() { Name = "Aoxe", Birthday = DateTime.UtcNow }
         };
         var table = objs.ConvertToDataTable();
         for (var i = 0; i < objs.Count; i++)

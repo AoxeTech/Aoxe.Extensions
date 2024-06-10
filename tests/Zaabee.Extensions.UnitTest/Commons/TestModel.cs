@@ -1,4 +1,4 @@
-namespace Zaabee.Extensions.UnitTest.Commons;
+namespace Aoxe.Extensions.UnitTest.Commons;
 
 public class TestModel
 {

@@ -1,4 +1,4 @@
-namespace Zaabee.Extensions.UnitTest;
+namespace Aoxe.Extensions.UnitTest;
 
 public class NullableExtensionTest
 {

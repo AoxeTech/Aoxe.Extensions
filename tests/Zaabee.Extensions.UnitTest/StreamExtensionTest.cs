@@ -1,4 +1,4 @@
-namespace Zaabee.Extensions.UnitTest;
+namespace Aoxe.Extensions.UnitTest;
 
 public class StreamExtensionTest
 {
@@ -245,7 +245,7 @@ public class StreamExtensionTest
     [Fact]
     public void WriteAndReadString()
     {
-        const string str = "Zaabee";
+        const string str = "Aoxe";
         var ms = new MemoryStream();
         ms.Write(str);
         var result = ms.ReadString();
@@ -255,7 +255,7 @@ public class StreamExtensionTest
     [Fact]
     public void TryWriteAndReadString()
     {
-        const string str = "Zaabee";
+        const string str = "Aoxe";
         var ms = new MemoryStream();
         Assert.True(ms.TryWrite(str));
         var result = ms.ReadString();
@@ -265,7 +265,7 @@ public class StreamExtensionTest
     [Fact]
     public async Task WriteAndReadStringAsync()
     {
-        const string str = "Zaabee";
+        const string str = "Aoxe";
         var ms = new MemoryStream();
         await ms.WriteAsync(str);
         var result = await ms.ReadStringAsync();
@@ -275,7 +275,7 @@ public class StreamExtensionTest
     [Fact]
     public async Task TryWriteAndReadStringAsync()
     {
-        const string str = "Zaabee";
+        const string str = "Aoxe";
         var ms = new MemoryStream();
         Assert.True(await ms.TryWriteAsync(str));
         var result = await ms.ReadStringAsync();
@@ -285,7 +285,7 @@ public class StreamExtensionTest
     [Fact]
     public void WriteStringIntoNullStream()
     {
-        const string str = "Zaabee";
+        const string str = "Aoxe";
         MemoryStream? ms = null;
         ms.Write(str);
     }
@@ -293,7 +293,7 @@ public class StreamExtensionTest
     [Fact]
     public async Task WriteStringIntoNullStreamAsync()
     {
-        const string str = "Zaabee";
+        const string str = "Aoxe";
         MemoryStream? ms = null;
         await ms.WriteAsync(str);
     }

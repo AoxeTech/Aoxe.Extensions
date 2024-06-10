@@ -2,4 +2,4 @@
 
 global using System.Buffers;
 global using Xunit;
-global using Zaabee.Extensions;
+global using Aoxe.Extensions;
