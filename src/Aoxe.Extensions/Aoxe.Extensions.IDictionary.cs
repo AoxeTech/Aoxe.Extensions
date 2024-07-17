@@ -14,13 +14,12 @@ public static partial class AoxeExtension
 #else
         var expandoObjCollection = (ICollection<KeyValuePair<string, object?>>)expandoObj;
 #endif
-        foreach (var keyValuePair in dictionary)
-            expandoObjCollection.Add(keyValuePair);
+        expandoObjCollection.AddRange(dictionary);
         dynamic eoDynamic = expandoObj;
         return eoDynamic;
     }
 
-    public static T ToObject<T>(this IDictionary<string, object?> source)
+    public static T ToGeneric<T>(this IDictionary<string, object?> source)
         where T : class, new()
     {
         var someObject = new T();
@@ -28,8 +27,7 @@ public static partial class AoxeExtension
 
         foreach (var keyValuePare in source)
         {
-            var key = char.ToUpper(keyValuePare.Key[0]) + keyValuePare.Key.Substring(1);
-            var targetProperty = someObjectType.GetProperty(key);
+            var targetProperty = someObjectType.GetProperty(keyValuePare.Key);
             if (targetProperty is null)
                 continue;
 

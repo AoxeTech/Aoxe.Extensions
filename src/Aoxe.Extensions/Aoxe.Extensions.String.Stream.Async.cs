@@ -2,7 +2,7 @@ namespace Aoxe.Extensions;
 
 public static partial class AoxeExtension
 {
-    public static async Task WriteToAsync(
+    public static async ValueTask WriteToAsync(
         this string str,
         Stream stream,
         Encoding? encoding = null,
@@ -17,7 +17,7 @@ public static partial class AoxeExtension
 #endif
     }
 
-    public static Task<bool> TryWriteToAsync(
+    public static ValueTask<bool> TryWriteToAsync(
         this string str,
         Stream stream,
         Encoding? encoding = null,

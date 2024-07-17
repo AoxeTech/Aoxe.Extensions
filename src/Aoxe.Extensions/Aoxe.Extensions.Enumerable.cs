@@ -2,7 +2,7 @@ namespace Aoxe.Extensions;
 
 public static partial class AoxeExtension
 {
-    public static void AddRange<T>(this IList<T> source, IEnumerable<T> collections)
+    public static void AddRange<T>(this ICollection<T> source, IEnumerable<T> collections)
     {
         switch (source)
         {

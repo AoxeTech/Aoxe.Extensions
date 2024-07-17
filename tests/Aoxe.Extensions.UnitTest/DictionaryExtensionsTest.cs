@@ -26,7 +26,7 @@ public class DictionaryExtensionsTest
             { "Name", "Aoxe" },
             { "Birthday", DateTime.Now }
         };
-        var testModel = dictionary.ToObject<TestModel>();
+        var testModel = dictionary.ToGeneric<TestModel>();
         Assert.NotNull(testModel);
         Assert.Equal(dictionary["Id"], testModel.Id);
         Assert.Equal(dictionary["Name"], testModel.Name);

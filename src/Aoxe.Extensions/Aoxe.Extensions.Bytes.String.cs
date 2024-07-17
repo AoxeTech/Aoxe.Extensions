@@ -30,9 +30,6 @@ public static partial class AoxeExtension
 #endif
     }
 
-    public static string FromHexToString(this byte[] hexBytes)
-    {
-        var rawBytes = hexBytes.FromHex();
-        return new string(rawBytes.Select(c => (char)c).ToArray());
-    }
+    public static string FromHexToString(this byte[] hexBytes) =>
+        new(hexBytes.FromHex().Select(c => (char)c).ToArray());
 }

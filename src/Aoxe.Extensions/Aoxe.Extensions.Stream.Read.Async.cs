@@ -2,35 +2,35 @@ namespace Aoxe.Extensions;
 
 public static partial class AoxeExtension
 {
-#if NETSTANDARD2_0
-    public static Task<int> TryReadAsync(
-        this Stream? stream,
-        byte[] buffer,
-        CancellationToken cancellationToken = default
-    ) => stream.TryReadAsync(buffer, 0, buffer.Length, cancellationToken);
-#else
     public static ValueTask<int> TryReadAsync(
         this Stream? stream,
         byte[] buffer,
         CancellationToken cancellationToken = default
     ) =>
-        stream is not null && stream.CanRead
+        stream?.CanRead is true
+#if NETSTANDARD2_0
+            ? new ValueTask<int>(stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken))
+#else
             ? stream.ReadAsync(buffer, cancellationToken)
-            : ValueTask.FromResult(0);
 #endif
+            : default;
 
-    public static Task<int> TryReadAsync(
+    public static ValueTask<int> TryReadAsync(
         this Stream? stream,
         byte[] buffer,
         int offset,
         int count,
         CancellationToken cancellationToken = default
     ) =>
-        stream is not null && stream.CanRead
-            ? stream.ReadAsync(buffer, offset, count, cancellationToken)
-            : Task.FromResult(0);
+        stream?.CanRead is true
+#if NETSTANDARD2_0
+            ? new ValueTask<int>(stream.ReadAsync(buffer, offset, count, cancellationToken))
+#else
+            ? stream.ReadAsync(buffer, cancellationToken)
+#endif
+            : default;
 
-    public static async Task<byte[]> ReadToEndAsync(
+    public static async ValueTask<byte[]> ReadToEndAsync(
         this Stream? stream,
         CancellationToken cancellationToken = default
     )
@@ -38,7 +38,7 @@ public static partial class AoxeExtension
         switch (stream)
         {
             case null:
-                return Array.Empty<byte>();
+                return [];
             case MemoryStream ms:
                 return ms.ToArray();
             default:
@@ -56,7 +56,7 @@ public static partial class AoxeExtension
         }
     }
 
-    public static async Task<byte[]> ReadToEndAsync(
+    public static async ValueTask<byte[]> ReadToEndAsync(
         this Stream? stream,
         int bufferSize,
         CancellationToken cancellationToken = default
@@ -65,7 +65,7 @@ public static partial class AoxeExtension
         switch (stream)
         {
             case null:
-                return Array.Empty<byte>();
+                return [];
             case MemoryStream ms:
                 return ms.ToArray();
             default:
@@ -81,7 +81,7 @@ public static partial class AoxeExtension
         }
     }
 
-    public static async Task<string> ReadStringAsync(
+    public static async ValueTask<string> ReadStringAsync(
         this Stream? stream,
         Encoding? encoding = null,
         CancellationToken cancellationToken = default

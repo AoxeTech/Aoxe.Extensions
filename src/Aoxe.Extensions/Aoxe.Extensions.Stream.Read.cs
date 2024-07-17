@@ -3,7 +3,7 @@ namespace Aoxe.Extensions;
 public static partial class AoxeExtension
 {
     public static int TryRead(this Stream? stream, byte[] buffer) =>
-        stream is not null && stream.CanRead
+        stream?.CanRead is true
 #if NETSTANDARD2_0
             ? stream.Read(buffer, 0, buffer.Length)
 #else
@@ -12,17 +12,23 @@ public static partial class AoxeExtension
             : default;
 
     public static int TryRead(this Stream? stream, byte[] buffer, int offset, int count) =>
-        stream is not null && stream.CanRead ? stream.Read(buffer, offset, count) : default;
+        stream?.CanRead is true
+#if NETSTANDARD2_0
+            ? stream.Read(buffer, offset, count)
+#else
+            ? stream.Read(buffer.AsSpan(offset, count))
+#endif
+            : default;
 
     public static int TryReadByte(this Stream? stream) =>
-        stream is not null && stream.CanRead ? stream.ReadByte() : -1;
+        stream?.CanRead is true ? stream.ReadByte() : -1;
 
     public static byte[] ReadToEnd(this Stream? stream)
     {
         switch (stream)
         {
             case null:
-                return Array.Empty<byte>();
+                return [];
             case MemoryStream ms:
                 return ms.ToArray();
             default:

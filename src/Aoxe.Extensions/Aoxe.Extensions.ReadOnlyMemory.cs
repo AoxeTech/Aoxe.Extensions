@@ -1,4 +1,4 @@
-namespace Aoxe.Memory.Extensions;
+namespace Aoxe.Extensions;
 
 public static partial class AoxeExtension
 {

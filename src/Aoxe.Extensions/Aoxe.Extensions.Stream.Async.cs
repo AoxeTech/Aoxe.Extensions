@@ -2,7 +2,7 @@ namespace Aoxe.Extensions;
 
 public static partial class AoxeExtension
 {
-    public static async Task<MemoryStream> ToMemoryStreamAsync(this Stream stream)
+    public static async ValueTask<MemoryStream> ToMemoryStreamAsync(this Stream stream)
     {
         var memoryStream = new MemoryStream();
         await stream.CopyToAsync(memoryStream);

@@ -4,7 +4,7 @@ public static partial class AoxeExtension
 {
     public static bool TrySetReadTimeout(this Stream? stream, int milliseconds)
     {
-        var canTimeout = stream is not null && stream.CanTimeout;
+        var canTimeout = stream?.CanTimeout is true;
         if (canTimeout)
             stream!.ReadTimeout = milliseconds;
         return canTimeout;
@@ -15,7 +15,7 @@ public static partial class AoxeExtension
 
     public static bool TrySetWriteTimeout(this Stream? stream, int milliseconds)
     {
-        var canTimeout = stream is not null && stream.CanTimeout;
+        var canTimeout = stream?.CanTimeout is true;
         if (canTimeout)
             stream!.WriteTimeout = milliseconds;
         return canTimeout;

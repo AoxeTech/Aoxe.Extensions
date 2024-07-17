@@ -2,13 +2,13 @@ namespace Aoxe.Extensions;
 
 public static partial class AoxeExtension
 {
-    public static async Task<bool> TryWriteAsync(
+    public static async ValueTask<bool> TryWriteAsync(
         this Stream? stream,
         byte[] buffer,
         CancellationToken cancellationToken = default
     )
     {
-        var canWrite = stream is not null && stream.CanWrite;
+        var canWrite = stream?.CanWrite is true;
         if (canWrite)
 #if NETSTANDARD2_0
             await stream!.WriteAsync(buffer, 0, buffer.Length, cancellationToken);
@@ -18,7 +18,7 @@ public static partial class AoxeExtension
         return canWrite;
     }
 
-    public static async Task<bool> TryWriteAsync(
+    public static async ValueTask<bool> TryWriteAsync(
         this Stream? stream,
         byte[] buffer,
         int offset,
@@ -26,18 +26,17 @@ public static partial class AoxeExtension
         CancellationToken cancellationToken = default
     )
     {
-        var canWrite = stream is not null && stream.CanWrite;
-#if NETSTANDARD2_0
+        var canWrite = stream?.CanWrite is true;
         if (canWrite)
+#if NETSTANDARD2_0
             await stream!.WriteAsync(buffer, offset, count, cancellationToken);
 #else
-        if (canWrite)
             await stream!.WriteAsync(buffer.AsMemory(offset, count), cancellationToken);
 #endif
         return canWrite;
     }
 
-    public static Task WriteAsync(
+    public static ValueTask WriteAsync(
         this Stream? stream,
         string str,
         Encoding? encoding = null,
@@ -45,15 +44,19 @@ public static partial class AoxeExtension
     )
     {
         if (stream is null)
-            return Task.CompletedTask;
+            return default;
         var bytes = str.GetBytes(encoding ?? Encoding.UTF8);
-        return stream.WriteAsync(bytes, 0, bytes.Length, cancellationToken);
+#if NETSTANDARD2_0
+        return new ValueTask(stream.WriteAsync(bytes, 0, bytes.Length, cancellationToken));
+#else
+        return stream.WriteAsync(bytes, cancellationToken);
+#endif
     }
 
-    public static async Task<bool> TryWriteAsync(
+    public static ValueTask<bool> TryWriteAsync(
         this Stream? stream,
         string str,
         Encoding? encoding = null,
         CancellationToken cancellationToken = default
-    ) => await stream.TryWriteAsync(str.GetBytes(encoding ?? Encoding.UTF8), cancellationToken);
+    ) => stream.TryWriteAsync(str.GetBytes(encoding ?? Encoding.UTF8), cancellationToken);
 }

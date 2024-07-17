@@ -125,7 +125,7 @@ public class BytesExtensionTest
         const string str = "Alice";
         var bytes = str.GetBytes(Encoding.UTF8);
         var ms = new MemoryStream();
-        bytes.TryWriteTo(ms);
+        Assert.True(bytes.TryWriteTo(ms));
         var result = ms.ReadToEnd();
         Assert.True(TestHelper.BytesEqual(bytes, result));
     }
@@ -136,7 +136,7 @@ public class BytesExtensionTest
         const string str = "Alice";
         var bytes = str.GetBytes(Encoding.UTF8);
         var ms = new MemoryStream();
-        await bytes.TryWriteToAsync(ms, CancellationToken.None);
+        Assert.True(await bytes.TryWriteToAsync(ms, CancellationToken.None));
         var result = await ms.ReadToEndAsync(bytes.Length, CancellationToken.None);
         Assert.True(TestHelper.BytesEqual(bytes, result));
     }

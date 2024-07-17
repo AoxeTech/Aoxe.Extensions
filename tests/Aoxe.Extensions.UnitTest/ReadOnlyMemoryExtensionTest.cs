@@ -1,4 +1,4 @@
-namespace Aoxe.Memory.Extensions.UnitTest;
+namespace Aoxe.Extensions.UnitTest;
 
 public class ReadOnlyMemoryExtensionTest
 {

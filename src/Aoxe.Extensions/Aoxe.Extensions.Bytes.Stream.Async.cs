@@ -2,7 +2,7 @@ namespace Aoxe.Extensions;
 
 public static partial class AoxeExtension
 {
-    public static async Task WriteToAsync(
+    public static async ValueTask WriteToAsync(
         this byte[] buffer,
         Stream stream,
         CancellationToken cancellationToken = default
@@ -13,9 +13,9 @@ public static partial class AoxeExtension
         await stream.WriteAsync(buffer, cancellationToken);
 #endif
 
-    public static Task<bool> TryWriteToAsync(
+    public static ValueTask<bool> TryWriteToAsync(
         this byte[] buffer,
         Stream stream,
         CancellationToken cancellationToken = default
-    ) => stream.TryWriteAsync(buffer, 0, buffer.Length, cancellationToken);
+    ) => stream.TryWriteAsync(buffer, cancellationToken);
 }
