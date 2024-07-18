@@ -8,7 +8,7 @@ public static partial class AoxeExtension
 
     public static bool IsNullOrDefault<T>(this T? param) => param is null || param.Equals(default);
 
-    public static bool IsNullOrEmpty<T>(this IEnumerable<T?>? src) => src is null || !src.Any();
+    public static bool IsNullOrEmpty<T>(this IEnumerable<T?>? src) => src?.Any() is not true;
 
     public static T IfNull<T>(this T? value, T defaultValue) =>
         value is null ? defaultValue : value;

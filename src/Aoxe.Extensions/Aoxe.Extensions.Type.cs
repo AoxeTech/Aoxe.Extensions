@@ -6,9 +6,7 @@ public static partial class AoxeExtension
         Activator.CreateInstance(type, args);
 
     public static bool IsNullableType(this Type? type) =>
-        type is not null
-        && type.IsGenericType
-        && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+        type?.IsGenericType is true && type.GetGenericTypeDefinition() == typeof(Nullable<>);
 
     public static bool IsNumericType(this Type? type) =>
         Type.GetTypeCode(type) switch

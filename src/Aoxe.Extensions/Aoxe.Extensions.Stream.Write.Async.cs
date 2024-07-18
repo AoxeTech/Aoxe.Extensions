@@ -44,7 +44,7 @@ public static partial class AoxeExtension
     )
     {
         if (stream is null)
-            return default;
+            return new ValueTask();
         var bytes = str.GetBytes(encoding ?? Encoding.UTF8);
 #if NETSTANDARD2_0
         return new ValueTask(stream.WriteAsync(bytes, 0, bytes.Length, cancellationToken));
