@@ -56,7 +56,7 @@ catch (Exception ex)
 // String extensions
 string text = "Hello, World!";
 Console.WriteLine(text.IsNullOrEmpty());  // False
-Console.WriteLine(text.Truncate(5));      // "Hello..."
+Console.WriteLine(text.Truncate(8));      // "Hello..."
 
 // Collection extensions
 var numbers = new List<int> { 1, 2, 3, 4, 5 };

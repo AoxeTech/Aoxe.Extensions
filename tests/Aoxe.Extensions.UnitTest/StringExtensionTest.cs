@@ -447,25 +447,63 @@ public class StringExtensionTest
 
     #endregion
 
-    #region Format
+    #region Truncate
 
-    [Theory]
-    [InlineData("{0:D3}", 2, "002")]
-    [InlineData("{0:G}", 2, "2")]
-    [InlineData("{0:N}", 250000, "250,000.00")]
-    [InlineData("{0:X000}", 12, "C")]
-    [InlineData("{0:000.000}", 12.2, "012.200")]
-    [InlineData("Hello {0}", "John", "Hello John")]
-    public void FormatTestWithOneArg(string format, object arg0, string result)
+    [Fact]
+    public void Truncate_NullInput_ReturnsNull()
     {
-        Assert.Equal(result, format.Format(arg0));
+        string? input = null;
+        var result = input.Truncate(5);
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void Truncate_EmptyInput_ReturnsEmptyString()
+    {
+        var input = string.Empty;
+        var result = input.Truncate(5);
+        Assert.Equal(string.Empty, result);
     }
 
     [Theory]
-    [InlineData("{0} {1}", "Hello", "John", "Hello John")]
-    public void FormatTestWithTwoArgs(string format, object arg0, object arg1, string result)
+    [InlineData(0)]
+    [InlineData(-1)]
+    public void Truncate_MaxLengthLessThanOrEqualToZero_ThrowsArgumentException(int maxLength)
     {
-        Assert.Equal(result, format.Format(arg0, arg1));
+        var input = "Test";
+        Assert.Throws<ArgumentException>(() => input.Truncate(maxLength));
+    }
+
+    [Fact]
+    public void Truncate_InputLengthLessThanOrEqualToMaxLength_ReturnsInput()
+    {
+        var input = "Hello";
+        var result = input.Truncate(5);
+        Assert.Equal("Hello", result);
+    }
+
+    [Fact]
+    public void Truncate_SuffixLengthGreaterThanOrEqualToMaxLength_ReturnsTruncatedSuffix()
+    {
+        var input = "Hello, World!";
+        var result = input.Truncate(3);
+        Assert.Equal("...", result);
+    }
+
+    [Fact]
+    public void Truncate_InputLengthGreaterThanMaxLength_ReturnsTruncatedInputWithSuffix()
+    {
+        var input = "Hello, World!";
+        var result = input.Truncate(8);
+        Assert.Equal("Hello...", result);
+    }
+
+    [Fact]
+    public void Truncate_CustomSuffix_ReturnsTruncatedInputWithCustomSuffix()
+    {
+        var input = "Hello, World!";
+        var result = input.Truncate(9, "--");
+        Assert.Equal("Hello, --", result);
     }
 
     #endregion

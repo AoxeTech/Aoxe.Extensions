@@ -58,12 +58,33 @@ public static partial class AoxeExtension
     public static string StringJoin<T>(this IEnumerable<T> values, string separator) =>
         string.Join(separator, values);
 
-    public static string Format(this string format, params object[] args) =>
-        string.Format(format, args);
+    public static string Truncate(this string value, int maxLength, string suffix = "...")
+    {
+        if (string.IsNullOrEmpty(value))
+            return value;
+
+        if (maxLength <= 0)
+            throw new ArgumentException(
+                "Maximum length must be greater than zero.",
+                nameof(maxLength)
+            );
+
+        if (value.Length <= maxLength)
+            return value;
+
+        return maxLength <= suffix.Length
+#if NETSTANDARD2_0
+            ? suffix.Substring(0, maxLength)
+            : value.Substring(0, maxLength - suffix.Length) + suffix;
+#else
+            ? suffix[..maxLength]
+            : string.Concat(value.AsSpan(0, maxLength - suffix.Length), suffix);
+#endif
+    }
 
     public static string GetLetterOrDigit(this string source) =>
         new(source.Where(char.IsLetterOrDigit).ToArray());
 
     public static string? TryReplace(this string? str, string oldValue, string? newValue) =>
-        string.IsNullOrEmpty(str) ? str : str!.Replace(oldValue, newValue);
+        string.IsNullOrEmpty(str) ? str : str.Replace(oldValue, newValue);
 }
