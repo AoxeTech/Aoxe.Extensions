@@ -1,15 +1,9 @@
 namespace Aoxe.Extensions.UnitTest.Commons;
 
-internal class FakeNetworkStream : Stream
+internal class FakeNetworkStream(Stream inner, int threshold = 1) : Stream
 {
-    private Stream Inner { get; }
-    private int Threshold { get; }
-
-    public FakeNetworkStream(Stream inner, int threshold = 1)
-    {
-        Inner = inner;
-        Threshold = threshold;
-    }
+    private Stream Inner { get; } = inner;
+    private int Threshold { get; } = threshold;
 
     public override bool CanRead => Inner.CanRead;
     public override bool CanSeek => Inner.CanSeek;

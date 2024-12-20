@@ -18,11 +18,7 @@ public static partial class AoxeExtension
     {
         var canWrite = stream?.CanWrite is true;
         if (canWrite)
-#if NETSTANDARD2_0
             stream!.Write(buffer, offset, count);
-#else
-            stream!.Write(buffer);
-#endif
         return canWrite;
     }
 

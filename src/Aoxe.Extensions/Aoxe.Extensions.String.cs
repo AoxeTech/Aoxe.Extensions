@@ -58,7 +58,7 @@ public static partial class AoxeExtension
     public static string StringJoin<T>(this IEnumerable<T> values, string separator) =>
         string.Join(separator, values);
 
-    public static string Truncate(this string value, int maxLength, string suffix = "...")
+    public static string? Truncate(this string? value, int maxLength, string suffix = "...")
     {
         if (string.IsNullOrEmpty(value))
             return value;
@@ -69,7 +69,7 @@ public static partial class AoxeExtension
                 nameof(maxLength)
             );
 
-        if (value.Length <= maxLength)
+        if (value!.Length <= maxLength)
             return value;
 
         return maxLength <= suffix.Length

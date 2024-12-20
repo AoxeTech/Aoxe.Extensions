@@ -5,7 +5,7 @@ public static partial class AoxeExtension
     public static bool IsNullOrEmpty(this Stream? stream) => stream is null || stream.Length is 0;
 
     public static long TrySeek(this Stream? stream, long offset, SeekOrigin seekOrigin) =>
-        stream?.CanSeek is true ? stream.Seek(offset, seekOrigin) : default;
+        stream?.CanSeek is true ? stream.Seek(offset, seekOrigin) : -1;
 
     public static MemoryStream ToMemoryStream(this Stream stream)
     {

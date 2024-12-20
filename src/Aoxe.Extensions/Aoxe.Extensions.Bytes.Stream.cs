@@ -11,10 +11,5 @@ public static partial class AoxeExtension
         stream.Write(buffer);
 #endif
 
-    public static bool TryWriteTo(this byte[] buffer, Stream stream) =>
-#if NETSTANDARD2_0
-        stream.TryWrite(buffer, 0, buffer.Length);
-#else
-        stream.TryWrite(buffer);
-#endif
+    public static bool TryWriteTo(this byte[] buffer, Stream stream) => stream.TryWrite(buffer);
 }

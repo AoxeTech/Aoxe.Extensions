@@ -13,7 +13,7 @@ public static partial class AoxeExtension
 #else
             ? stream.ReadAsync(buffer, cancellationToken)
 #endif
-            : new ValueTask<int>(0);
+            : new ValueTask<int>(-1);
 
     public static ValueTask<int> TryReadAsync(
         this Stream? stream,
@@ -28,7 +28,7 @@ public static partial class AoxeExtension
 #else
             ? stream.ReadAsync(buffer, cancellationToken)
 #endif
-            : new ValueTask<int>(0);
+            : new ValueTask<int>(-1);
 
     public static async ValueTask<byte[]> ReadToEndAsync(
         this Stream? stream,

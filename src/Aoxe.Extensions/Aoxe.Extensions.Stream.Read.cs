@@ -9,7 +9,7 @@ public static partial class AoxeExtension
 #else
             ? stream.Read(buffer)
 #endif
-            : default;
+            : -1;
 
     public static int TryRead(this Stream? stream, byte[] buffer, int offset, int count) =>
         stream?.CanRead is true
@@ -18,7 +18,7 @@ public static partial class AoxeExtension
 #else
             ? stream.Read(buffer.AsSpan(offset, count))
 #endif
-            : default;
+            : -1;
 
     public static int TryReadByte(this Stream? stream) =>
         stream?.CanRead is true ? stream.ReadByte() : -1;
