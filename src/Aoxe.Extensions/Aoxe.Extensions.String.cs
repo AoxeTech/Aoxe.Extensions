@@ -86,5 +86,5 @@ public static partial class AoxeExtension
         new(source.Where(char.IsLetterOrDigit).ToArray());
 
     public static string? TryReplace(this string? str, string oldValue, string? newValue) =>
-        string.IsNullOrEmpty(str) ? str : str.Replace(oldValue, newValue);
+        string.IsNullOrEmpty(str) ? str : str!.Replace(oldValue, newValue);
 }

@@ -36,7 +36,7 @@ using Aoxe.Extensions;
 
 ## 🌟 Examples
 
-Aoxe.Extensiosn is based on the idea of fluent style, providing a huge number of extension methods to extend C#, thus making the C# language more readable.
+Aoxe.Extensions is based on the idea of fluent style, providing a huge number of extension methods to extend C#, thus making the C# language more readable.
 
 ```csharp
 // Exception handling

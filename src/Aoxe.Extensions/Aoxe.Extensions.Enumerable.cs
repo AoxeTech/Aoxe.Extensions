@@ -36,6 +36,21 @@ public static partial class AoxeExtension
         return -1;
     }
 
+    public static void IndexForeach<T>(this IEnumerable<T> source, Action<int, T> action)
+    {
+#if NET9_0_OR_GREATER
+        foreach (var valueTuple in source.Index())
+            action(valueTuple.Index, valueTuple.Item);
+#else
+        var index = 0;
+        foreach (var item in source)
+        {
+            action(index, item);
+            index++;
+        }
+#endif
+    }
+
     public static bool NotContains<T>(this IEnumerable<T> source, T item) => !source.Contains(item);
 
     public static List<T?> ToList<T>(this IEnumerable<T?> src, Func<T?, bool>? func) =>
@@ -65,9 +80,10 @@ public static partial class AoxeExtension
         var properties = TypeDescriptor.GetProperties(typeof(T));
         var table = new DataTable();
         foreach (PropertyDescriptor prop in properties)
-            table
-                .Columns
-                .Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+            table.Columns.Add(
+                prop.Name,
+                Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType
+            );
         foreach (var item in data)
         {
             var row = table.NewRow();

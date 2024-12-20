@@ -121,4 +121,84 @@ public class EnumerableExtensionTest
                 Assert.Equal(propertyInfo.GetValue(obj), row[propertyInfo.Name]);
         }
     }
+
+    [Fact]
+    public void IndexForeach_EmptyCollection_NoActionExecuted()
+    {
+        // Arrange
+        var list = new List<string>();
+        var count = 0;
+
+        // Act
+        list.IndexForeach((i, item) => count++);
+
+        // Assert
+        Assert.Equal(0, count);
+    }
+
+    [Fact]
+    public void IndexForeach_SingleItem_CorrectIndexAndValue()
+    {
+        // Arrange
+        var list = new List<string> { "test" };
+        var capturedIndex = -1;
+        var capturedItem = string.Empty;
+
+        // Act
+        list.IndexForeach(
+            (i, item) =>
+            {
+                capturedIndex = i;
+                capturedItem = item;
+            }
+        );
+
+        // Assert
+        Assert.Equal(0, capturedIndex);
+        Assert.Equal("test", capturedItem);
+    }
+
+    [Fact]
+    public void IndexForeach_MultipleItems_CorrectIndexesAndValues()
+    {
+        // Arrange
+        var list = new List<string> { "one", "two", "three" };
+        var indexes = new List<int>();
+        var items = new List<string>();
+
+        // Act
+        list.IndexForeach(
+            (i, item) =>
+            {
+                indexes.Add(i);
+                items.Add(item);
+            }
+        );
+
+        // Assert
+        Assert.Equal(new[] { 0, 1, 2 }, indexes);
+        Assert.Equal(new[] { "one", "two", "three" }, items);
+    }
+
+    [Fact]
+    public void IndexForeach_LargeCollection_CorrectIndexing()
+    {
+        // Arrange
+        var list = Enumerable.Range(1, 1000).ToList();
+        var lastIndex = -1;
+        var itemSum = 0;
+
+        // Act
+        list.IndexForeach(
+            (i, item) =>
+            {
+                lastIndex = i;
+                itemSum += item;
+            }
+        );
+
+        // Assert
+        Assert.Equal(999, lastIndex);
+        Assert.Equal(500500, itemSum); // Sum of numbers 1 to 1000
+    }
 }
