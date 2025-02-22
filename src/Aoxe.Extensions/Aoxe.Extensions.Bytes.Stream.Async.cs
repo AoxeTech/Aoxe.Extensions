@@ -13,9 +13,24 @@ public static partial class AoxeExtension
         stream.WriteAsync(buffer, cancellationToken);
 #endif
 
-    public static ValueTask<bool> TryWriteToAsync(
+    public static async ValueTask<bool> TryWriteToAsync(
         this byte[] buffer,
         Stream stream,
         CancellationToken cancellationToken = default
-    ) => stream.TryWriteAsync(buffer, cancellationToken);
+    )
+    {
+        try
+        {
+#if NETSTANDARD2_0
+            await stream.WriteAsync(buffer, 0, buffer.Length, cancellationToken);
+#else
+            await stream.WriteAsync(buffer, cancellationToken);
+#endif
+            return true;
+        }
+        catch (TaskCanceledException)
+        {
+            return false;
+        }
+    }
 }
