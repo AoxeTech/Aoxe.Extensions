@@ -2,63 +2,61 @@ namespace Aoxe.Extensions;
 
 public static partial class AoxeExtension
 {
-    public static void IfTrueThenThrow<TException>(this bool b, TException exception)
+    /// <summary>Throws exception if condition is true</summary>
+    public static void ThrowIfTrue<TException>(this bool condition, TException exception)
         where TException : Exception
     {
-        if (b)
+        if (condition)
             throw exception;
     }
 
-    public static void IfFalseThenThrow<TException>(this bool b, TException exception)
+    /// <summary>Throws exception if condition is false</summary>
+    public static void ThrowIfFalse<TException>(this bool condition, TException exception)
         where TException : Exception
     {
-        if (!b)
+        if (!condition)
             throw exception;
     }
 
-    public static void IfTrue(this bool b, Action action)
+    /// <summary>Executes action if condition is true</summary>
+    public static void Then(this bool condition, Action action)
     {
-        if (b)
+        if (condition)
             action();
     }
 
-    public static TResult? IfTrue<TResult>(this bool b, Func<TResult?> func) =>
-        b ? func() : default;
+    /// <summary>Returns function result if condition is true</summary>
+    public static TResult? Then<TResult>(this bool condition, Func<TResult?> func) =>
+        condition ? func() : default;
 
-    public static void IfFalse(this bool b, Action action)
+    /// <summary>Executes action if condition is false</summary>
+    public static void Otherwise(this bool condition, Action action)
     {
-        if (!b)
+        if (!condition)
             action();
     }
 
-    public static TResult? IfFalse<TResult>(this bool b, Func<TResult?> func) =>
-        !b ? func() : default;
+    /// <summary>Returns function result if condition is false</summary>
+    public static TResult? Otherwise<TResult>(this bool condition, Func<TResult?> func) =>
+        !condition ? func() : default;
 
-    public static void IfTrueElse(this bool b, Action actionTrue, Action actionElse)
+    /// <summary>Executes appropriate action based on condition</summary>
+    public static void ThenOrOtherwise(
+        this bool condition,
+        Action thenAction,
+        Action otherwiseAction
+    )
     {
-        if (b)
-            actionTrue();
+        if (condition)
+            thenAction();
         else
-            actionElse();
+            otherwiseAction();
     }
 
-    public static TResult? IfTrueElse<TResult>(
-        this bool b,
-        Func<TResult?> funcTrue,
-        Func<TResult?> funcElse
-    ) => b ? funcTrue() : funcElse();
-
-    public static void IfFalseElse(this bool b, Action actionFalse, Action actionElse)
-    {
-        if (!b)
-            actionFalse();
-        else
-            actionElse();
-    }
-
-    public static TResult? IfFalseElse<TResult>(
-        this bool b,
-        Func<TResult?> funcFalse,
-        Func<TResult?> funcElse
-    ) => !b ? funcFalse() : funcElse();
+    /// <summary>Returns result from appropriate function based on condition</summary>
+    public static TResult? ThenOrOtherwise<TResult>(
+        this bool condition,
+        Func<TResult?> thenFunc,
+        Func<TResult?> otherwiseFunc
+    ) => condition ? thenFunc() : otherwiseFunc();
 }

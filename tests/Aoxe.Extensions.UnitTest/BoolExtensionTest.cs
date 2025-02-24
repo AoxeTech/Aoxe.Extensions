@@ -1,115 +1,139 @@
 namespace Aoxe.Extensions.UnitTest;
 
-public class BoolExtensionTest
+public class BooleanExtensionTests
 {
     [Fact]
-    public void IfThrowTest()
+    public void ThrowIfTrue_ThrowsExceptionWhenTrue()
     {
-        true.IfFalseThenThrow(new ArgumentException());
-        false.IfTrueThenThrow(new ArgumentException());
-        Assert.Throws<ArgumentException>(() => true.IfTrueThenThrow(new ArgumentException()));
-        Assert.Throws<ArgumentException>(() => false.IfFalseThenThrow(new ArgumentException()));
+        var exception = new InvalidOperationException("Test error");
+
+        // Should throw when true
+        Assert.Throws<InvalidOperationException>(() => true.ThrowIfTrue(exception));
+
+        // Should not throw when false
+        var ex = Record.Exception(() => false.ThrowIfTrue(exception));
+        Assert.Null(ex);
     }
 
     [Fact]
-    public void IfTrueAction()
+    public void ThrowIfFalse_ThrowsExceptionWhenFalse()
     {
-        var i = 1;
+        var exception = new ArgumentException("Test error");
 
-        true.IfTrue(Action);
-        Assert.Equal(2, i);
-        return;
+        // Should throw when false
+        Assert.Throws<ArgumentException>(() => false.ThrowIfFalse(exception));
 
-        void Action()
-        {
-            i++;
-        }
+        // Should not throw when true
+        var ex = Record.Exception(() => true.ThrowIfFalse(exception));
+        Assert.Null(ex);
+    }
+
+    [Theory]
+    [InlineData(true, 1)]
+    [InlineData(false, 0)]
+    public void Then_ExecutesActionWhenTrue(bool condition, int expected)
+    {
+        int counter = 0;
+        condition.Then(() => counter++);
+        Assert.Equal(expected, counter);
+    }
+
+    [Theory]
+    [InlineData(true, "Success")]
+    [InlineData(false, null)]
+    public void Then_ReturnsValueWhenTrue(bool condition, string? expected)
+    {
+        var result = condition.Then(() => "Success");
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(false, 1)]
+    [InlineData(true, 0)]
+    public void Otherwise_ExecutesActionWhenFalse(bool condition, int expected)
+    {
+        int counter = 0;
+        condition.Otherwise(() => counter++);
+        Assert.Equal(expected, counter);
+    }
+
+    [Theory]
+    [InlineData(false, 42)]
+    [InlineData(true, 0)]
+    public void Otherwise_ReturnsValueWhenFalse(bool condition, int? expected)
+    {
+        var result = condition.Otherwise(() => 42);
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(true, "Then", "Otherwise")]
+    [InlineData(false, "Then", "Otherwise")]
+    public void ThenOrOtherwise_ExecutesCorrectBranch(
+        bool condition,
+        string expectedThen,
+        string expectedOtherwise
+    )
+    {
+        string result = "";
+        condition.ThenOrOtherwise(() => result = expectedThen, () => result = expectedOtherwise);
+        Assert.Equal(condition ? expectedThen : expectedOtherwise, result);
+    }
+
+    [Theory]
+    [InlineData(true, 100, 200)]
+    [InlineData(false, 200, 100)]
+    public void ThenOrOtherwise_ReturnsCorrectValue(bool condition, int expected, int notExpected)
+    {
+        var result = condition.ThenOrOtherwise(() => 100, () => 200);
+        Assert.Equal(expected, result);
+        Assert.NotEqual(notExpected, result);
     }
 
     [Fact]
-    public void IfFalseAction()
+    public void NullActions_ThrowNullReferenceException()
     {
-        var i = 1;
+        // Then (Action)
+        Assert.Throws<NullReferenceException>(() => true.Then(null!));
 
-        false.IfFalse(Action);
-        Assert.Equal(2, i);
-        return;
+        // Then (Func)
+        Assert.Throws<NullReferenceException>(() => true.Then<string>(null!));
 
-        void Action()
-        {
-            i++;
-        }
+        // Otherwise (Action)
+        Assert.Throws<NullReferenceException>(() => false.Otherwise(null!));
+
+        // ThenOrOtherwise
+        Assert.Throws<NullReferenceException>(() => true.ThenOrOtherwise(null!, () => { }));
+        Assert.Throws<NullReferenceException>(() => false.ThenOrOtherwise(() => { }, null!));
     }
 
     [Fact]
-    public void IfTrueFunc()
+    public void ChainingMethods_WorksCorrectly()
     {
-        Assert.Equal(1, true.IfTrue(() => 1));
+        int value = 0;
+
+        true.ThenOrOtherwise(() => value += 10, () => value -= 5);
+
+        Assert.Equal(10, value);
+
+        false.ThenOrOtherwise(() => value *= 2, () => value += 3);
+
+        Assert.Equal(13, value);
     }
 
     [Fact]
-    public void IfFalseFunc()
+    public void MixedValueTypes_WorkAsExpected()
     {
-        Assert.Equal(1, false.IfFalse(() => 1));
-    }
+        // Value type test
+        var intResult = false.Otherwise(() => 42);
+        Assert.Equal(42, intResult);
 
-    [Fact]
-    public void IfTrueElseAction()
-    {
-        var a = 0;
-        var b = "123";
+        // Reference type test
+        var stringResult = true.Then(() => "Success");
+        Assert.Equal("Success", stringResult);
 
-        true.IfTrueElse(() => a++, () => b = "456");
-        Assert.Equal(1, a);
-        Assert.Equal("123", b);
-
-        var c = 0;
-        var d = "123";
-
-        false.IfTrueElse(() => c++, () => d = "456");
-        Assert.Equal(0, c);
-        Assert.Equal("456", d);
-    }
-
-    [Fact]
-    public void IfFalseElseAction()
-    {
-        var a = 0;
-        var b = "123";
-
-        true.IfFalseElse(() => a++, () => b = "456");
-        Assert.Equal(0, a);
-        Assert.Equal("456", b);
-
-        var c = 0;
-        var d = "123";
-
-        false.IfFalseElse(() => c++, () => d = "456");
-        Assert.Equal(1, c);
-        Assert.Equal("123", d);
-    }
-
-    [Fact]
-    public void IfTrueElseFunc()
-    {
-        const int i = 1;
-        var s0 = true.IfTrueElse(() => i + 1, () => i - 1);
-        Assert.Equal(2, s0);
-
-        const int j = 1;
-        var s1 = false.IfTrueElse(() => j + 1, () => j - 1);
-        Assert.Equal(0, s1);
-    }
-
-    [Fact]
-    public void IfFalseElseFunc()
-    {
-        const int i = 1;
-        var s0 = false.IfFalseElse(() => i + 1, () => i - 1);
-        Assert.Equal(2, s0);
-
-        const int j = 1;
-        var s1 = true.IfFalseElse(() => j + 1, () => j - 1);
-        Assert.Equal(0, s1);
+        // Nullable handling
+        var nullResult = false.Then<string?>(() => "Not null");
+        Assert.Null(nullResult);
     }
 }

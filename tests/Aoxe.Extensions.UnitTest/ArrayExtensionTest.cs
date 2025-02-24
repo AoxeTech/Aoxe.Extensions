@@ -2,103 +2,117 @@ namespace Aoxe.Extensions.UnitTest;
 
 public class ArrayExtensionTest
 {
+    private readonly int[] _testArray = [1, 2, 3, 4, 5];
+
     [Fact]
-    public void ToSpanTest()
+    public void ToSpan_ConvertsEntireArray()
     {
-        var span = Consts.Chars.ToSpan();
-        Assert.Equal(Consts.Chars.Length, span.Length);
-        var chars = span.ToArray();
-        for (var i = 0; i < Consts.Chars.Length; i++)
-            Assert.Equal(Consts.Chars[i], chars[i]);
+        var span = _testArray.ToSpan();
+        Assert.Equal(_testArray.Length, span.Length);
+        Assert.Equal(_testArray, span.ToArray());
+    }
+
+    [Theory]
+    [InlineData(1, 3)]
+    [InlineData(0, 5)]
+    [InlineData(4, 1)]
+    public void ToSpan_ConvertsSubarray(int start, int length)
+    {
+        var span = _testArray.ToSpan(start, length);
+        Assert.Equal(length, span.Length);
+        Assert.Equal(_testArray.AsSpan(start, length).ToArray(), span.ToArray());
     }
 
     [Fact]
-    public void ToSpanWithLengthTest()
+    public void ToMemory_ConvertsEntireArray()
     {
-        var span = Consts.Chars.ToSpan(0, Consts.Chars.Length);
-        Assert.Equal(Consts.Chars.Length, span.Length);
-        var chars = span.ToArray();
-        for (var i = 0; i < Consts.Chars.Length; i++)
-            Assert.Equal(Consts.Chars[i], chars[i]);
+        var memory = _testArray.ToMemory();
+        Assert.Equal(_testArray.Length, memory.Length);
+        Assert.Equal(_testArray, memory.ToArray());
+    }
+
+    [Theory]
+    [InlineData(1, 3)]
+    [InlineData(0, 5)]
+    [InlineData(4, 1)]
+    public void ToMemory_ConvertsSubarray(int start, int length)
+    {
+        var memory = _testArray.ToMemory(start, length);
+        Assert.Equal(length, memory.Length);
+        Assert.Equal(_testArray.AsMemory(start, length).ToArray(), memory.ToArray());
     }
 
     [Fact]
-    public void ToMemoryTest()
+    public void ToReadOnlySpan_ConvertsEntireArray()
     {
-        var memory = Consts.Chars.ToMemory();
-        Assert.Equal(Consts.Chars.Length, memory.Length);
-        var chars = memory.ToArray();
-        for (var i = 0; i < Consts.Chars.Length; i++)
-            Assert.Equal(Consts.Chars[i], chars[i]);
+        var span = _testArray.ToReadOnlySpan();
+        Assert.Equal(_testArray.Length, span.Length);
+        Assert.Equal(_testArray, span.ToArray());
+    }
+
+    [Theory]
+    [InlineData(1, 3)]
+    [InlineData(0, 5)]
+    [InlineData(4, 1)]
+    public void ToReadOnlySpan_ConvertsSubarray(int start, int length)
+    {
+        var span = _testArray.ToReadOnlySpan(start, length);
+        Assert.Equal(length, span.Length);
+        Assert.Equal(_testArray.AsSpan(start, length).ToArray(), span.ToArray());
     }
 
     [Fact]
-    public void ToMemoryWithLengthTest()
+    public void ToReadOnlyMemory_ConvertsEntireArray()
     {
-        var memory = Consts.Chars.ToMemory(0, Consts.Chars.Length);
-        Assert.Equal(Consts.Chars.Length, memory.Length);
-        var chars = memory.ToArray();
-        for (var i = 0; i < Consts.Chars.Length; i++)
-            Assert.Equal(Consts.Chars[i], chars[i]);
+        var memory = _testArray.ToReadOnlyMemory();
+        Assert.Equal(_testArray.Length, memory.Length);
+        Assert.Equal(_testArray, memory.ToArray());
+    }
+
+    [Theory]
+    [InlineData(1, 3)]
+    [InlineData(0, 5)]
+    [InlineData(4, 1)]
+    public void ToReadOnlyMemory_ConvertsSubarray(int start, int length)
+    {
+        var memory = _testArray.ToReadOnlyMemory(start, length);
+        Assert.Equal(length, memory.Length);
+        Assert.Equal(_testArray.AsMemory(start, length).ToArray(), memory.ToArray());
     }
 
     [Fact]
-    public void ToReadOnlySpanTest()
+    public void ToReadOnlySequence_ConvertsEntireArray()
     {
-        var span = Consts.Chars.ToReadOnlySpan();
-        Assert.Equal(Consts.Chars.Length, span.Length);
-        var chars = span.ToArray();
-        for (var i = 0; i < Consts.Chars.Length; i++)
-            Assert.Equal(Consts.Chars[i], chars[i]);
+        var sequence = _testArray.ToReadOnlySequence();
+        Assert.Equal(_testArray.Length, sequence.Length);
+        Assert.Equal(_testArray, sequence.ToArray());
     }
 
-    [Fact]
-    public void ToReadOnlySpanWithLengthTest()
+    [Theory]
+    [InlineData(1, 3)]
+    [InlineData(0, 5)]
+    [InlineData(4, 1)]
+    public void ToReadOnlySequence_ConvertsSubarray(int start, int length)
     {
-        var span = Consts.Chars.ToReadOnlySpan(0, Consts.Chars.Length);
-        Assert.Equal(Consts.Chars.Length, span.Length);
-        var chars = span.ToArray();
-        for (var i = 0; i < Consts.Chars.Length; i++)
-            Assert.Equal(Consts.Chars[i], chars[i]);
+        var sequence = _testArray.ToReadOnlySequence(start, length);
+        Assert.Equal(length, sequence.Length);
+        Assert.Equal(_testArray.AsSpan(start, length).ToArray(), sequence.ToArray());
     }
 
-    [Fact]
-    public void ToReadOnlyMemoryTest()
+    [Theory]
+    [InlineData(-1, 2)]
+    [InlineData(3, 3)]
+    [InlineData(0, 6)]
+    public void InvalidArguments_ThrowException(int start, int length)
     {
-        var memory = Consts.Chars.ToReadOnlyMemory();
-        Assert.Equal(Consts.Chars.Length, memory.Length);
-        var chars = memory.ToArray();
-        for (var i = 0; i < Consts.Chars.Length; i++)
-            Assert.Equal(Consts.Chars[i], chars[i]);
-    }
-
-    [Fact]
-    public void ToReadOnlyMemoryWithLengthTest()
-    {
-        var memory = Consts.Chars.ToReadOnlyMemory(0, Consts.Chars.Length);
-        Assert.Equal(Consts.Chars.Length, memory.Length);
-        var chars = memory.ToArray();
-        for (var i = 0; i < Consts.Chars.Length; i++)
-            Assert.Equal(Consts.Chars[i], chars[i]);
-    }
-
-    [Fact]
-    public void ToReadOnlySequenceTest()
-    {
-        var sequence = Consts.Chars.ToReadOnlySequence();
-        Assert.Equal(Consts.Chars.Length, sequence.Length);
-        var chars = sequence.ToArray();
-        for (var i = 0; i < Consts.Chars.Length; i++)
-            Assert.Equal(Consts.Chars[i], chars[i]);
-    }
-
-    [Fact]
-    public void ToReadOnlySequenceWithLengthTest()
-    {
-        var sequence = Consts.Chars.ToReadOnlySequence(0, Consts.Chars.Length);
-        Assert.Equal(Consts.Chars.Length, sequence.Length);
-        var chars = sequence.ToArray();
-        for (var i = 0; i < Consts.Chars.Length; i++)
-            Assert.Equal(Consts.Chars[i], chars[i]);
+        Assert.Throws<ArgumentOutOfRangeException>(() => _testArray.ToSpan(start, length));
+        Assert.Throws<ArgumentOutOfRangeException>(() => _testArray.ToMemory(start, length));
+        Assert.Throws<ArgumentOutOfRangeException>(() => _testArray.ToReadOnlySpan(start, length));
+        Assert.Throws<ArgumentOutOfRangeException>(
+            () => _testArray.ToReadOnlyMemory(start, length)
+        );
+        Assert.Throws<ArgumentOutOfRangeException>(
+            () => _testArray.ToReadOnlySequence(start, length)
+        );
     }
 }
