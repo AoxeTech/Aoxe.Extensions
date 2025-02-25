@@ -76,7 +76,7 @@ public class BooleanExtensionTests
     )
     {
         string result = "";
-        condition.ThenOrOtherwise(() => result = expectedThen, () => result = expectedOtherwise);
+        condition.ThenOtherwise(() => result = expectedThen, () => result = expectedOtherwise);
         Assert.Equal(condition ? expectedThen : expectedOtherwise, result);
     }
 
@@ -85,7 +85,7 @@ public class BooleanExtensionTests
     [InlineData(false, 200, 100)]
     public void ThenOrOtherwise_ReturnsCorrectValue(bool condition, int expected, int notExpected)
     {
-        var result = condition.ThenOrOtherwise(() => 100, () => 200);
+        var result = condition.ThenOtherwise(() => 100, () => 200);
         Assert.Equal(expected, result);
         Assert.NotEqual(notExpected, result);
     }
@@ -103,8 +103,8 @@ public class BooleanExtensionTests
         Assert.Throws<NullReferenceException>(() => false.Otherwise(null!));
 
         // ThenOrOtherwise
-        Assert.Throws<NullReferenceException>(() => true.ThenOrOtherwise(null!, () => { }));
-        Assert.Throws<NullReferenceException>(() => false.ThenOrOtherwise(() => { }, null!));
+        Assert.Throws<NullReferenceException>(() => true.ThenOtherwise(null!, () => { }));
+        Assert.Throws<NullReferenceException>(() => false.ThenOtherwise(() => { }, null!));
     }
 
     [Fact]
@@ -112,11 +112,11 @@ public class BooleanExtensionTests
     {
         int value = 0;
 
-        true.ThenOrOtherwise(() => value += 10, () => value -= 5);
+        true.ThenOtherwise(() => value += 10, () => value -= 5);
 
         Assert.Equal(10, value);
 
-        false.ThenOrOtherwise(() => value *= 2, () => value += 3);
+        false.ThenOtherwise(() => value *= 2, () => value += 3);
 
         Assert.Equal(13, value);
     }

@@ -22,6 +22,8 @@ public static partial class AoxeExtension
     /// </remarks>
     public static TResult RunSync<TResult>(this Task<TResult> func)
     {
+        if (func is null)
+            throw new NullReferenceException(nameof(func));
         return TaskFactory.StartNew(Func).Unwrap().GetAwaiter().GetResult();
         Task<TResult> Func() => func;
     }
@@ -36,6 +38,8 @@ public static partial class AoxeExtension
     /// </remarks>
     public static void RunSync(this Task func)
     {
+        if (func is null)
+            throw new NullReferenceException(nameof(func));
         TaskFactory.StartNew(Func).Unwrap().GetAwaiter().GetResult();
         return;
         Task Func() => func;

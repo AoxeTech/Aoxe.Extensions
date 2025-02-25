@@ -41,11 +41,7 @@ public static partial class AoxeExtension
         !condition ? func() : default;
 
     /// <summary>Executes appropriate action based on condition</summary>
-    public static void ThenOrOtherwise(
-        this bool condition,
-        Action thenAction,
-        Action otherwiseAction
-    )
+    public static void ThenOtherwise(this bool condition, Action thenAction, Action otherwiseAction)
     {
         if (condition)
             thenAction();
@@ -54,7 +50,7 @@ public static partial class AoxeExtension
     }
 
     /// <summary>Returns result from appropriate function based on condition</summary>
-    public static TResult? ThenOrOtherwise<TResult>(
+    public static TResult? ThenOtherwise<TResult>(
         this bool condition,
         Func<TResult?> thenFunc,
         Func<TResult?> otherwiseFunc

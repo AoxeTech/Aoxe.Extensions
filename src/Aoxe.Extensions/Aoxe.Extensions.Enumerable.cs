@@ -1,31 +1,63 @@
 namespace Aoxe.Extensions;
 
+/// <summary>
+/// Provides extension methods for collection manipulation and conversion.
+/// </summary>
 public static partial class AoxeExtension
 {
+    /// <summary>
+    /// Adds multiple items to a collection.
+    /// </summary>
+    /// <typeparam name="T">The type of elements in the collection.</typeparam>
+    /// <param name="source">The target collection.</param>
+    /// <param name="collections">The items to add.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="source"/> or <paramref name="collections"/> is null.
+    /// </exception>
+    /// <remarks>
+    /// Optimized for <see cref="List{T}"/> using its AddRange method. For other collection types,
+    /// items are added sequentially.
+    /// </remarks>
     public static void AddRange<T>(this ICollection<T> source, IEnumerable<T> collections)
     {
-        switch (source)
+        if (source == null)
+            throw new ArgumentNullException(nameof(source));
+        if (collections == null)
+            throw new ArgumentNullException(nameof(collections));
+
+        if (source is List<T> list)
         {
-            case List<T> list:
-                list.AddRange(collections);
-                break;
-            default:
-            {
-                foreach (var item in collections)
-                    source.Add(item);
-                break;
-            }
+            list.AddRange(collections);
+            return;
+        }
+
+        foreach (var item in collections)
+        {
+            source.Add(item);
         }
     }
 
+    /// <summary>
+    /// Finds the index of the first occurrence of a value in a sequence.
+    /// </summary>
+    /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+    /// <param name="source">The sequence to search.</param>
+    /// <param name="value">The value to locate.</param>
+    /// <param name="comparer">The equality comparer to use (defaults to <see cref="EqualityComparer{T}.Default"/>).</param>
+    /// <returns>The zero-based index of the value, or -1 if not found.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="source"/> is null.</exception>
     public static int IndexOf<T>(
         this IEnumerable<T?> source,
         T? value,
         IEqualityComparer<T?>? comparer = null
     )
     {
+        if (source == null)
+            throw new ArgumentNullException(nameof(source));
+
+        comparer ??= EqualityComparer<T?>.Default;
         var index = 0;
-        comparer ??= EqualityComparer<T?>.Default; // or pass in as a parameter
+
         foreach (var item in source)
         {
             if (comparer.Equals(item, value))
@@ -36,59 +68,144 @@ public static partial class AoxeExtension
         return -1;
     }
 
+    /// <summary>
+    /// Executes an action for each element in the sequence, providing the element's index.
+    /// </summary>
+    /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+    /// <param name="source">The sequence to iterate.</param>
+    /// <param name="action">The action to execute for each element.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="source"/> is null.</exception>
     public static void IndexForeach<T>(this IEnumerable<T> source, Action<int, T> action)
     {
+        if (source == null)
+            throw new ArgumentNullException(nameof(source));
+
 #if NET9_0_OR_GREATER
-        foreach (var valueTuple in source.Index())
-            action(valueTuple.Index, valueTuple.Item);
+        foreach (var (index, item) in source.Index())
+        {
+            action(index, item);
+        }
 #else
         var index = 0;
         foreach (var item in source)
         {
-            action(index, item);
-            index++;
+            action(index++, item);
         }
 #endif
     }
 
-    public static bool NotContains<T>(this IEnumerable<T> source, T item) => !source.Contains(item);
-
-    public static List<T?> ToList<T>(this IEnumerable<T?> src, Func<T?, bool>? func) =>
-        func is null ? src.ToList() : src.Where(func).ToList();
-
-    public static void ForEach<T>(this IEnumerable<T?> src, Action<T?>? action)
+    /// <summary>
+    /// Determines whether a sequence does not contain a specified element.
+    /// </summary>
+    /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+    /// <param name="source">The sequence to check.</param>
+    /// <param name="item">The item to locate.</param>
+    /// <returns>true if the item is not found; otherwise, false.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="source"/> is null.</exception>
+    public static bool NotContains<T>(this IEnumerable<T> source, T item)
     {
-        if (action is null)
-            return;
-        foreach (var i in src)
-            action(i);
+        if (source == null)
+            throw new ArgumentNullException(nameof(source));
+
+        return !source.Contains(item);
     }
 
-    public static IEnumerable<T?> ForEachLazy<T>(this IEnumerable<T?> src, Action<T?>? action)
+    /// <summary>
+    /// Filters and converts a sequence to a list.
+    /// </summary>
+    /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+    /// <param name="source">The sequence to convert.</param>
+    /// <param name="predicate">An optional filter predicate.</param>
+    /// <returns>A filtered list of elements.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="source"/> is null.</exception>
+    public static List<T?> ToList<T>(this IEnumerable<T?> source, Func<T?, bool>? predicate = null)
     {
-        if (action is null)
-            return src;
-        return src.Select(i =>
+        if (source == null)
+            throw new ArgumentNullException(nameof(source));
+
+        return predicate == null ? source.ToList() : source.Where(predicate).ToList();
+    }
+
+    /// <summary>
+    /// Executes an action for each element in the sequence.
+    /// </summary>
+    /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+    /// <param name="source">The sequence to iterate.</param>
+    /// <param name="action">The action to execute for each element.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="source"/> is null.</exception>
+    public static void ForEach<T>(this IEnumerable<T?> source, Action<T?>? action)
+    {
+        if (source == null)
+            throw new ArgumentNullException(nameof(source));
+        if (action == null)
+            return;
+
+        foreach (var item in source)
         {
-            action(i);
-            return i;
+            action(item);
+        }
+    }
+
+    /// <summary>
+    /// Executes an action for each element in a sequence while maintaining lazy evaluation.
+    /// </summary>
+    /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+    /// <param name="source">The sequence to iterate.</param>
+    /// <param name="action">The action to execute for each element.</param>
+    /// <returns>The original sequence.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="source"/> is null.</exception>
+    /// <remarks>
+    /// The action will be executed each time the sequence is enumerated.
+    /// </remarks>
+    public static IEnumerable<T?> ForEachLazy<T>(this IEnumerable<T?> source, Action<T?>? action)
+    {
+        if (source == null)
+            throw new ArgumentNullException(nameof(source));
+        if (action == null)
+            return source;
+
+        return source.Select(item =>
+        {
+            action(item);
+            return item;
         });
     }
 
+    /// <summary>
+    /// Converts a sequence to a <see cref="DataTable"/>.
+    /// </summary>
+    /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+    /// <param name="data">The sequence to convert.</param>
+    /// <returns>A DataTable with columns matching the element's properties.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="data"/> is null.</exception>
+    /// <remarks>
+    /// Creates columns for all public instance properties of type <typeparamref name="T"/>.
+    /// Null values are converted to <see cref="DBNull.Value"/>.
+    /// </remarks>
     public static DataTable ConvertToDataTable<T>(this IEnumerable<T> data)
     {
+        if (data == null)
+            throw new ArgumentNullException(nameof(data));
+
         var properties = TypeDescriptor.GetProperties(typeof(T));
         var table = new DataTable();
+
+        // Create columns
         foreach (PropertyDescriptor prop in properties)
-            table.Columns.Add(
-                prop.Name,
-                Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType
-            );
+        {
+            var columnType = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
+            table.Columns.Add(prop.Name, columnType);
+        }
+
+        // Populate rows
         foreach (var item in data)
         {
             var row = table.NewRow();
             foreach (PropertyDescriptor prop in properties)
-                row[prop.Name] = item is null ? DBNull.Value : prop.GetValue(item) ?? DBNull.Value;
+            {
+                var value = item != null ? prop.GetValue(item) : null;
+                row[prop.Name] = value ?? DBNull.Value;
+            }
             table.Rows.Add(row);
         }
 

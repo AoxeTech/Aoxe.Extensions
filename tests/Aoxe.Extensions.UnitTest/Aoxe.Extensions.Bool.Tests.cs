@@ -10,7 +10,7 @@ public class AoxeExtensionBoolTests
         var exception = new InvalidOperationException();
 
         // Act & Assert
-        Assert.Throws<InvalidOperationException>(() => condition.IfTrueThenThrow(exception));
+        Assert.Throws<InvalidOperationException>(() => condition.ThrowIfTrue(exception));
     }
 
     [Fact]
@@ -21,7 +21,7 @@ public class AoxeExtensionBoolTests
         var exception = new InvalidOperationException();
 
         // Act & Assert
-        var exceptionRecord = Record.Exception(() => condition.IfTrueThenThrow(exception));
+        var exceptionRecord = Record.Exception(() => condition.ThrowIfTrue(exception));
         Assert.Null(exceptionRecord);
     }
 
@@ -33,7 +33,7 @@ public class AoxeExtensionBoolTests
         var exception = new ArgumentException();
 
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => condition.IfFalseThenThrow(exception));
+        Assert.Throws<ArgumentException>(() => condition.ThrowIfFalse(exception));
     }
 
     [Fact]
@@ -44,7 +44,7 @@ public class AoxeExtensionBoolTests
         var exception = new ArgumentException();
 
         // Act & Assert
-        var exceptionRecord = Record.Exception(() => condition.IfFalseThenThrow(exception));
+        var exceptionRecord = Record.Exception(() => condition.ThrowIfFalse(exception));
         Assert.Null(exceptionRecord);
     }
 
@@ -57,7 +57,7 @@ public class AoxeExtensionBoolTests
         Action action = () => actionExecuted = true;
 
         // Act
-        condition.IfTrue(action);
+        condition.Then(action);
 
         // Assert
         Assert.True(actionExecuted);
@@ -72,7 +72,7 @@ public class AoxeExtensionBoolTests
         Action action = () => actionExecuted = true;
 
         // Act
-        condition.IfTrue(action);
+        condition.Then(action);
 
         // Assert
         Assert.False(actionExecuted);
@@ -87,7 +87,7 @@ public class AoxeExtensionBoolTests
         Action action = () => actionExecuted = true;
 
         // Act
-        condition.IfFalse(action);
+        condition.Otherwise(action);
 
         // Assert
         Assert.True(actionExecuted);
@@ -102,7 +102,7 @@ public class AoxeExtensionBoolTests
         Action action = () => actionExecuted = true;
 
         // Act
-        condition.IfFalse(action);
+        condition.Otherwise(action);
 
         // Assert
         Assert.False(actionExecuted);
@@ -116,7 +116,7 @@ public class AoxeExtensionBoolTests
         Func<int?> func = () => 42;
 
         // Act
-        int? result = condition.IfTrue(func);
+        int? result = condition.Then(func);
 
         // Assert
         Assert.Equal(42, result);
@@ -130,7 +130,7 @@ public class AoxeExtensionBoolTests
         Func<int?> func = () => 42;
 
         // Act
-        int? result = condition.IfTrue(func);
+        int? result = condition.Then(func);
 
         // Assert
         Assert.Null(result);
@@ -144,7 +144,7 @@ public class AoxeExtensionBoolTests
         Func<string?> func = () => "False";
 
         // Act
-        string? result = condition.IfFalse(func);
+        string? result = condition.Otherwise(func);
 
         // Assert
         Assert.Equal("False", result);
@@ -158,7 +158,7 @@ public class AoxeExtensionBoolTests
         Func<string?> func = () => "False";
 
         // Act
-        string? result = condition.IfFalse(func);
+        string? result = condition.Otherwise(func);
 
         // Assert
         Assert.Null(result);
@@ -175,7 +175,7 @@ public class AoxeExtensionBoolTests
         Action elseAction = () => elseExecuted = true;
 
         // Act
-        condition.IfTrueElse(trueAction, elseAction);
+        condition.ThenOtherwise(trueAction, elseAction);
 
         // Assert
         Assert.True(trueExecuted);
@@ -193,7 +193,7 @@ public class AoxeExtensionBoolTests
         Action elseAction = () => elseExecuted = true;
 
         // Act
-        condition.IfTrueElse(trueAction, elseAction);
+        condition.ThenOtherwise(trueAction, elseAction);
 
         // Assert
         Assert.False(trueExecuted);
@@ -209,7 +209,7 @@ public class AoxeExtensionBoolTests
         Func<string?> elseFunc = () => "Else";
 
         // Act
-        string? result = condition.IfTrueElse(trueFunc, elseFunc);
+        string? result = condition.ThenOtherwise(trueFunc, elseFunc);
 
         // Assert
         Assert.Equal("True", result);
@@ -224,73 +224,7 @@ public class AoxeExtensionBoolTests
         Func<string?> elseFunc = () => "Else";
 
         // Act
-        string? result = condition.IfTrueElse(trueFunc, elseFunc);
-
-        // Assert
-        Assert.Equal("Else", result);
-    }
-
-    [Fact]
-    public void IfFalseElse_WhenFalse_ExecutesFalseAction()
-    {
-        // Arrange
-        bool condition = false;
-        bool falseExecuted = false;
-        bool elseExecuted = false;
-        Action falseAction = () => falseExecuted = true;
-        Action elseAction = () => elseExecuted = true;
-
-        // Act
-        condition.IfFalseElse(falseAction, elseAction);
-
-        // Assert
-        Assert.True(falseExecuted);
-        Assert.False(elseExecuted);
-    }
-
-    [Fact]
-    public void IfFalseElse_WhenTrue_ExecutesElseAction()
-    {
-        // Arrange
-        bool condition = true;
-        bool falseExecuted = false;
-        bool elseExecuted = false;
-        Action falseAction = () => falseExecuted = true;
-        Action elseAction = () => elseExecuted = true;
-
-        // Act
-        condition.IfFalseElse(falseAction, elseAction);
-
-        // Assert
-        Assert.False(falseExecuted);
-        Assert.True(elseExecuted);
-    }
-
-    [Fact]
-    public void IfFalseElse_WithFunc_WhenFalse_ReturnsFalseResult()
-    {
-        // Arrange
-        bool condition = false;
-        Func<string?> falseFunc = () => "False";
-        Func<string?> elseFunc = () => "Else";
-
-        // Act
-        string? result = condition.IfFalseElse(falseFunc, elseFunc);
-
-        // Assert
-        Assert.Equal("False", result);
-    }
-
-    [Fact]
-    public void IfFalseElse_WithFunc_WhenTrue_ReturnsElseResult()
-    {
-        // Arrange
-        bool condition = true;
-        Func<string?> falseFunc = () => "False";
-        Func<string?> elseFunc = () => "Else";
-
-        // Act
-        string? result = condition.IfFalseElse(falseFunc, elseFunc);
+        string? result = condition.ThenOtherwise(trueFunc, elseFunc);
 
         // Assert
         Assert.Equal("Else", result);

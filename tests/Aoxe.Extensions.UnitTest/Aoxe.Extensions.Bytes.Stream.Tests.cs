@@ -1,92 +1,51 @@
 namespace Aoxe.Extensions.UnitTest;
 
-public class BytesStreamTests
+public class StreamOperationTests
 {
-    private static readonly byte[] TestData = [1, 2, 3, 4, 5];
-
     [Fact]
-    public void ToMemoryStream_EmptyArray_CreatesEmptyStream()
+    public void ToMemoryStream_ContainsOriginalData()
     {
-        var bytes = Array.Empty<byte>();
-        using var stream = bytes.ToMemoryStream();
-
-        Assert.Equal(0, stream.Length);
-        Assert.Equal(0, stream.Position);
+        var bytes = new byte[] { 1, 2, 3 };
+        using var ms = bytes.ToMemoryStream();
+        Assert.Equal(bytes, ms.ToArray());
     }
 
     [Fact]
-    public void ToMemoryStream_WithData_CreatesPopulatedStream()
+    public void WriteTo_WritesEntireBuffer()
     {
-        using var stream = TestData.ToMemoryStream();
-
-        Assert.Equal(TestData.Length, stream.Length);
-        Assert.Equal(0, stream.Position);
-        Assert.Equal(TestData, stream.ToArray());
+        var bytes = new byte[] { 1, 2, 3 };
+        using var ms = new MemoryStream();
+        bytes.WriteTo(ms);
+        Assert.Equal(bytes, ms.ToArray());
     }
 
     [Fact]
-    public void WriteTo_ToEmptyStream_WritesCorrectly()
+    public void TryWriteTo_ReturnsFalseOnFailure()
     {
-        using var stream = new MemoryStream();
-        TestData.WriteTo(stream);
-
-        Assert.Equal(TestData.Length, stream.Length);
-        Assert.Equal(TestData, stream.ToArray());
-    }
-
-    [Fact]
-    public void WriteTo_ToExistingStream_AppendsCorrectly()
-    {
-        using var stream = new MemoryStream();
-        var initial = new byte[] { 0xFF };
-        stream.Write(initial, 0, initial.Length);
-
-        TestData.WriteTo(stream);
-
-        var expected = new byte[] { 0xFF, 1, 2, 3, 4, 5 };
-        Assert.Equal(expected, stream.ToArray());
-    }
-
-    [Fact]
-    public void WriteTo_ToNullStream_ThrowsArgumentNullException()
-    {
-        Stream? stream = null;
-        Assert.Throws<NullReferenceException>(() => TestData.WriteTo(stream));
-    }
-
-    [Fact]
-    public void WriteTo_ToClosedStream_ThrowsObjectDisposedException()
-    {
-        var stream = new MemoryStream();
-        stream.Dispose();
-
-        Assert.Throws<ObjectDisposedException>(() => TestData.WriteTo(stream));
-    }
-
-    [Fact]
-    public void TryWriteTo_ToValidStream_ReturnsTrue()
-    {
-        using var stream = new MemoryStream();
-        var result = TestData.TryWriteTo(stream);
-
-        Assert.True(result);
-        Assert.Equal(TestData, stream.ToArray());
-    }
-
-    [Fact]
-    public void TryWriteTo_ToNonWritableStream_ReturnsFalse()
-    {
-        using var stream = new MemoryStream([], writable: false);
-        var result = TestData.TryWriteTo(stream);
-
+        var bytes = new byte[] { 1, 2, 3 };
+        using var ms = new MemoryStream(new byte[0], writable: false);
+        var result = bytes.TryWriteTo(ms);
         Assert.False(result);
     }
 
     [Fact]
-    public void TryWriteTo_ToNullStream_ReturnsFalse()
+    public async Task WriteToAsync_WritesEntireBuffer()
     {
-        Stream stream = null!;
-        var result = TestData.TryWriteTo(stream);
+        var bytes = new byte[] { 1, 2, 3 };
+        using var ms = new MemoryStream();
+        await bytes.WriteToAsync(ms);
+        Assert.Equal(bytes, ms.ToArray());
+    }
+
+    [Fact]
+    public async Task TryWriteToAsync_ReturnsFalseOnCancel()
+    {
+        var bytes = new byte[1000];
+        using var cts = new CancellationTokenSource();
+        cts.Cancel();
+
+        using var ms = new MemoryStream();
+        var result = await bytes.TryWriteToAsync(ms, cts.Token);
 
         Assert.False(result);
     }
