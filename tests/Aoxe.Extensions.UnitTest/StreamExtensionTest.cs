@@ -265,7 +265,7 @@ public class StreamExtensionTest
     [Fact]
     public async Task WriteAndReadStringAsync()
     {
-        const string str = "Aoxe";
+        const string? str = "Aoxe";
         var ms = new MemoryStream();
         await ms.WriteAsync(str);
         var result = await ms.ReadStringAsync();
@@ -275,7 +275,7 @@ public class StreamExtensionTest
     [Fact]
     public async Task TryWriteAndReadStringAsync()
     {
-        const string str = "Aoxe";
+        const string? str = "Aoxe";
         var ms = new MemoryStream();
         Assert.True(await ms.TryWriteAsync(str));
         var result = await ms.ReadStringAsync();
@@ -293,7 +293,7 @@ public class StreamExtensionTest
     [Fact]
     public async Task WriteStringIntoNullStreamAsync()
     {
-        const string str = "Aoxe";
+        const string? str = "Aoxe";
         MemoryStream? ms = null;
         await ms.WriteAsync(str);
     }
@@ -342,7 +342,7 @@ public class StreamExtensionTest
             Assert.Equal(rawBytes[i], bytes[i]);
     }
 
-    private static bool BytesEqual(byte[] first, byte[] second)
+    private static bool BytesEqual(byte[]? first, byte[] second)
     {
         if (first.IsNullOrEmpty() || second.IsNullOrEmpty())
             return false;

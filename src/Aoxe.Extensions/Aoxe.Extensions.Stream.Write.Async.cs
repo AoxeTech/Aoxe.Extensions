@@ -2,61 +2,111 @@ namespace Aoxe.Extensions;
 
 public static partial class AoxeExtension
 {
+    /// <summary>
+    /// Attempts to write a buffer to a stream with proper error handling
+    /// </summary>
     public static async ValueTask<bool> TryWriteAsync(
         this Stream? stream,
-        byte[] buffer,
+        byte[]? buffer,
         CancellationToken cancellationToken = default
     )
     {
-        var canWrite = stream?.CanWrite is true;
-        if (canWrite)
+        try
+        {
+            if (stream is not { CanWrite: true })
+                return false;
+
 #if NETSTANDARD2_0
-            await stream!.WriteAsync(buffer, 0, buffer.Length, cancellationToken);
+            await stream
+                .WriteAsync(buffer, 0, buffer.Length, cancellationToken)
+                .ConfigureAwait(false);
 #else
-            await stream!.WriteAsync(buffer, cancellationToken);
+            await stream.WriteAsync(buffer, cancellationToken).ConfigureAwait(false);
 #endif
-        return canWrite;
+            return true;
+        }
+        catch (Exception ex)
+            when (ex is IOException or ObjectDisposedException or NotSupportedException)
+        {
+            return false;
+        }
     }
 
+    /// <summary>
+    /// Attempts to write a buffer segment to a stream with proper error handling
+    /// </summary>
     public static async ValueTask<bool> TryWriteAsync(
         this Stream? stream,
-        byte[] buffer,
+        byte[]? buffer,
         int offset,
         int count,
         CancellationToken cancellationToken = default
     )
     {
-        var canWrite = stream?.CanWrite is true;
-        if (canWrite)
+        try
+        {
+            if (stream == null || !stream.CanWrite)
+                return false;
+
 #if NETSTANDARD2_0
-            await stream!.WriteAsync(buffer, offset, count, cancellationToken);
+            await stream.WriteAsync(buffer, offset, count, cancellationToken).ConfigureAwait(false);
 #else
-            await stream!.WriteAsync(buffer.AsMemory(offset, count), cancellationToken);
+            await stream
+                .WriteAsync(buffer.AsMemory(offset, count), cancellationToken)
+                .ConfigureAwait(false);
 #endif
-        return canWrite;
+            return true;
+        }
+        catch (Exception ex)
+            when (ex is IOException or ObjectDisposedException or NotSupportedException)
+        {
+            return false;
+        }
     }
 
-    public static ValueTask WriteAsync(
+    /// <summary>
+    /// Writes a string to a stream using the specified encoding
+    /// </summary>
+    public static async ValueTask WriteAsync(
         this Stream? stream,
-        string str,
+        string? str,
         Encoding? encoding = null,
         CancellationToken cancellationToken = default
     )
     {
-        if (stream is null)
-            return new ValueTask();
-        var bytes = str.GetBytes(encoding ?? Encoding.UTF8);
+        if (stream is null || str is null)
+            return;
+
+        var bytes = (encoding ?? Encoding.UTF8).GetBytes(str);
+
 #if NETSTANDARD2_0
-        return new ValueTask(stream.WriteAsync(bytes, 0, bytes.Length, cancellationToken));
+        await stream.WriteAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
 #else
-        return stream.WriteAsync(bytes, cancellationToken);
+        await stream.WriteAsync(bytes, cancellationToken).ConfigureAwait(false);
 #endif
     }
 
-    public static ValueTask<bool> TryWriteAsync(
+    /// <summary>
+    /// Safely attempts to write a string to a stream with error handling
+    /// </summary>
+    public static async ValueTask<bool> TryWriteAsync(
         this Stream? stream,
-        string str,
+        string? str,
         Encoding? encoding = null,
         CancellationToken cancellationToken = default
-    ) => stream.TryWriteAsync(str.GetBytes(encoding ?? Encoding.UTF8), cancellationToken);
+    )
+    {
+        try
+        {
+            if (stream is not { CanWrite: true } || str == null)
+                return false;
+
+            var bytes = (encoding ?? Encoding.UTF8).GetBytes(str);
+            return await stream.TryWriteAsync(bytes, cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex) when (ex is ArgumentException or EncoderFallbackException)
+        {
+            return false;
+        }
+    }
 }

@@ -41,7 +41,7 @@ public class StringExtensionTest
     public void StringJoinTest(string separator)
     {
         var stringList = new List<string> { "Alice", "Bob", "Carol", "Dave", "Eve" };
-        Assert.Equal(stringList.StringJoin(separator), string.Join(separator, stringList));
+        Assert.Equal(stringList.JoinToString(separator), string.Join(separator, stringList));
     }
 
     #region Bytes
@@ -438,7 +438,7 @@ public class StringExtensionTest
     [InlineData("Eve")]
     public void Base64Test(string value)
     {
-        Assert.Equal(value, value.ToBase64String().FromBase64ToString());
+        Assert.Equal(value, value.ToBase64String().DecodeBase64());
         Assert.Equal(value.ToBase64Bytes(), value.ToBase64String().GetBytes());
         Assert.True(
             TestHelper.BytesEqual(value.GetBytes(), value.ToBase64String().FromBase64ToBytes())
@@ -564,13 +564,13 @@ public class StringExtensionTest
     [Theory]
     [InlineData("123,3234.aada：asdhaslkd", "1233234aadaasdhaslkd")]
     public void GetLetterOrDigitTest(string first, string second) =>
-        Assert.Equal(first.GetLetterOrDigit(), second);
+        Assert.Equal(first.FilterLettersAndDigits(), second);
 
     [Theory]
     [InlineData("abcdefg", "a", "1", "1bcdefg")]
     [InlineData("     ", " ", "", "")]
     public void TryReplaceTest(string str, string first, string second, string result) =>
-        Assert.Equal(str.TryReplace(first, second), result);
+        Assert.Equal(str.SafeReplace(first, second), result);
 
     [Theory]
     [InlineData("1F3870BE274F6C49B3E31A0C6728957F")]

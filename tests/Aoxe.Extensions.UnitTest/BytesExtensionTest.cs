@@ -153,7 +153,7 @@ public class BytesExtensionTest
         Assert.True(TestHelper.BytesEqual(rawBytes, resultOfHexBytesFromRawBytes));
         Assert.Equal(str, resultStrOfHexBytesFromRawBytes);
 
-        var hexBytesFromStr = str.ToHex();
+        var hexBytesFromStr = str.ToHexString();
         var resultOfHexBytesFromStr = hexBytesFromStr.FromHex();
         var resultStrOfHexBytesFromStr = hexBytesFromStr.FromHexToString();
         Assert.True(TestHelper.BytesEqual(rawBytes, resultOfHexBytesFromStr));

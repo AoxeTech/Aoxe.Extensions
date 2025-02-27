@@ -2,39 +2,93 @@ namespace Aoxe.Extensions;
 
 public static partial class AoxeExtension
 {
-    public static bool TryWrite(this Stream? stream, byte[] buffer)
+    /// <summary>
+    /// Safely attempts to write a byte array to the stream
+    /// </summary>
+    /// <returns>True if write succeeded, false otherwise</returns>
+    public static bool TryWrite(this Stream? stream, byte[]? buffer)
     {
-        var canWrite = stream?.CanWrite is true;
-        if (canWrite)
+        if (stream == null || buffer == null)
+            return false;
+
+        try
+        {
+            if (!stream.CanWrite)
+                return false;
+
 #if NETSTANDARD2_0
-            stream!.Write(buffer, 0, buffer.Length);
+            stream.Write(buffer, 0, buffer.Length);
 #else
-            stream!.Write(buffer);
+            stream.Write(buffer);
 #endif
-        return canWrite;
+            return true;
+        }
+        catch (Exception ex)
+            when (ex is IOException or ObjectDisposedException or NotSupportedException)
+        {
+            return false;
+        }
     }
 
-    public static bool TryWrite(this Stream? stream, byte[] buffer, int offset, int count)
+    /// <summary>
+    /// Safely attempts to write a byte array segment to the stream
+    /// </summary>
+    /// <exception cref="ArgumentException">Thrown for invalid offset/count values</exception>
+    public static bool TryWrite(this Stream? stream, byte[]? buffer, int offset, int count)
     {
-        var canWrite = stream?.CanWrite is true;
-        if (canWrite)
-            stream!.Write(buffer, offset, count);
-        return canWrite;
+        if (stream == null || buffer == null)
+            return false;
+
+        if (offset < 0 || count < 0 || offset + count > buffer.Length)
+            throw new ArgumentException("Invalid offset or count");
+
+        try
+        {
+            if (!stream.CanWrite)
+                return false;
+
+            stream.Write(buffer, offset, count);
+            return true;
+        }
+        catch (Exception ex)
+            when (ex is IOException or ObjectDisposedException or NotSupportedException)
+        {
+            return false;
+        }
     }
 
+    /// <summary>
+    /// Safely attempts to write a single byte to the stream
+    /// </summary>
     public static bool TryWriteByte(this Stream? stream, byte value)
     {
-        var canWrite = stream?.CanWrite is true;
-        if (canWrite)
-            stream!.WriteByte(value);
-        return canWrite;
+        if (stream == null)
+            return false;
+
+        try
+        {
+            if (!stream.CanWrite)
+                return false;
+
+            stream.WriteByte(value);
+            return true;
+        }
+        catch (Exception ex)
+            when (ex is IOException or ObjectDisposedException or NotSupportedException)
+        {
+            return false;
+        }
     }
 
-    public static void Write(this Stream? stream, string str, Encoding? encoding = null)
+    /// <summary>
+    /// Writes a string to the stream using specified encoding (UTF-8 default)
+    /// </summary>
+    public static void Write(this Stream? stream, string? str, Encoding? encoding = null)
     {
-        if (stream is null)
+        if (stream == null || str == null)
             return;
-        var bytes = str.GetBytes(encoding ?? Encoding.UTF8);
+
+        var bytes = (encoding ?? Encoding.UTF8).GetBytes(str);
 #if NETSTANDARD2_0
         stream.Write(bytes, 0, bytes.Length);
 #else
@@ -42,6 +96,22 @@ public static partial class AoxeExtension
 #endif
     }
 
-    public static bool TryWrite(this Stream? stream, string str, Encoding? encoding = null) =>
-        stream.TryWrite(str.GetBytes(encoding ?? Encoding.UTF8));
+    /// <summary>
+    /// Safely attempts to write a string to the stream
+    /// </summary>
+    public static bool TryWrite(this Stream? stream, string? str, Encoding? encoding = null)
+    {
+        try
+        {
+            if (stream == null || str == null)
+                return false;
+
+            var bytes = (encoding ?? Encoding.UTF8).GetBytes(str);
+            return stream.TryWrite(bytes);
+        }
+        catch (Exception ex) when (ex is EncoderFallbackException or ArgumentException)
+        {
+            return false;
+        }
+    }
 }
