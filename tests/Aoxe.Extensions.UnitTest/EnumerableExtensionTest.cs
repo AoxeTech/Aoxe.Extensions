@@ -18,7 +18,10 @@ public class EnumerableExtensionTest
     [InlineData(10, 5)]
     public void IndexOfTest(int total, int index)
     {
-        var testModels = Enumerable.Range(0, total).Select(_ => new TestModel { Name = "Alice" });
+        var testModels = Enumerable
+            .Range(0, total)
+            .Select(_ => new TestModel { Name = "Alice" })
+            .ToList();
         var testModel = testModels.Skip(index).First();
         Assert.Equal(index, testModels.IndexOf(testModel));
     }
