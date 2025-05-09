@@ -116,7 +116,7 @@ public class StreamExtensionTest
         Assert.Equal(1000, stream.ReadTimeout);
         var timeSpan = TimeSpan.FromMinutes(1);
         Assert.True(stream.TrySetReadTimeout(timeSpan));
-        Assert.Equal(timeSpan.Milliseconds, stream.ReadTimeout);
+        Assert.Equal(timeSpan.TotalMilliseconds, stream.ReadTimeout);
     }
 
     [Fact]
@@ -127,7 +127,7 @@ public class StreamExtensionTest
         Assert.Equal(1000, stream.WriteTimeout);
         var timeSpan = TimeSpan.FromMinutes(1);
         Assert.True(stream.TrySetWriteTimeout(timeSpan));
-        Assert.Equal(timeSpan.Milliseconds, stream.WriteTimeout);
+        Assert.Equal(timeSpan.TotalMilliseconds, stream.WriteTimeout);
     }
 
     [Fact]
@@ -141,8 +141,9 @@ public class StreamExtensionTest
         var msBytes = new byte[1024];
         for (var i = 0; i < msBytes.Length; i++)
             msBytes[i] = (byte)(i % (byte.MaxValue + 1));
-        for (var i = 0; i < msBytes.Length; i++)
-            ms.TryWriteByte(msBytes[i]);
+        foreach (var b in msBytes)
+            ms.TryWriteByte(b);
+
         Assert.Equal(0, ms.TrySeek(0, SeekOrigin.Begin));
         var msResult = ms.ReadToEnd();
         Assert.True(BytesEqual(msBytes, msResult));
@@ -346,6 +347,6 @@ public class StreamExtensionTest
     {
         if (first.IsNullOrEmpty() || second.IsNullOrEmpty())
             return false;
-        return !first.Where((t, i) => t != second[i]).Any();
+        return !first!.Where((t, i) => t != second[i]).Any();
     }
 }

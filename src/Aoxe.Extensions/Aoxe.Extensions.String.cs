@@ -92,7 +92,7 @@ public static partial class AoxeExtension
     /// <summary>
     /// Truncates string to specified length with optional suffix
     /// </summary>
-    public static string Truncate(this string value, int maxLength, string suffix = "...")
+    public static string? Truncate(this string? value, int maxLength, string suffix = "...")
     {
         if (string.IsNullOrEmpty(value))
             return value;
@@ -100,7 +100,7 @@ public static partial class AoxeExtension
         if (maxLength <= 0)
             throw new ArgumentException("Maximum length must be positive", nameof(maxLength));
 
-        if (value.Length <= maxLength)
+        if (value!.Length <= maxLength)
             return value;
 
         if (maxLength <= suffix.Length)
@@ -139,15 +139,15 @@ public static partial class AoxeExtension
     }
 
     // Other methods remain the same as previous .NET Standard 2.0 compatible versions
-    public static bool IsNullOrEmpty(this string value) => string.IsNullOrEmpty(value);
+    public static bool IsNullOrEmpty(this string? value) => string.IsNullOrEmpty(value);
 
-    public static bool IsNullOrWhiteSpace(this string value) => string.IsNullOrWhiteSpace(value);
+    public static bool IsNullOrWhiteSpace(this string? value) => string.IsNullOrWhiteSpace(value);
 
     public static string JoinToString<T>(
         this IEnumerable<T>? values,
         string separator,
         string defaultValue = ""
-    ) => values != null && values.Any() ? string.Join(separator, values) : defaultValue;
+    ) => values is not null && values.Any() ? string.Join(separator, values) : defaultValue;
 
     public static string FilterLettersAndDigits(this string source)
     {

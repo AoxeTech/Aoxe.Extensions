@@ -11,11 +11,11 @@ public class DateOnlyExtensionsTest
     {
         var dateFrom = new DateOnly(1900, 1, 1);
         var dateTo = dateFrom.AddDays(days);
-        var dates = dateFrom.EachDayTo(dateTo).ToList();
+        var dates = dateFrom.EachDayTo(dateTo);
         if (days < 0)
             Assert.Empty(dates);
         else
-            Assert.Equal(days + 1, dates.Count);
+            Assert.Equal(days + 1, dates.Count());
         foreach (var result in dates)
         {
             Assert.Equal(dateFrom, result);
@@ -31,11 +31,11 @@ public class DateOnlyExtensionsTest
     {
         var dateFrom = new DateOnly(1900, 1, 1);
         var dateTo = dateFrom.AddMonths(months);
-        var dates = dateFrom.EachMonthTo(dateTo).ToList();
+        var dates = dateFrom.EachMonthTo(dateTo);
         if (months < 0)
             Assert.Empty(dates);
         else
-            Assert.Equal(months + 1, dates.Count);
+            Assert.Equal(months + 1, dates.Count());
         foreach (var result in dates)
         {
             Assert.Equal(dateFrom, result);

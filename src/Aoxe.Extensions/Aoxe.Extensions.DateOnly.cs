@@ -28,6 +28,10 @@ public static partial class AoxeExtension
     /// </remarks>
     public static IEnumerable<DateOnly> EachDayTo(this DateOnly dateFrom, DateOnly dateTo)
     {
+        if (dateFrom > dateTo)
+        {
+            yield break;
+        }
         for (var date = dateFrom; date <= dateTo; date = date.AddDays(1))
         {
             yield return date;
@@ -60,6 +64,10 @@ public static partial class AoxeExtension
         var current = new DateOnly(dateFrom.Year, dateFrom.Month, 1);
         var endMonth = new DateOnly(dateTo.Year, dateTo.Month, 1);
 
+        if (dateFrom > dateTo)
+        {
+            yield break;
+        }
         while (current <= endMonth)
         {
             yield return current;

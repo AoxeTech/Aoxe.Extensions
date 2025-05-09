@@ -7,7 +7,7 @@ public static partial class AoxeExtension
     /// </summary>
     public static async ValueTask<bool> TryWriteAsync(
         this Stream? stream,
-        byte[]? buffer,
+        byte[] buffer,
         CancellationToken cancellationToken = default
     )
     {
@@ -37,7 +37,7 @@ public static partial class AoxeExtension
     /// </summary>
     public static async ValueTask<bool> TryWriteAsync(
         this Stream? stream,
-        byte[]? buffer,
+        byte[] buffer,
         int offset,
         int count,
         CancellationToken cancellationToken = default
@@ -45,7 +45,7 @@ public static partial class AoxeExtension
     {
         try
         {
-            if (stream == null || !stream.CanWrite)
+            if (stream is not { CanWrite: true })
                 return false;
 
 #if NETSTANDARD2_0

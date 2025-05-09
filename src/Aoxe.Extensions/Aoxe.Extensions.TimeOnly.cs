@@ -73,17 +73,18 @@ public static partial class AoxeExtension
     /// </remarks>
     public static IEnumerable<TimeOnly> EachHourTo(this TimeOnly from, TimeOnly to)
     {
-        var difference = to - from;
-        if (difference < TimeSpan.Zero)
-            yield break;
+        var fromSpan = from.ToTimeSpan();
+        var toSpan = to.ToTimeSpan();
 
-        // Calculate total full hours between times
+        var difference =
+            toSpan >= fromSpan ? toSpan - fromSpan : TimeSpan.FromHours(24) - (fromSpan - toSpan);
+
         var totalHours = (int)difference.TotalHours;
 
         for (var i = 0; i <= totalHours; i++)
         {
-            var result = from.AddHours(i);
-            yield return new TimeOnly(result.Hour, 0, 0);
+            var currentHour = from.AddHours(i);
+            yield return new TimeOnly(currentHour.Hour, 0, 0);
         }
     }
 }

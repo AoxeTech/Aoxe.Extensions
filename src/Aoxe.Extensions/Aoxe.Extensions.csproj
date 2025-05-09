@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;net8.0;net9.0</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;net8.0;net10.0</TargetFrameworks>
         <PackageVersion>2025.2.2</PackageVersion>
         <Version>2025.2.2</Version>
         <Description>Exteinsions for C# language.</Description>
@@ -31,8 +31,8 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-        <PackageReference Include="System.Memory" Version="4.6.0" />
-        <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.0" />
+        <PackageReference Include="System.Memory" Version="4.6.3" />
+        <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
     </ItemGroup>
 
     <ItemGroup>

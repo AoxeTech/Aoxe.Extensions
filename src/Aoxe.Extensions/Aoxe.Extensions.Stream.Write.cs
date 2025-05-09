@@ -6,14 +6,11 @@ public static partial class AoxeExtension
     /// Safely attempts to write a byte array to the stream
     /// </summary>
     /// <returns>True if write succeeded, false otherwise</returns>
-    public static bool TryWrite(this Stream? stream, byte[]? buffer)
+    public static bool TryWrite(this Stream? stream, byte[] buffer)
     {
-        if (stream == null || buffer == null)
-            return false;
-
         try
         {
-            if (!stream.CanWrite)
+            if (stream is not { CanWrite: true })
                 return false;
 
 #if NETSTANDARD2_0
@@ -34,17 +31,14 @@ public static partial class AoxeExtension
     /// Safely attempts to write a byte array segment to the stream
     /// </summary>
     /// <exception cref="ArgumentException">Thrown for invalid offset/count values</exception>
-    public static bool TryWrite(this Stream? stream, byte[]? buffer, int offset, int count)
+    public static bool TryWrite(this Stream? stream, byte[] buffer, int offset, int count)
     {
-        if (stream == null || buffer == null)
-            return false;
-
         if (offset < 0 || count < 0 || offset + count > buffer.Length)
             throw new ArgumentException("Invalid offset or count");
 
         try
         {
-            if (!stream.CanWrite)
+            if (stream is not { CanWrite: true })
                 return false;
 
             stream.Write(buffer, offset, count);

@@ -118,12 +118,12 @@ public static partial class AoxeExtension
     /// <param name="predicate">An optional filter predicate.</param>
     /// <returns>A filtered list of elements.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="source"/> is null.</exception>
-    public static List<T?> ToList<T>(this IEnumerable<T?> source, Func<T?, bool>? predicate = null)
+    public static List<T?> ToList<T>(this IEnumerable<T?> source, Func<T?, bool> predicate)
     {
         if (source == null)
             throw new ArgumentNullException(nameof(source));
 
-        return predicate == null ? source.ToList() : source.Where(predicate).ToList();
+        return source.Where(predicate).ToList();
     }
 
     /// <summary>

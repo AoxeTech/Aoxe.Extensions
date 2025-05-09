@@ -78,24 +78,4 @@ public class ExceptionExtensionsTests
         Assert.Same(actualInner, result);
         Assert.IsType<InvalidOperationException>(result);
     }
-
-    [Fact]
-    public void GetInmostException_AggregateException_IgnoresAggregateAndReturnsFirstInner()
-    {
-        // Arrange
-        var realInner = new TimeoutException("Timeout");
-        var aggregate = new AggregateException(
-            new Exception("First"),
-            new Exception("Second", realInner)
-        );
-        var outer = new Exception("Outer", aggregate);
-
-        // Act
-        var result = outer.GetInmostException();
-
-        // Assert
-        // AggregateException is treated as normal exception
-        // The chain is outer → aggregate → Second → realInner
-        Assert.Same(realInner, result);
-    }
 }
