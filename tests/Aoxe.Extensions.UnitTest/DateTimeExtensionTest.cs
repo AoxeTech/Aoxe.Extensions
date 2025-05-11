@@ -10,11 +10,11 @@ public class DateTimeExtensionTest
     {
         var dateFrom = new DateTime(1900, 1, 1);
         var dateTo = dateFrom.AddSeconds(seconds);
-        var dates = dateFrom.EachSecondTo(dateTo);
+        var dates = dateFrom.EachSecondTo(dateTo).ToList();
         if (seconds < 0)
             Assert.Empty(dates);
         else
-            Assert.Equal(seconds + 1, dates.Count());
+            Assert.Equal(seconds + 1, dates.Count);
         foreach (var result in dates)
         {
             Assert.Equal(dateFrom, result);
@@ -30,11 +30,11 @@ public class DateTimeExtensionTest
     {
         var dateFrom = new DateTime(1900, 1, 1);
         var dateTo = dateFrom.AddMinutes(minutes);
-        var dates = dateFrom.EachMinuteTo(dateTo);
+        var dates = dateFrom.EachMinuteTo(dateTo).ToList();
         if (minutes < 0)
             Assert.Empty(dates);
         else
-            Assert.Equal(minutes + 1, dates.Count());
+            Assert.Equal(minutes + 1, dates.Count);
         foreach (var result in dates)
         {
             Assert.Equal(dateFrom, result);
@@ -50,11 +50,11 @@ public class DateTimeExtensionTest
     {
         var dateFrom = new DateTime(1900, 1, 1);
         var dateTo = dateFrom.AddHours(hours);
-        var dates = dateFrom.EachHourTo(dateTo);
+        var dates = dateFrom.EachHourTo(dateTo).ToList();
         if (hours < 0)
             Assert.Empty(dates);
         else
-            Assert.Equal(hours + 1, dates.Count());
+            Assert.Equal(hours + 1, dates.Count);
         foreach (var result in dates)
         {
             Assert.Equal(dateFrom, result);
@@ -70,11 +70,11 @@ public class DateTimeExtensionTest
     {
         var dateFrom = new DateTime(1900, 1, 1);
         var dateTo = dateFrom.AddDays(days);
-        var dates = dateFrom.EachDayTo(dateTo);
+        var dates = dateFrom.EachDayTo(dateTo).ToList();
         if (days < 0)
             Assert.Empty(dates);
         else
-            Assert.Equal(days + 1, dates.Count());
+            Assert.Equal(days + 1, dates.Count);
         foreach (var result in dates)
         {
             Assert.Equal(dateFrom, result);
@@ -90,11 +90,11 @@ public class DateTimeExtensionTest
     {
         var dateFrom = new DateTime(1900, 1, 1);
         var dateTo = dateFrom.AddMonths(months);
-        var dates = dateFrom.EachMonthTo(dateTo);
+        var dates = dateFrom.EachMonthTo(dateTo).ToList();
         if (months < 0)
             Assert.Empty(dates);
         else
-            Assert.Equal(months + 1, dates.Count());
+            Assert.Equal(months + 1, dates.Count);
         foreach (var result in dates)
         {
             Assert.Equal(dateFrom, result);

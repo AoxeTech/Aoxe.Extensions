@@ -23,7 +23,7 @@ public class StreamOperationTests
     public void TryWriteTo_ReturnsFalseOnFailure()
     {
         var bytes = new byte[] { 1, 2, 3 };
-        using var ms = new MemoryStream(new byte[0], writable: false);
+        using var ms = new MemoryStream([], writable: false);
         var result = bytes.TryWriteTo(ms);
         Assert.False(result);
     }

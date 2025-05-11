@@ -45,32 +45,4 @@ public class EncodingTests
         var result = bytes.GetString();
         Assert.Equal("é", result);
     }
-
-    [Fact]
-    public void ToHexString_ProducesCorrectFormat()
-    {
-        var bytes = new byte[] { 0xAB, 0xCD, 0xEF };
-#if NETSTANDARD2_0
-        var expected = "ABCDEF";
-#else
-        var expected = "ABCDEF";
-#endif
-        Assert.Equal(expected, bytes.ToHexString());
-    }
-
-    [Fact]
-    public void FromHexToString_ConvertsCorrectly()
-    {
-        // Create proper hex nibbles (A=10, B=11, C=12)
-        var hexBytes1 = new byte[] { 0x0A, 0x0B, 0x0C };
-        var result1 = hexBytes1.FromHexToString();
-        Assert.Equal("\n\v\f", result1); // ASCII values for 10, 11, 12
-
-        // Or for actual "ABC" string:
-        // 1. First create proper hex representation
-        var original = "414243"; // Hex string for "ABC"
-        var hexBytes = original.ToHexBytes();
-        var result = hexBytes.FromHexToString();
-        Assert.Equal("ABC", result);
-    }
 }

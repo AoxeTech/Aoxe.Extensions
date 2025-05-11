@@ -31,7 +31,7 @@ public class StreamExtensionTest
         Assert.True(ms.IsNullOrEmpty());
         ms = new MemoryStream();
         Assert.True(ms.IsNullOrEmpty());
-        ms.Write(new[] { (byte)0, (byte)1 }, 0, 2);
+        ms.Write([0, 1], 0, 2);
         Assert.False(ms.IsNullOrEmpty());
     }
 
@@ -100,8 +100,9 @@ public class StreamExtensionTest
         var result = new byte[1024];
         for (var i = 0; i < bytes.Length; i++)
             bytes[i] = (byte)(i % (byte.MaxValue + 1));
-        for (var i = 0; i < bytes.Length; i++)
-            ms.TryWriteByte(bytes[i]);
+        foreach (var t in bytes)
+            ms.TryWriteByte(t);
+
         Assert.Equal(0, ms.TrySeek(0, SeekOrigin.Begin));
         for (var i = 0; i < result.Length; i++)
             result[i] = (byte)ms.TryReadByte();
@@ -152,8 +153,9 @@ public class StreamExtensionTest
         var nsBytes = new byte[1024];
         for (var i = 0; i < nsBytes.Length; i++)
             nsBytes[i] = (byte)(i % (byte.MaxValue + 1));
-        for (var i = 0; i < nsBytes.Length; i++)
-            ns.TryWriteByte(nsBytes[i]);
+        foreach (var t in nsBytes)
+            ns.TryWriteByte(t);
+
         Assert.Equal(0, ns.TrySeek(0, SeekOrigin.Begin));
         var nsResult = ns.ReadToEnd();
         Assert.True(BytesEqual(nsBytes, nsResult));
@@ -170,8 +172,9 @@ public class StreamExtensionTest
         var msBytes = new byte[1024];
         for (var i = 0; i < msBytes.Length; i++)
             msBytes[i] = (byte)(i % (byte.MaxValue + 1));
-        for (var i = 0; i < msBytes.Length; i++)
-            ms.TryWriteByte(msBytes[i]);
+        foreach (var t in msBytes)
+            ms.TryWriteByte(t);
+
         Assert.Equal(0, ms.TrySeek(0, SeekOrigin.Begin));
         var msResult = await ms.ReadToEndAsync();
         Assert.True(BytesEqual(msBytes, msResult));
@@ -180,8 +183,9 @@ public class StreamExtensionTest
         var nsBytes = new byte[1024];
         for (var i = 0; i < nsBytes.Length; i++)
             nsBytes[i] = (byte)(i % (byte.MaxValue + 1));
-        for (var i = 0; i < nsBytes.Length; i++)
-            ns.TryWriteByte(nsBytes[i]);
+        foreach (var t in nsBytes)
+            ns.TryWriteByte(t);
+
         Assert.Equal(0, ns.TrySeek(0, SeekOrigin.Begin));
         var nsResult = await ns.ReadToEndAsync();
         Assert.True(BytesEqual(nsBytes, nsResult));
@@ -198,8 +202,9 @@ public class StreamExtensionTest
         var msBytes = new byte[1024];
         for (var i = 0; i < msBytes.Length; i++)
             msBytes[i] = (byte)(i % (byte.MaxValue + 1));
-        for (var i = 0; i < msBytes.Length; i++)
-            ms.TryWriteByte(msBytes[i]);
+        foreach (var t in msBytes)
+            ms.TryWriteByte(t);
+
         Assert.Equal(0, ms.TrySeek(0, SeekOrigin.Begin));
         var msResult = await ms.ReadToEndAsync(msBytes.Length);
         Assert.True(BytesEqual(msBytes, msResult));
@@ -208,8 +213,9 @@ public class StreamExtensionTest
         var nsBytes = new byte[1024];
         for (var i = 0; i < nsBytes.Length; i++)
             nsBytes[i] = (byte)(i % (byte.MaxValue + 1));
-        for (var i = 0; i < nsBytes.Length; i++)
-            ns.TryWriteByte(nsBytes[i]);
+        foreach (var t in nsBytes)
+            ns.TryWriteByte(t);
+
         Assert.Equal(0, ns.TrySeek(0, SeekOrigin.Begin));
         var nsResult = await ns.ReadToEndAsync(nsBytes.Length);
         Assert.True(BytesEqual(nsBytes, nsResult));
@@ -226,8 +232,9 @@ public class StreamExtensionTest
         var msBytes = new byte[1024];
         for (var i = 0; i < msBytes.Length; i++)
             msBytes[i] = (byte)(i % (byte.MaxValue + 1));
-        for (var i = 0; i < msBytes.Length; i++)
-            ms.TryWriteByte(msBytes[i]);
+        foreach (var t in msBytes)
+            ms.TryWriteByte(t);
+
         Assert.Equal(0, ms.TrySeek(0, SeekOrigin.Begin));
         var msResult = await ms.ReadToEndAsync(msBytes.Length, CancellationToken.None);
         Assert.True(BytesEqual(msBytes, msResult));
@@ -236,8 +243,9 @@ public class StreamExtensionTest
         var nsBytes = new byte[1024];
         for (var i = 0; i < nsBytes.Length; i++)
             nsBytes[i] = (byte)(i % (byte.MaxValue + 1));
-        for (var i = 0; i < nsBytes.Length; i++)
-            ns.TryWriteByte(nsBytes[i]);
+        foreach (var t in nsBytes)
+            ns.TryWriteByte(t);
+
         Assert.Equal(0, ns.TrySeek(0, SeekOrigin.Begin));
         var nsResult = await ns.ReadToEndAsync(nsBytes.Length, CancellationToken.None);
         Assert.True(BytesEqual(nsBytes, nsResult));

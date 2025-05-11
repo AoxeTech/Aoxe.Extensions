@@ -11,7 +11,7 @@ public class TimeOnlyExtensionsTest
     {
         var timeFrom = new TimeOnly(12, 0, 0);
         var timeTo = timeFrom.AddSeconds(seconds);
-        var times = timeFrom.EachSecondTo(timeTo);
+        var times = timeFrom.EachSecondTo(timeTo).ToList();
         foreach (var result in times)
         {
             Assert.Equal(timeFrom, result);
@@ -27,7 +27,7 @@ public class TimeOnlyExtensionsTest
     {
         var timeFrom = new TimeOnly(12, 0, 0);
         var timeTo = timeFrom.AddMinutes(minutes);
-        var times = timeFrom.EachMinuteTo(timeTo);
+        var times = timeFrom.EachMinuteTo(timeTo).ToList();
         foreach (var result in times)
         {
             Assert.Equal(timeFrom, result);
@@ -43,7 +43,7 @@ public class TimeOnlyExtensionsTest
     {
         var timeFrom = new TimeOnly(12, 0, 0);
         var timeTo = timeFrom.AddHours(hours);
-        var times = timeFrom.EachHourTo(timeTo);
+        var times = timeFrom.EachHourTo(timeTo).ToList();
         foreach (var result in times)
         {
             Assert.Equal(timeFrom, result);

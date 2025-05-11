@@ -31,7 +31,7 @@ public class DateOnlyExtensionsTest
     {
         var dateFrom = new DateOnly(1900, 1, 1);
         var dateTo = dateFrom.AddMonths(months);
-        var dates = dateFrom.EachMonthTo(dateTo);
+        var dates = dateFrom.EachMonthTo(dateTo).ToList();
         if (months < 0)
             Assert.Empty(dates);
         else

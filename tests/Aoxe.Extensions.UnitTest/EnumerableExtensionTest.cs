@@ -7,7 +7,7 @@ public class EnumerableExtensionTest
     {
         IList<int> list = new List<int>();
         var myCollection = new MyCollection<int>();
-        var collection = Enumerable.Range(0, 5);
+        var collection = Enumerable.Range(0, 5).ToList();
         list.AddRange(collection);
         myCollection.AddRange(collection);
         Assert.Equal(list.Count, myCollection.Count);
@@ -38,7 +38,7 @@ public class EnumerableExtensionTest
     [Fact]
     public void NotContainsTest()
     {
-        IEnumerable<int> testInts = Enumerable.Range(0, 10);
+        var testInts = Enumerable.Range(0, 10).ToList();
         Assert.False(testInts.NotContains(0));
         Assert.False(testInts.NotContains(9));
         Assert.True(testInts.NotContains(10));

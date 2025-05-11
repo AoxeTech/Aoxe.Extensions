@@ -230,13 +230,13 @@ public class StringExtensionTest
     [Fact]
     public void ParseEnumTest()
     {
-        Assert.Equal(TestEnum.Create, TestEnum.Create.ToString().ParseEnum(typeof(TestEnum)));
+        Assert.Equal(TestEnum.Create, nameof(TestEnum.Create).ParseEnum(typeof(TestEnum)));
         Assert.Equal(
             TestEnum.Create,
-            TestEnum.Create.ToString().ToLower().ParseEnum(typeof(TestEnum), true)
+            nameof(TestEnum.Create).ToLower().ParseEnum(typeof(TestEnum), true)
         );
         Assert.Throws<ArgumentException>(
-            () => TestEnum.Create.ToString().ToLower().ParseEnum(typeof(TestEnum))
+            () => nameof(TestEnum.Create).ToLower().ParseEnum(typeof(TestEnum))
         );
     }
 
@@ -576,7 +576,7 @@ public class StringExtensionTest
     [InlineData("1F3870BE274F6C49B3E31A0C6728957F")]
     public void HexTest(string hexString)
     {
-        var bytes = hexString.FromHex();
+        var bytes = hexString.FromHexToBytes();
         var result = bytes.ToHexString();
         Assert.Equal(hexString, result);
     }
@@ -587,7 +587,7 @@ public class StringExtensionTest
     {
         var hexString = str.ToHexString();
 
-        var hexBytes = hexString.FromHex();
+        var hexBytes = hexString.FromHexToBytes();
         var result = hexBytes.ToHexString();
         Assert.Equal(hexString, result);
     }

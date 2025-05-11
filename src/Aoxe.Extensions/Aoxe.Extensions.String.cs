@@ -5,51 +5,6 @@ public static partial class AoxeExtension
     private static readonly Encoding Utf8Encoding = Encoding.UTF8;
 
     /// <summary>
-    /// Converts a string to its hexadecimal representation
-    /// </summary>
-    public static string ToHexString(this string value)
-    {
-        if (value == null)
-            throw new ArgumentNullException(nameof(value));
-
-        var bytes = Encoding.UTF8.GetBytes(value);
-        var hexChars = new char[bytes.Length * 2];
-        const string hexAlphabet = "0123456789ABCDEF";
-
-        for (var i = 0; i < bytes.Length; i++)
-        {
-            hexChars[i * 2] = hexAlphabet[bytes[i] >> 4];
-            hexChars[i * 2 + 1] = hexAlphabet[bytes[i] & 0x0F];
-        }
-
-        return new string(hexChars);
-    }
-
-    /// <summary>
-    /// Converts a hexadecimal string to its original string representation
-    /// </summary>
-    public static string FromHexToString(this string hexString)
-    {
-        if (hexString == null)
-            throw new ArgumentNullException(nameof(hexString));
-
-        if (hexString.Length % 2 != 0)
-            throw new FormatException("Hex string must have even length");
-
-        var bytes = new byte[hexString.Length / 2];
-        for (var i = 0; i < hexString.Length; i += 2)
-        {
-            var hexPair = hexString.Substring(i, 2);
-            bytes[i / 2] = byte.Parse(
-                hexPair,
-                NumberStyles.HexNumber,
-                CultureInfo.InvariantCulture
-            );
-        }
-        return Encoding.UTF8.GetString(bytes);
-    }
-
-    /// <summary>
     /// Removes all leading occurrences of a specified string
     /// </summary>
     public static string TrimStart(

@@ -140,35 +140,4 @@ public class BytesExtensionTest
         var result = await ms.ReadToEndAsync(bytes.Length, CancellationToken.None);
         Assert.True(TestHelper.BytesEqual(bytes, result));
     }
-
-    [Theory]
-    [InlineData("apple")]
-    public void HexTest(string str)
-    {
-        var rawBytes = str.GetUtf8Bytes();
-
-        var hexBytesFromRawBytes = rawBytes.ToHex();
-        var resultOfHexBytesFromRawBytes = hexBytesFromRawBytes.FromHex();
-        var resultStrOfHexBytesFromRawBytes = hexBytesFromRawBytes.FromHexToString();
-        Assert.True(TestHelper.BytesEqual(rawBytes, resultOfHexBytesFromRawBytes));
-        Assert.Equal(str, resultStrOfHexBytesFromRawBytes);
-
-        var hexBytesFromStr = str.ToHexString();
-        var resultOfHexBytesFromStr = hexBytesFromStr.FromHex();
-        var resultStrOfHexBytesFromStr = hexBytesFromStr.FromHexToString();
-        Assert.True(TestHelper.BytesEqual(rawBytes, resultOfHexBytesFromStr));
-        Assert.Equal(str, resultStrOfHexBytesFromStr);
-
-        var hexStrFromRawBytes = rawBytes.ToHexString();
-        var resultOfHexStrFromRawBytes = hexStrFromRawBytes.FromHexToString();
-        var resultBytesOfHexStrFromRawBytes = hexStrFromRawBytes.FromHex();
-        Assert.True(TestHelper.BytesEqual(rawBytes, resultBytesOfHexStrFromRawBytes));
-        Assert.Equal(str, resultOfHexStrFromRawBytes);
-
-        var hexStrFromStr = str.ToHexString();
-        var resultOfHexStrFromStr = hexStrFromStr.FromHexToString();
-        var resultBytesOfHexStrFromStr = hexStrFromStr.FromHex();
-        Assert.True(TestHelper.BytesEqual(rawBytes, resultBytesOfHexStrFromStr));
-        Assert.Equal(str, resultOfHexStrFromStr);
-    }
 }

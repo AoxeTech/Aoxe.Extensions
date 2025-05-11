@@ -73,7 +73,7 @@ public class ObjectExtensionsTests
         [Fact]
         public void IsNullOrDefault_DateTimeDefault_ReturnsTrue()
         {
-            DateTime? value = default;
+            DateTime? value = null;
             Assert.True(value.IsNullOrDefault());
         }
 
@@ -111,7 +111,7 @@ public class ObjectExtensionsTests
         [Fact]
         public void IsNullOrEmpty_WithNonEmptyCollection_ReturnsFalse()
         {
-            var value = new Queue<string>(new[] { "test" });
+            var value = new Queue<string>(["test"]);
             Assert.False(value.IsNullOrEmpty());
         }
     }
