@@ -129,15 +129,15 @@ public static partial class AoxeExtension
         }
     }
 
-    private static DateTimeOffset TruncateToSecond(this DateTimeOffset dto) =>
+    public static DateTimeOffset TruncateToSecond(this DateTimeOffset dto) =>
         new(dto.Year, dto.Month, dto.Day, dto.Hour, dto.Minute, dto.Second, dto.Offset);
 
-    private static DateTimeOffset TruncateToMinute(this DateTimeOffset dto) =>
+    public static DateTimeOffset TruncateToMinute(this DateTimeOffset dto) =>
         new(dto.Year, dto.Month, dto.Day, dto.Hour, dto.Minute, 0, dto.Offset);
 
-    private static DateTimeOffset TruncateToHour(this DateTimeOffset dto) =>
+    public static DateTimeOffset TruncateToHour(this DateTimeOffset dto) =>
         new(dto.Year, dto.Month, dto.Day, dto.Hour, 0, 0, dto.Offset);
 
-    private static DateTimeOffset TruncateToDay(this DateTimeOffset dto) =>
+    public static DateTimeOffset TruncateToDay(this DateTimeOffset dto) =>
         new(dto.Year, dto.Month, dto.Day, 0, 0, 0, dto.Offset);
 }
