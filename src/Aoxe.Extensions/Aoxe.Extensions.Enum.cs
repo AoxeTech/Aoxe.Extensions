@@ -78,7 +78,7 @@ public static partial class AoxeExtension
     /// </code>
     /// </example>
     /// </remarks>
-    public static string GetDescriptions(this Enum enumerationValue, string separator = ",") =>
+    public static string GetDescriptions(this Enum enumerationValue, string separator = ", ") =>
         DescriptionsCache.GetOrAdd(
             Tuple.Create(enumerationValue, separator),
             _ => ProcessDescriptions(enumerationValue, separator)

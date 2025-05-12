@@ -15,7 +15,7 @@ public class EnumExtensionTest
     public void GetDescriptionsTest()
     {
         Assert.Equal(
-            "A,B,C",
+            "A, B, C",
             (TestEnum.Create | TestEnum.Delete | TestEnum.Modify).GetDescriptions()
         );
         Assert.Equal(

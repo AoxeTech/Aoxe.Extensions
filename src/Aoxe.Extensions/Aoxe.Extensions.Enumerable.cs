@@ -170,45 +170,4 @@ public static partial class AoxeExtension
             return item;
         });
     }
-
-    /// <summary>
-    /// Converts a sequence to a <see cref="DataTable"/>.
-    /// </summary>
-    /// <typeparam name="T">The type of elements in the sequence.</typeparam>
-    /// <param name="data">The sequence to convert.</param>
-    /// <returns>A DataTable with columns matching the element's properties.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="data"/> is null.</exception>
-    /// <remarks>
-    /// Creates columns for all public instance properties of type <typeparamref name="T"/>.
-    /// Null values are converted to <see cref="DBNull.Value"/>.
-    /// </remarks>
-    public static DataTable ConvertToDataTable<T>(this IEnumerable<T> data)
-    {
-        if (data == null)
-            throw new ArgumentNullException(nameof(data));
-
-        var properties = TypeDescriptor.GetProperties(typeof(T));
-        var table = new DataTable();
-
-        // Create columns
-        foreach (PropertyDescriptor prop in properties)
-        {
-            var columnType = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
-            table.Columns.Add(prop.Name, columnType);
-        }
-
-        // Populate rows
-        foreach (var item in data)
-        {
-            var row = table.NewRow();
-            foreach (PropertyDescriptor prop in properties)
-            {
-                var value = item != null ? prop.GetValue(item) : null;
-                row[prop.Name] = value ?? DBNull.Value;
-            }
-            table.Rows.Add(row);
-        }
-
-        return table;
-    }
 }
