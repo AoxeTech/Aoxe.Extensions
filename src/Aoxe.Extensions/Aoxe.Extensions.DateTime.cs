@@ -29,15 +29,7 @@ public static partial class AoxeExtension
     /// </remarks>
     public static IEnumerable<DateTime> EachSecondTo(this DateTime from, DateTime to)
     {
-        var current = new DateTime(
-            from.Year,
-            from.Month,
-            from.Day,
-            from.Hour,
-            from.Minute,
-            from.Second,
-            from.Kind
-        );
+        var current = from.TruncateToSecond();
 
         while (current <= to)
         {
@@ -63,15 +55,7 @@ public static partial class AoxeExtension
     /// </remarks>
     public static IEnumerable<DateTime> EachMinuteTo(this DateTime from, DateTime to)
     {
-        var current = new DateTime(
-            from.Year,
-            from.Month,
-            from.Day,
-            from.Hour,
-            from.Minute,
-            0,
-            from.Kind
-        );
+        var current = from.TruncateToMinute();
 
         while (current <= to)
         {
@@ -91,7 +75,7 @@ public static partial class AoxeExtension
     /// </remarks>
     public static IEnumerable<DateTime> EachHourTo(this DateTime from, DateTime to)
     {
-        var current = new DateTime(from.Year, from.Month, from.Day, from.Hour, 0, 0, from.Kind);
+        var current = from.TruncateToHour();
 
         while (current <= to)
         {
@@ -112,7 +96,7 @@ public static partial class AoxeExtension
     /// </remarks>
     public static IEnumerable<DateTime> EachDayTo(this DateTime from, DateTime to)
     {
-        var current = new DateTime(from.Year, from.Month, from.Day, 0, 0, 0, from.Kind);
+        var current = from.TruncateToDay();
 
         while (current <= to)
         {
@@ -138,14 +122,27 @@ public static partial class AoxeExtension
     /// </remarks>
     public static IEnumerable<DateTime> EachMonthTo(this DateTime from, DateTime to)
     {
-        var current = new DateTime(from.Year, from.Month, 1, 0, 0, 0, from.Kind);
+        var current = from.TruncateToMonth();
 
-        var endMonth = new DateTime(to.Year, to.Month, 1, 0, 0, 0, to.Kind);
-
-        while (current <= endMonth && current <= to)
+        while (current <= to)
         {
             yield return current;
             current = current.AddMonths(1);
         }
     }
+
+    public static DateTime TruncateToSecond(this DateTime dto) =>
+        new(dto.Year, dto.Month, dto.Day, dto.Hour, dto.Minute, dto.Second, dto.Kind);
+
+    public static DateTime TruncateToMinute(this DateTime dto) =>
+        new(dto.Year, dto.Month, dto.Day, dto.Hour, dto.Minute, 0, dto.Kind);
+
+    public static DateTime TruncateToHour(this DateTime dto) =>
+        new(dto.Year, dto.Month, dto.Day, dto.Hour, 0, 0, dto.Kind);
+
+    public static DateTime TruncateToDay(this DateTime dto) =>
+        new(dto.Year, dto.Month, dto.Day, 0, 0, 0, dto.Kind);
+
+    public static DateTime TruncateToMonth(this DateTime dto) =>
+        new(dto.Year, dto.Month, 1, 0, 0, 0, dto.Kind);
 }

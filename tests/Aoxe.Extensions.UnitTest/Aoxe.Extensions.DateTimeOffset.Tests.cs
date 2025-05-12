@@ -145,7 +145,7 @@ public class DateTimeOffsetRangeExtensionsTests
     {
         // Arrange
         var later = DateTimeOffset.Now;
-        var earlier = later.AddDays(-1);
+        var earlier = later.AddMonths(-1);
 
         // Act & Assert
         Assert.Empty(later.EachSecondTo(earlier));

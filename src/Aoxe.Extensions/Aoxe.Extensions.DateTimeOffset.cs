@@ -118,9 +118,9 @@ public static partial class AoxeExtension
         DateTimeOffset to
     )
     {
-        var current = new DateTimeOffset(from.Year, from.Month, 1, 0, 0, 0, from.Offset);
+        var current = from.TruncateToMonth();
 
-        var endMonth = new DateTimeOffset(to.Year, to.Month, 1, 0, 0, 0, to.Offset);
+        var endMonth = to.TruncateToMonth();
 
         while (current <= endMonth && current <= to)
         {
@@ -140,4 +140,7 @@ public static partial class AoxeExtension
 
     public static DateTimeOffset TruncateToDay(this DateTimeOffset dto) =>
         new(dto.Year, dto.Month, dto.Day, 0, 0, 0, dto.Offset);
+
+    public static DateTimeOffset TruncateToMonth(this DateTimeOffset dto) =>
+        new(dto.Year, dto.Month, 1, 0, 0, 0, dto.Offset);
 }
