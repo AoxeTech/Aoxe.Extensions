@@ -207,7 +207,7 @@ public static partial class AoxeExtension
     /// <param name="defaultValue">Value to return if parsing fails</param>
     /// <returns>Parsed boolean or defaultValue if parsing fails</returns>
     public static bool TryParseBool(this string? value, bool defaultValue = false) =>
-        bool.TryParse(value, out var result) ? result : defaultValue;
+        value is not null && (bool.TryParse(value, out var result) ? result : defaultValue);
 
     /// <summary>
     /// Attempts to parse a string representation of a date and time

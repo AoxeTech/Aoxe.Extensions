@@ -1,4 +1,4 @@
-#if !NETSTANDARD2_0
+#if NETCOREAPP
 namespace Aoxe.Extensions;
 
 public static partial class AoxeExtension

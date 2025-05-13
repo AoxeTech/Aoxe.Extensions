@@ -101,20 +101,4 @@ public static partial class AoxeExtension
 
         return string.Join(separator, descriptions);
     }
-
-    /// <summary>
-    /// Gets the description from a MemberInfo's <see cref="DescriptionAttribute"/>.
-    /// </summary>
-    /// <param name="field">The MemberInfo to inspect.</param>
-    /// <returns>
-    /// The Description attribute value if present; otherwise, the member name.
-    /// </returns>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="field"/> is null.</exception>
-    private static string GetDescription(MemberInfo field)
-    {
-        if (field == null)
-            throw new ArgumentNullException(nameof(field));
-
-        return field.GetCustomAttribute<DescriptionAttribute>()?.Description ?? field.Name;
-    }
 }
