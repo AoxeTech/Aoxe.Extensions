@@ -15,7 +15,7 @@ public static partial class AoxeExtension
 #endif
             : new ValueTask<int>(-1);
 
-    public static ValueTask<int> TryReadAsync(
+    public static async ValueTask<int> TryReadAsync(
         this Stream? stream,
         byte[] buffer,
         int offset,
@@ -24,11 +24,11 @@ public static partial class AoxeExtension
     ) =>
         stream?.CanRead is true
 #if NETSTANDARD2_0
-            ? new ValueTask<int>(stream.ReadAsync(buffer, offset, count, cancellationToken))
+            ? await new ValueTask<int>(stream.ReadAsync(buffer, offset, count, cancellationToken))
 #else
-            ? stream.ReadAsync(buffer, cancellationToken)
+            ? await stream.ReadAsync(buffer.AsMemory(offset, count), cancellationToken)
 #endif
-            : new ValueTask<int>(-1);
+            : -1;
 
     public static async ValueTask<byte[]> ReadToEndAsync(
         this Stream? stream,

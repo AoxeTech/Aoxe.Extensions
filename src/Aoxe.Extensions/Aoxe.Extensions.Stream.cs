@@ -78,27 +78,4 @@ public static partial class AoxeExtension
     /// </summary>
     public static ReadOnlySequence<byte> ToReadOnlySequence(this Stream stream) =>
         new(stream.ReadToEnd());
-
-    /// <summary>
-    /// Asynchronously reads all bytes into a <see cref="ReadOnlyMemory{T}"/>.
-    /// </summary>
-    public static async ValueTask<ReadOnlyMemory<byte>> ToReadOnlyMemoryAsync(this Stream stream) =>
-        (await stream.ReadToEndAsync().ConfigureAwait(false)).AsMemory();
-
-    /// <summary>
-    /// Asynchronously reads all bytes into a <see cref="ReadOnlySequence{T}"/>.
-    /// </summary>
-    public static async ValueTask<ReadOnlySequence<byte>> ToReadOnlySequenceAsync(
-        this Stream stream
-    ) => new(await stream.ReadToEndAsync().ConfigureAwait(false));
-
-    private static async Task<byte[]> ReadToEndAsync(this Stream stream)
-    {
-        if (stream is MemoryStream ms)
-            return ms.ToArray();
-
-        using var memoryStream = new MemoryStream();
-        await stream.CopyToAsync(memoryStream).ConfigureAwait(false);
-        return memoryStream.ToArray();
-    }
 }

@@ -7,16 +7,16 @@ public static partial class AoxeExtension
     /// <summary>
     /// Removes all leading occurrences of a specified string
     /// </summary>
-    public static string TrimStart(
-        this string target,
+    public static string? TrimStart(
+        this string? target,
         string trimString,
         StringComparison comparison = StringComparison.Ordinal
     )
     {
-        if (string.IsNullOrEmpty(trimString))
+        if (string.IsNullOrEmpty(target) || string.IsNullOrEmpty(trimString))
             return target;
 
-        var result = target;
+        var result = target!;
         while (result.StartsWith(trimString, comparison))
         {
             result = result.Substring(trimString.Length);
@@ -27,16 +27,16 @@ public static partial class AoxeExtension
     /// <summary>
     /// Removes all trailing occurrences of a specified string
     /// </summary>
-    public static string TrimEnd(
-        this string target,
+    public static string? TrimEnd(
+        this string? target,
         string trimString,
         StringComparison comparison = StringComparison.Ordinal
     )
     {
-        if (string.IsNullOrEmpty(trimString))
+        if (string.IsNullOrEmpty(target) || string.IsNullOrEmpty(trimString))
             return target;
 
-        var result = target;
+        var result = target!;
         while (result.EndsWith(trimString, comparison))
         {
             result = result.Substring(0, result.Length - trimString.Length);
@@ -67,8 +67,8 @@ public static partial class AoxeExtension
     /// <summary>
     /// Safely replaces occurrences of a specified string
     /// </summary>
-    public static string SafeReplace(
-        this string str,
+    public static string? SafeReplace(
+        this string? str,
         string oldValue,
         string newValue,
         StringComparison comparison = StringComparison.Ordinal
@@ -79,7 +79,7 @@ public static partial class AoxeExtension
 
         var sb = new StringBuilder();
         var previousIndex = 0;
-        var index = str.IndexOf(oldValue, comparison);
+        var index = str!.IndexOf(oldValue, comparison);
 
         while (index != -1)
         {
