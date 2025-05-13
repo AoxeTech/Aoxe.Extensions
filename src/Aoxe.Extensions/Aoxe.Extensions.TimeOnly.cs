@@ -18,20 +18,17 @@ public static partial class AoxeExtension
     /// <param name="from">Starting time (inclusive)</param>
     /// <param name="to">Ending time (inclusive)</param>
     /// <returns>Sequence of TimeOnly values every second from start to end</returns>
-    /// <remarks>Returns empty sequence if end time is earlier than start time</remarks>
     public static IEnumerable<TimeOnly> EachSecondTo(this TimeOnly from, TimeOnly to)
     {
-        var difference = to - from;
-        if (difference < TimeSpan.Zero)
-            yield break;
+        var start = from.TruncateToSecond();
+        var end = to.TruncateToSecond();
 
-        // Calculate total full seconds between times
-        var totalSeconds = (int)difference.TotalSeconds;
+        yield return start;
 
-        for (var i = 0; i <= totalSeconds; i++)
+        while (start != end)
         {
-            var result = from.AddSeconds(i);
-            yield return new TimeOnly(result.Hour, result.Minute, result.Second);
+            start = start.AddSeconds(1);
+            yield return start;
         }
     }
 
@@ -42,22 +39,19 @@ public static partial class AoxeExtension
     /// <param name="to">Ending time (inclusive)</param>
     /// <returns>Sequence of TimeOnly values every minute from start to end</returns>
     /// <remarks>
-    /// - Returns empty sequence if end time is earlier than start time
     /// - Seconds are always set to 00 in the returned values
     /// </remarks>
     public static IEnumerable<TimeOnly> EachMinuteTo(this TimeOnly from, TimeOnly to)
     {
-        var difference = to - from;
-        if (difference < TimeSpan.Zero)
-            yield break;
+        var start = from.TruncateToMinute();
+        var end = to.TruncateToMinute();
 
-        // Calculate total full minutes between times
-        var totalMinutes = (int)difference.TotalMinutes;
+        yield return start;
 
-        for (var i = 0; i <= totalMinutes; i++)
+        while (start != end)
         {
-            var result = from.AddMinutes(i);
-            yield return new TimeOnly(result.Hour, result.Minute, 0);
+            start = start.AddMinutes(1);
+            yield return start;
         }
     }
 
@@ -68,24 +62,27 @@ public static partial class AoxeExtension
     /// <param name="to">Ending time (inclusive)</param>
     /// <returns>Sequence of TimeOnly values every hour from start to end</returns>
     /// <remarks>
-    /// - Returns empty sequence if end time is earlier than start time
     /// - Minutes and seconds are always set to 00 in the returned values
     /// </remarks>
     public static IEnumerable<TimeOnly> EachHourTo(this TimeOnly from, TimeOnly to)
     {
-        var fromSpan = from.ToTimeSpan();
-        var toSpan = to.ToTimeSpan();
+        var start = from.TruncateToHour();
+        var end = to.TruncateToHour();
 
-        var difference =
-            toSpan >= fromSpan ? toSpan - fromSpan : TimeSpan.FromHours(24) - (fromSpan - toSpan);
+        yield return start;
 
-        var totalHours = (int)difference.TotalHours;
-
-        for (var i = 0; i <= totalHours; i++)
+        while (start != end)
         {
-            var currentHour = from.AddHours(i);
-            yield return new TimeOnly(currentHour.Hour, 0, 0);
+            start = start.AddHours(1);
+            yield return start;
         }
     }
+
+    public static TimeOnly TruncateToSecond(this TimeOnly dto) =>
+        new(dto.Hour, dto.Minute, dto.Second);
+
+    public static TimeOnly TruncateToMinute(this TimeOnly dto) => new(dto.Hour, dto.Minute, 0);
+
+    public static TimeOnly TruncateToHour(this TimeOnly dto) => new(dto.Hour, 0, 0);
 }
 #endif

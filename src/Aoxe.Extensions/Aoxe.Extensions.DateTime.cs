@@ -29,6 +29,9 @@ public static partial class AoxeExtension
     /// </remarks>
     public static IEnumerable<DateTime> EachSecondTo(this DateTime from, DateTime to)
     {
+        if (from > to)
+            yield break;
+
         var current = from.TruncateToSecond();
 
         while (current <= to)
@@ -55,6 +58,9 @@ public static partial class AoxeExtension
     /// </remarks>
     public static IEnumerable<DateTime> EachMinuteTo(this DateTime from, DateTime to)
     {
+        if (from > to)
+            yield break;
+
         var current = from.TruncateToMinute();
 
         while (current <= to)
@@ -75,6 +81,9 @@ public static partial class AoxeExtension
     /// </remarks>
     public static IEnumerable<DateTime> EachHourTo(this DateTime from, DateTime to)
     {
+        if (from > to)
+            yield break;
+
         var current = from.TruncateToHour();
 
         while (current <= to)
@@ -96,6 +105,9 @@ public static partial class AoxeExtension
     /// </remarks>
     public static IEnumerable<DateTime> EachDayTo(this DateTime from, DateTime to)
     {
+        if (from > to)
+            yield break;
+
         var current = from.TruncateToDay();
 
         while (current <= to)
@@ -122,6 +134,9 @@ public static partial class AoxeExtension
     /// </remarks>
     public static IEnumerable<DateTime> EachMonthTo(this DateTime from, DateTime to)
     {
+        if (from > to)
+            yield break;
+
         var current = from.TruncateToMonth();
 
         while (current <= to)

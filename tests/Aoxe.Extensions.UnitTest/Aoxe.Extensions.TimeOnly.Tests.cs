@@ -61,20 +61,6 @@ public class AoxeExtensionsTimeOnlyTests
         Assert.Equal(expected, result);
     }
 
-    [Fact]
-    public void EachSecondTo_ReverseRange_ReturnsEmpty()
-    {
-        // Arrange
-        var from = new TimeOnly(12, 0, 0);
-        var to = new TimeOnly(11, 59, 59);
-
-        // Act
-        var result = from.EachSecondTo(to).ToList();
-
-        // Assert
-        Assert.Empty(result);
-    }
-
     #endregion
 
     #region EachMinuteTo Tests

@@ -31,6 +31,9 @@ public static partial class AoxeExtension
         DateTimeOffset to
     )
     {
+        if (from > to)
+            yield break;
+
         var current = from.TruncateToSecond();
         while (current <= to)
         {
@@ -53,6 +56,9 @@ public static partial class AoxeExtension
         DateTimeOffset to
     )
     {
+        if (from > to)
+            yield break;
+
         var current = from.TruncateToMinute();
         while (current <= to)
         {
@@ -75,6 +81,9 @@ public static partial class AoxeExtension
         DateTimeOffset to
     )
     {
+        if (from > to)
+            yield break;
+
         var current = from.TruncateToHour();
         while (current <= to)
         {
@@ -95,6 +104,9 @@ public static partial class AoxeExtension
     /// </remarks>
     public static IEnumerable<DateTimeOffset> EachDayTo(this DateTimeOffset from, DateTimeOffset to)
     {
+        if (from > to)
+            yield break;
+
         var current = from.TruncateToDay();
         while (current <= to)
         {
@@ -118,6 +130,9 @@ public static partial class AoxeExtension
         DateTimeOffset to
     )
     {
+        if (from > to)
+            yield break;
+
         var current = from.TruncateToMonth();
 
         var endMonth = to.TruncateToMonth();

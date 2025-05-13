@@ -1,4 +1,4 @@
-#if !NETSTANDARD2_0
+#if NETCOREAPP
 namespace Aoxe.Extensions;
 
 /// <summary>
@@ -29,9 +29,8 @@ public static partial class AoxeExtension
     public static IEnumerable<DateOnly> EachDayTo(this DateOnly dateFrom, DateOnly dateTo)
     {
         if (dateFrom > dateTo)
-        {
             yield break;
-        }
+
         for (var date = dateFrom; date <= dateTo; date = date.AddDays(1))
         {
             yield return date;

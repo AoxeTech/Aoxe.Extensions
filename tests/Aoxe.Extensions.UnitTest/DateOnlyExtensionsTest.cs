@@ -1,4 +1,4 @@
-#if !NET48
+#if NETCOREAPP
 namespace Aoxe.Extensions.UnitTest;
 
 public class DateOnlyExtensionsTest
