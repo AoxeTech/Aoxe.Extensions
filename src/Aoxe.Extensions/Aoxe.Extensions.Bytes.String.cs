@@ -45,7 +45,7 @@ public static partial class AoxeExtension
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="bytes"/> is null.</exception>
     public static string GetString(this byte[] bytes, Encoding? encoding = null)
     {
-        if (bytes == null)
+        if (bytes is null)
             throw new ArgumentNullException(nameof(bytes));
         return (encoding ?? Encoding.UTF8).GetString(bytes);
     }

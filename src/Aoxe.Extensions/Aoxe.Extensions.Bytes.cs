@@ -13,7 +13,7 @@ public static partial class AoxeExtension
     /// <exception cref="ArgumentNullException">Thrown when the source array is null.</exception>
     public static byte[] CloneNew(this byte[] src)
     {
-        if (src == null)
+        if (src is null)
             throw new ArgumentNullException(nameof(src));
 
         var dest = new byte[src.Length];

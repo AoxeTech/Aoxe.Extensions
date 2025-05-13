@@ -11,7 +11,7 @@ public static partial class AoxeExtension
 
     public static string ToHexString(this byte[] bytes)
     {
-        if (bytes == null)
+        if (bytes is null)
             throw new ArgumentNullException(nameof(bytes));
         return BitConverter.ToString(bytes).Replace("-", "");
     }
@@ -24,7 +24,7 @@ public static partial class AoxeExtension
 
     public static byte[] ToHexBytes(this byte[] bytes)
     {
-        if (bytes == null)
+        if (bytes is null)
             throw new ArgumentNullException(nameof(bytes));
         return Encoding.ASCII.GetBytes(bytes.ToHexString());
     }
@@ -41,7 +41,7 @@ public static partial class AoxeExtension
 
     public static byte[] FromHexToBytes(this string hexString)
     {
-        if (hexString == null)
+        if (hexString is null)
             throw new ArgumentNullException(nameof(hexString));
         ValidateHexFormat(hexString);
 
@@ -61,7 +61,7 @@ public static partial class AoxeExtension
 
     public static byte[] FromHexToBytes(this byte[] hexBytes)
     {
-        if (hexBytes == null)
+        if (hexBytes is null)
             throw new ArgumentNullException(nameof(hexBytes));
         string hexString = Encoding.ASCII.GetString(hexBytes);
         return hexString.FromHexToBytes();

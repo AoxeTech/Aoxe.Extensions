@@ -19,9 +19,9 @@ public static partial class AoxeExtension
         CancellationToken cancellationToken = default
     )
     {
-        if (buffer == null)
+        if (buffer is null)
             throw new ArgumentNullException(nameof(buffer));
-        if (stream == null)
+        if (stream is null)
             throw new ArgumentNullException(nameof(stream));
 
 #if NETSTANDARD2_0

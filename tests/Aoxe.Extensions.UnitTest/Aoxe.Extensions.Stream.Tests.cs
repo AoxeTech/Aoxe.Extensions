@@ -78,7 +78,7 @@ public class AoxeExtensionsStreamTests
         // Arrange
         Stream stream = content != null ? new MemoryStream(ToBytes(content)) : null;
 
-        if (content == null)
+        if (content is null)
         {
             // Act & Assert for null case
             Assert.Throws<ArgumentNullException>(() => stream.ToMemoryStream());

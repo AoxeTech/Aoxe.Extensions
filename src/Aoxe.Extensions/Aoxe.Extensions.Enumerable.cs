@@ -20,9 +20,9 @@ public static partial class AoxeExtension
     /// </remarks>
     public static void AddRange<T>(this ICollection<T> source, IEnumerable<T> collections)
     {
-        if (source == null)
+        if (source is null)
             throw new ArgumentNullException(nameof(source));
-        if (collections == null)
+        if (collections is null)
             throw new ArgumentNullException(nameof(collections));
 
         if (source is List<T> list)
@@ -52,7 +52,7 @@ public static partial class AoxeExtension
         IEqualityComparer<T?>? comparer = null
     )
     {
-        if (source == null)
+        if (source is null)
             throw new ArgumentNullException(nameof(source));
 
         comparer ??= EqualityComparer<T?>.Default;
@@ -77,7 +77,7 @@ public static partial class AoxeExtension
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="source"/> is null.</exception>
     public static void IndexForeach<T>(this IEnumerable<T> source, Action<int, T> action)
     {
-        if (source == null)
+        if (source is null)
             throw new ArgumentNullException(nameof(source));
 
 #if NET9_0_OR_GREATER
@@ -104,7 +104,7 @@ public static partial class AoxeExtension
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="source"/> is null.</exception>
     public static bool NotContains<T>(this IEnumerable<T> source, T item)
     {
-        if (source == null)
+        if (source is null)
             throw new ArgumentNullException(nameof(source));
 
         return !source.Contains(item);
@@ -120,7 +120,7 @@ public static partial class AoxeExtension
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="source"/> is null.</exception>
     public static List<T?> ToList<T>(this IEnumerable<T?> source, Func<T?, bool> predicate)
     {
-        if (source == null)
+        if (source is null)
             throw new ArgumentNullException(nameof(source));
 
         return source.Where(predicate).ToList();
@@ -135,9 +135,9 @@ public static partial class AoxeExtension
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="source"/> is null.</exception>
     public static void ForEach<T>(this IEnumerable<T?> source, Action<T?>? action)
     {
-        if (source == null)
+        if (source is null)
             throw new ArgumentNullException(nameof(source));
-        if (action == null)
+        if (action is null)
             return;
 
         foreach (var item in source)
@@ -159,9 +159,9 @@ public static partial class AoxeExtension
     /// </remarks>
     public static IEnumerable<T?> ForEachLazy<T>(this IEnumerable<T?> source, Action<T?>? action)
     {
-        if (source == null)
+        if (source is null)
             throw new ArgumentNullException(nameof(source));
-        if (action == null)
+        if (action is null)
             return source;
 
         return source.Select(item =>

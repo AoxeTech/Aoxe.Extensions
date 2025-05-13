@@ -13,7 +13,7 @@ public static partial class AoxeExtension
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="bytes"/> is null.</exception>
     public static MemoryStream ToMemoryStream(this byte[] bytes)
     {
-        if (bytes == null)
+        if (bytes is null)
             throw new ArgumentNullException(nameof(bytes));
         return new MemoryStream(bytes);
     }
@@ -26,9 +26,9 @@ public static partial class AoxeExtension
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="buffer"/> or <paramref name="stream"/> is null.</exception>
     public static void WriteTo(this byte[] buffer, Stream stream)
     {
-        if (buffer == null)
+        if (buffer is null)
             throw new ArgumentNullException(nameof(buffer));
-        if (stream == null)
+        if (stream is null)
             throw new ArgumentNullException(nameof(stream));
 
 #if NETSTANDARD2_0

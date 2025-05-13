@@ -13,7 +13,7 @@ public static partial class AoxeExtension
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="bytes"/> is null.</exception>
     public static string ToBase64String(this byte[] bytes)
     {
-        if (bytes == null)
+        if (bytes is null)
             throw new ArgumentNullException(nameof(bytes));
         return Convert.ToBase64String(bytes);
     }
@@ -27,7 +27,7 @@ public static partial class AoxeExtension
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="bytes"/> is null.</exception>
     public static byte[] ToBase64Bytes(this byte[] bytes, Encoding? encoding = null)
     {
-        if (bytes == null)
+        if (bytes is null)
             throw new ArgumentNullException(nameof(bytes));
         return bytes.ToBase64String().GetBytes(encoding);
     }
@@ -42,7 +42,7 @@ public static partial class AoxeExtension
     /// <exception cref="FormatException">Thrown when the input is not valid Base64 data.</exception>
     public static byte[] DecodeBase64ToBytes(this byte[] bytes, Encoding? encoding = null)
     {
-        if (bytes == null)
+        if (bytes is null)
             throw new ArgumentNullException(nameof(bytes));
         return Convert.FromBase64String(bytes.GetString(encoding));
     }
@@ -57,7 +57,7 @@ public static partial class AoxeExtension
     /// <exception cref="FormatException">Thrown when the input is not valid Base64 data.</exception>
     public static string DecodeBase64ToString(this byte[] bytes, Encoding? encoding = null)
     {
-        if (bytes == null)
+        if (bytes is null)
             throw new ArgumentNullException(nameof(bytes));
         return Convert.FromBase64String(bytes.GetString(encoding)).GetString(encoding);
     }

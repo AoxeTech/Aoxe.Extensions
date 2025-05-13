@@ -25,7 +25,7 @@ public class Base64ConversionTests
     public void ToBase64Bytes_WithDifferentEncodings(string? encodingName, string expectedBase64)
     {
         var bytes = new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F };
-        var encoding = encodingName == null ? null : Encoding.GetEncoding(encodingName);
+        var encoding = encodingName is null ? null : Encoding.GetEncoding(encodingName);
 
         var result = bytes.ToBase64Bytes(encoding);
         var expected = Encoding.ASCII.GetBytes(expectedBase64);

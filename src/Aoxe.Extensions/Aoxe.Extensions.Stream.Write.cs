@@ -56,7 +56,7 @@ public static partial class AoxeExtension
     /// </summary>
     public static bool TryWriteByte(this Stream? stream, byte value)
     {
-        if (stream == null)
+        if (stream is null)
             return false;
 
         try
@@ -79,7 +79,7 @@ public static partial class AoxeExtension
     /// </summary>
     public static void Write(this Stream? stream, string? str, Encoding? encoding = null)
     {
-        if (stream == null || str == null)
+        if (stream is null || str is null)
             return;
 
         var bytes = (encoding ?? Encoding.UTF8).GetBytes(str);
@@ -97,7 +97,7 @@ public static partial class AoxeExtension
     {
         try
         {
-            if (stream == null || str == null)
+            if (stream is null || str is null)
                 return false;
 
             var bytes = (encoding ?? Encoding.UTF8).GetBytes(str);

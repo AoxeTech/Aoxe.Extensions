@@ -98,7 +98,7 @@ public static partial class AoxeExtension
     {
         try
         {
-            if (stream is not { CanWrite: true } || str == null)
+            if (stream is not { CanWrite: true } || str is null)
                 return false;
 
             var bytes = (encoding ?? Encoding.UTF8).GetBytes(str);
