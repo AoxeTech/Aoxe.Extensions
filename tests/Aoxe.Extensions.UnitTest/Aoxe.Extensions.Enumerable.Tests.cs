@@ -40,7 +40,7 @@ public class AoxeExtensionsEnumerableTests
         ICollection<int> collection = null;
 
         // Act & Assert
-        Assert.Throws<NullReferenceException>(() => collection.AddRange(new[] { 1 }));
+        Assert.Throws<ArgumentNullException>(() => collection.AddRange(new[] { 1 }));
     }
 
     #endregion
@@ -214,12 +214,12 @@ public class AoxeExtensionsEnumerableTests
         ICollection<int> nullCollection = null;
 
         // Act & Assert
-        Assert.Throws<NullReferenceException>(() => nullCollection.AddRange(new[] { 1 }));
-        Assert.Throws<NullReferenceException>(() => nullEnumerable.IndexOf(1));
-        Assert.Throws<NullReferenceException>(() => nullEnumerable.IndexForeach((i, x) => { }));
+        Assert.Throws<ArgumentNullException>(() => nullCollection.AddRange([1]));
+        Assert.Throws<ArgumentNullException>(() => nullEnumerable.IndexOf(1));
+        Assert.Throws<ArgumentNullException>(() => nullEnumerable.IndexForeach((i, x) => { }));
         Assert.Throws<ArgumentNullException>(() => nullEnumerable.NotContains(1));
         Assert.Throws<ArgumentNullException>(() => nullEnumerable.ToList(x => true));
-        Assert.Throws<NullReferenceException>(() => nullEnumerable.ForEach(x => { }));
+        Assert.Throws<ArgumentNullException>(() => nullEnumerable.ForEach(x => { }));
     }
 
     #endregion

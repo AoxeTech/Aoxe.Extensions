@@ -5,8 +5,12 @@ public static partial class AoxeExtension
     public static bool IsNullOrEmpty(this Stream? stream) =>
         stream is null or { CanSeek: true, Length: 0 };
 
-    public static long TrySeek(this Stream? stream, long offset, SeekOrigin seekOrigin) =>
-        stream?.CanSeek == true ? stream.Seek(offset, seekOrigin) : -1;
+    public static long TrySeek(this Stream stream, long offset, SeekOrigin seekOrigin)
+    {
+        if (stream is null)
+            throw new ArgumentNullException(nameof(stream));
+        return stream.CanSeek ? stream.Seek(offset, seekOrigin) : -1;
+    }
 
     public static MemoryStream ToMemoryStream(this Stream stream)
     {
@@ -35,9 +39,17 @@ public static partial class AoxeExtension
         return memoryStream;
     }
 
-    public static ReadOnlyMemory<byte> ToReadOnlyMemory(this Stream stream) =>
-        stream.ReadToEnd().AsMemory();
+    public static ReadOnlyMemory<byte> ToReadOnlyMemory(this Stream stream)
+    {
+        if (stream is null)
+            throw new ArgumentNullException(nameof(stream));
+        return stream.ReadToEnd().AsMemory();
+    }
 
-    public static ReadOnlySequence<byte> ToReadOnlySequence(this Stream stream) =>
-        new(stream.ReadToEnd());
+    public static ReadOnlySequence<byte> ToReadOnlySequence(this Stream stream)
+    {
+        if (stream is null)
+            throw new ArgumentNullException(nameof(stream));
+        return new ReadOnlySequence<byte>(stream.ReadToEnd());
+    }
 }

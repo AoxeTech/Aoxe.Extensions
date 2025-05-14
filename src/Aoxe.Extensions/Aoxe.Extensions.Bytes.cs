@@ -4,9 +4,7 @@ public static partial class AoxeExtension
 {
     public static byte[] CloneNew(this byte[] src)
     {
-        if (src is null)
-            throw new ArgumentNullException(nameof(src));
-        var dest = new byte[src.Length];
+        var dest = new byte[(src ?? throw new ArgumentNullException(nameof(src))).Length];
         Array.Copy(src, dest, src.Length);
         return dest;
     }

@@ -9,6 +9,8 @@ public static partial class AoxeExtension
         CancellationToken cancellationToken = default
     )
     {
+        if (stream is null)
+            throw new ArgumentNullException(nameof(stream));
         if (!stream.CanWrite)
             throw new InvalidOperationException("Stream is not writable");
 

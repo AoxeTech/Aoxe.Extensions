@@ -3,10 +3,12 @@ namespace Aoxe.Extensions;
 public static partial class AoxeExtension
 {
     public static MemoryStream ToMemoryStream(this string str, Encoding? encoding = null) =>
-        new MemoryStream((encoding ?? Encoding.UTF8).GetBytes(str));
+        new((encoding ?? Encoding.UTF8).GetBytes(str));
 
     public static void WriteTo(this string str, Stream stream, Encoding? encoding = null)
     {
+        if (stream is null)
+            throw new ArgumentNullException(nameof(stream));
         if (!stream.CanWrite)
             throw new InvalidOperationException("Stream is not writable");
 

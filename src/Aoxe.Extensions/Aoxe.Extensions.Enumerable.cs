@@ -4,6 +4,11 @@ public static partial class AoxeExtension
 {
     public static void AddRange<T>(this ICollection<T> source, IEnumerable<T> collections)
     {
+        if (source is null)
+            throw new ArgumentNullException(nameof(source));
+        if (collections is null)
+            throw new ArgumentNullException(nameof(collections));
+
         if (source is List<T> list)
         {
             list.AddRange(collections);
@@ -20,6 +25,11 @@ public static partial class AoxeExtension
         IEqualityComparer<T?>? comparer = null
     )
     {
+        if (source is null)
+            throw new ArgumentNullException(nameof(source));
+        if (value is null)
+            throw new ArgumentNullException(nameof(value));
+
         comparer ??= EqualityComparer<T?>.Default;
         var index = 0;
 
@@ -35,6 +45,10 @@ public static partial class AoxeExtension
 
     public static void IndexForeach<T>(this IEnumerable<T> source, Action<int, T> action)
     {
+        if (source is null)
+            throw new ArgumentNullException(nameof(source));
+        if (action is null)
+            throw new ArgumentNullException(nameof(action));
 #if NET9_0_OR_GREATER
         foreach (var (index, item) in source.Index())
         {
@@ -56,6 +70,8 @@ public static partial class AoxeExtension
 
     public static void ForEach<T>(this IEnumerable<T?> source, Action<T?>? action)
     {
+        if (source is null)
+            throw new ArgumentNullException(nameof(source));
         if (action is null)
             return;
 
@@ -65,6 +81,8 @@ public static partial class AoxeExtension
 
     public static IEnumerable<T?> ForEachLazy<T>(this IEnumerable<T?> source, Action<T?>? action)
     {
+        if (source is null)
+            throw new ArgumentNullException(nameof(source));
         if (action is null)
             return source;
 
