@@ -2,7 +2,6 @@ namespace Aoxe.Extensions;
 
 public static partial class AoxeExtension
 {
-    /// <summary>Throws exception if condition is true</summary>
     public static void ThrowIfTrue<TException>(this bool condition, TException exception)
         where TException : Exception
     {
@@ -10,7 +9,6 @@ public static partial class AoxeExtension
             throw exception;
     }
 
-    /// <summary>Throws exception if condition is false</summary>
     public static void ThrowIfFalse<TException>(this bool condition, TException exception)
         where TException : Exception
     {
@@ -18,29 +16,24 @@ public static partial class AoxeExtension
             throw exception;
     }
 
-    /// <summary>Executes action if condition is true</summary>
     public static void Then(this bool condition, Action action)
     {
         if (condition)
             action();
     }
 
-    /// <summary>Returns function result if condition is true</summary>
     public static TResult? Then<TResult>(this bool condition, Func<TResult?> func) =>
         condition ? func() : default;
 
-    /// <summary>Executes action if condition is false</summary>
     public static void Otherwise(this bool condition, Action action)
     {
         if (!condition)
             action();
     }
 
-    /// <summary>Returns function result if condition is false</summary>
     public static TResult? Otherwise<TResult>(this bool condition, Func<TResult?> func) =>
         !condition ? func() : default;
 
-    /// <summary>Executes appropriate action based on condition</summary>
     public static void ThenOtherwise(this bool condition, Action thenAction, Action otherwiseAction)
     {
         if (condition)
@@ -49,7 +42,6 @@ public static partial class AoxeExtension
             otherwiseAction();
     }
 
-    /// <summary>Returns result from appropriate function based on condition</summary>
     public static TResult? ThenOtherwise<TResult>(
         this bool condition,
         Func<TResult?> thenFunc,

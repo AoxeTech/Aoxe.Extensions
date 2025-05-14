@@ -2,9 +2,6 @@ namespace Aoxe.Extensions;
 
 public static partial class AoxeExtension
 {
-    /// <summary>
-    /// Attempts to write a buffer to a stream with proper error handling
-    /// </summary>
     public static async ValueTask<bool> TryWriteAsync(
         this Stream? stream,
         byte[] buffer,
@@ -32,9 +29,6 @@ public static partial class AoxeExtension
         }
     }
 
-    /// <summary>
-    /// Attempts to write a buffer segment to a stream with proper error handling
-    /// </summary>
     public static async ValueTask<bool> TryWriteAsync(
         this Stream? stream,
         byte[] buffer,
@@ -64,9 +58,6 @@ public static partial class AoxeExtension
         }
     }
 
-    /// <summary>
-    /// Writes a string to a stream using the specified encoding
-    /// </summary>
     public static async ValueTask WriteAsync(
         this Stream? stream,
         string? str,
@@ -86,9 +77,6 @@ public static partial class AoxeExtension
 #endif
     }
 
-    /// <summary>
-    /// Safely attempts to write a string to a stream with error handling
-    /// </summary>
     public static async ValueTask<bool> TryWriteAsync(
         this Stream? stream,
         string? str,

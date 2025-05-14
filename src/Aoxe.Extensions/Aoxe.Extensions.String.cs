@@ -4,9 +4,6 @@ public static partial class AoxeExtension
 {
     private static readonly Encoding Utf8Encoding = Encoding.UTF8;
 
-    /// <summary>
-    /// Removes all leading occurrences of a specified string
-    /// </summary>
     public static string? TrimStart(
         this string? target,
         string trimString,
@@ -24,9 +21,6 @@ public static partial class AoxeExtension
         return result;
     }
 
-    /// <summary>
-    /// Removes all trailing occurrences of a specified string
-    /// </summary>
     public static string? TrimEnd(
         this string? target,
         string trimString,
@@ -44,9 +38,6 @@ public static partial class AoxeExtension
         return result;
     }
 
-    /// <summary>
-    /// Truncates string to specified length with optional suffix
-    /// </summary>
     public static string? Truncate(this string? value, int maxLength, string suffix = "...")
     {
         if (string.IsNullOrEmpty(value))
@@ -64,9 +55,6 @@ public static partial class AoxeExtension
         return value.Substring(0, maxLength - suffix.Length) + suffix;
     }
 
-    /// <summary>
-    /// Safely replaces occurrences of a specified string
-    /// </summary>
     public static string? SafeReplace(
         this string? str,
         string oldValue,
@@ -93,7 +81,6 @@ public static partial class AoxeExtension
         return sb.ToString();
     }
 
-    // Other methods remain the same as previous .NET Standard 2.0 compatible versions
     public static bool IsNullOrEmpty(this string? value) => string.IsNullOrEmpty(value);
 
     public static bool IsNullOrWhiteSpace(this string? value) => string.IsNullOrWhiteSpace(value);

@@ -1,9 +1,6 @@
 #if NETCOREAPP
 namespace Aoxe.Extensions;
 
-/// <summary>
-/// Provides extension methods for <see cref="DateOnly"/> date range generation.
-/// </summary>
 public static partial class AoxeExtension
 {
     public static IEnumerable<DateOnly> EachDayTo(this DateOnly dateFrom, DateOnly dateTo)

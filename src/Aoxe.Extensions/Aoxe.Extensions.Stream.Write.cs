@@ -2,10 +2,6 @@ namespace Aoxe.Extensions;
 
 public static partial class AoxeExtension
 {
-    /// <summary>
-    /// Safely attempts to write a byte array to the stream
-    /// </summary>
-    /// <returns>True if write succeeded, false otherwise</returns>
     public static bool TryWrite(this Stream? stream, byte[] buffer)
     {
         try
@@ -27,10 +23,6 @@ public static partial class AoxeExtension
         }
     }
 
-    /// <summary>
-    /// Safely attempts to write a byte array segment to the stream
-    /// </summary>
-    /// <exception cref="ArgumentException">Thrown for invalid offset/count values</exception>
     public static bool TryWrite(this Stream? stream, byte[] buffer, int offset, int count)
     {
         if (offset < 0 || count < 0 || offset + count > buffer.Length)
@@ -51,9 +43,6 @@ public static partial class AoxeExtension
         }
     }
 
-    /// <summary>
-    /// Safely attempts to write a single byte to the stream
-    /// </summary>
     public static bool TryWriteByte(this Stream? stream, byte value)
     {
         if (stream is null)
@@ -74,9 +63,6 @@ public static partial class AoxeExtension
         }
     }
 
-    /// <summary>
-    /// Writes a string to the stream using specified encoding (UTF-8 default)
-    /// </summary>
     public static void Write(this Stream? stream, string? str, Encoding? encoding = null)
     {
         if (stream is null || str is null)
@@ -90,9 +76,6 @@ public static partial class AoxeExtension
 #endif
     }
 
-    /// <summary>
-    /// Safely attempts to write a string to the stream
-    /// </summary>
     public static bool TryWrite(this Stream? stream, string? str, Encoding? encoding = null)
     {
         try

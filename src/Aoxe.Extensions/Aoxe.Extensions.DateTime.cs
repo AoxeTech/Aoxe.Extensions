@@ -1,8 +1,5 @@
 namespace Aoxe.Extensions;
 
-/// <summary>
-/// Provides extension methods for generating date/time ranges at various intervals.
-/// </summary>
 public static partial class AoxeExtension
 {
     public static IEnumerable<DateTime> EachSecondTo(this DateTime from, DateTime to)

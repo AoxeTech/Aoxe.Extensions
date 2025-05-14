@@ -9,12 +9,12 @@ public static partial class AoxeExtension
         return encoding.GetBytes(input).ToHexString();
     }
 
-    public static string ToHexString(this byte[] bytes)
-    {
-        if (bytes is null)
-            throw new ArgumentNullException(nameof(bytes));
-        return BitConverter.ToString(bytes).Replace("-", "");
-    }
+    public static string ToHexString(this byte[] bytes) =>
+#if NETSTANDARD2_0
+        BitConverter.ToString(bytes).Replace("-", "");
+#else
+        Convert.ToHexString(bytes);
+#endif
 
     public static byte[] ToHexBytes(this string input, Encoding? encoding = null)
     {
@@ -22,12 +22,8 @@ public static partial class AoxeExtension
         return encoding.GetBytes(input).ToHexBytes();
     }
 
-    public static byte[] ToHexBytes(this byte[] bytes)
-    {
-        if (bytes is null)
-            throw new ArgumentNullException(nameof(bytes));
-        return Encoding.ASCII.GetBytes(bytes.ToHexString());
-    }
+    public static byte[] ToHexBytes(this byte[] bytes) =>
+        Encoding.ASCII.GetBytes(bytes.ToHexString());
 
     #endregion
 
@@ -41,12 +37,10 @@ public static partial class AoxeExtension
 
     public static byte[] FromHexToBytes(this string hexString)
     {
-        if (hexString is null)
-            throw new ArgumentNullException(nameof(hexString));
         ValidateHexFormat(hexString);
 
-        byte[] bytes = new byte[hexString.Length / 2];
-        for (int i = 0; i < bytes.Length; i++)
+        var bytes = new byte[hexString.Length / 2];
+        for (var i = 0; i < bytes.Length; i++)
         {
             bytes[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
         }
@@ -59,13 +53,8 @@ public static partial class AoxeExtension
         return encoding.GetString(hexBytes.FromHexToBytes());
     }
 
-    public static byte[] FromHexToBytes(this byte[] hexBytes)
-    {
-        if (hexBytes is null)
-            throw new ArgumentNullException(nameof(hexBytes));
-        string hexString = Encoding.ASCII.GetString(hexBytes);
-        return hexString.FromHexToBytes();
-    }
+    public static byte[] FromHexToBytes(this byte[] hexBytes) =>
+        Encoding.ASCII.GetString(hexBytes).FromHexToBytes();
 
     #endregion
 
