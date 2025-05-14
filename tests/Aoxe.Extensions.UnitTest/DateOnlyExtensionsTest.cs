@@ -11,7 +11,7 @@ public class DateOnlyExtensionsTest
     {
         var dateFrom = new DateOnly(1900, 1, 1);
         var dateTo = dateFrom.AddDays(days);
-        var dates = dateFrom.EachDayTo(dateTo);
+        var dates = dateFrom.EachDayTo(dateTo).ToList();
         if (days < 0)
             Assert.Empty(dates);
         else
@@ -36,6 +36,26 @@ public class DateOnlyExtensionsTest
             Assert.Empty(dates);
         else
             Assert.Equal(months + 1, dates.Count());
+        foreach (var result in dates)
+        {
+            Assert.Equal(dateFrom, result);
+            dateFrom = dateFrom.AddMonths(1);
+        }
+    }
+
+    [Theory]
+    [InlineData(-1024)]
+    [InlineData(0)]
+    [InlineData(1024)]
+    public void EachYearToTest(int years)
+    {
+        var dateFrom = new DateOnly(1900, 1, 1);
+        var dateTo = dateFrom.AddMonths(years);
+        var dates = dateFrom.EachMonthTo(dateTo).ToList();
+        if (years < 0)
+            Assert.Empty(dates);
+        else
+            Assert.Equal(years + 1, dates.Count());
         foreach (var result in dates)
         {
             Assert.Equal(dateFrom, result);

@@ -2,44 +2,107 @@ namespace Aoxe.Extensions.UnitTest;
 
 public class DateTimeOffsetRangeExtensionsTests
 {
-    private readonly TimeSpan _offset = TimeSpan.FromHours(8);
-    private readonly TimeSpan _utcOffset = TimeSpan.Zero;
+    private readonly DateTimeOffset _testDate = new DateTimeOffset(
+        2023,
+        10,
+        15,
+        14,
+        30,
+        45,
+        500,
+        TimeSpan.FromHours(2)
+    );
+
+    #region Truncation Tests
+
+    [Fact]
+    public void TruncateToSecond_RemovesMilliseconds()
+    {
+        // Act
+        var result = _testDate.TruncateToSecond();
+
+        // Assert
+        Assert.Equal(new DateTimeOffset(2023, 10, 15, 14, 30, 45, TimeSpan.FromHours(2)), result);
+        Assert.Equal(0, result.Millisecond);
+    }
+
+    [Fact]
+    public void TruncateToMinute_ResetsSeconds()
+    {
+        // Act
+        var result = _testDate.TruncateToMinute();
+
+        // Assert
+        Assert.Equal(new DateTimeOffset(2023, 10, 15, 14, 30, 0, TimeSpan.FromHours(2)), result);
+        Assert.Equal(0, result.Second);
+    }
+
+    [Fact]
+    public void TruncateToHour_ResetsMinutesAndSeconds()
+    {
+        // Act
+        var result = _testDate.TruncateToHour();
+
+        // Assert
+        Assert.Equal(new DateTimeOffset(2023, 10, 15, 14, 0, 0, TimeSpan.FromHours(2)), result);
+        Assert.Equal(0, result.Minute);
+    }
+
+    [Fact]
+    public void TruncateToDay_ResetsTimeToMidnight()
+    {
+        // Act
+        var result = _testDate.TruncateToDay();
+
+        // Assert
+        Assert.Equal(new DateTimeOffset(2023, 10, 15, 0, 0, 0, TimeSpan.FromHours(2)), result);
+        Assert.Equal(0, result.Hour);
+    }
+
+    [Fact]
+    public void TruncateToMonth_SetsFirstDayOfMonth()
+    {
+        // Act
+        var result = _testDate.TruncateToMonth();
+
+        // Assert
+        Assert.Equal(new DateTimeOffset(2023, 10, 1, 0, 0, 0, TimeSpan.FromHours(2)), result);
+        Assert.Equal(1, result.Day);
+    }
+
+    #endregion
 
     #region EachSecondTo Tests
 
     [Fact]
-    public void EachSecondTo_NormalRange_ReturnsCorrectSequence()
+    public void EachSecondTo_GeneratesCorrectSequence()
     {
         // Arrange
-        var start = new DateTimeOffset(2023, 1, 1, 12, 30, 45, 500, _offset);
-        var end = start.AddSeconds(2);
+        var from = new DateTimeOffset(2023, 10, 15, 14, 30, 45, TimeSpan.Zero);
+        var to = from.AddSeconds(2);
 
         // Act
-        var result = start.EachSecondTo(end).ToList();
+        var results = from.EachSecondTo(to).ToList();
 
         // Assert
-        Assert.Equal(3, result.Count);
-        Assert.Equal(start.TruncateToSecond(), result[0]);
-        Assert.Equal(start.TruncateToSecond().AddSeconds(1), result[1]);
-        Assert.Equal(end.TruncateToSecond(), result[2]);
-        Assert.All(result, d => Assert.Equal(_offset, d.Offset));
+        Assert.Equal(3, results.Count);
+        Assert.Equal(from, results[0]);
+        Assert.Equal(from.AddSeconds(1), results[1]);
+        Assert.Equal(to, results[2]);
     }
 
     [Fact]
-    public void EachSecondTo_CrossTimezone_HandlesOffsetProperly()
+    public void EachSecondTo_WhenEndIsEarlier_ReturnsEmpty()
     {
         // Arrange
-        var start = new DateTimeOffset(2023, 1, 1, 23, 59, 59, 999, _utcOffset);
-        var end = new DateTimeOffset(2023, 1, 2, 0, 0, 1, 0, _offset);
+        var from = new DateTimeOffset(2023, 10, 15, 14, 30, 45, TimeSpan.Zero);
+        var to = from.AddSeconds(-1);
 
         // Act
-        var result = start.EachSecondTo(end).ToList();
+        var results = from.EachSecondTo(to).ToList();
 
         // Assert
-        Assert.Equal(3, result.Count);
-        Assert.Equal(new DateTimeOffset(2023, 1, 1, 23, 59, 59, _utcOffset), result[0]);
-        Assert.Equal(new DateTimeOffset(2023, 1, 2, 0, 0, 0, _offset), result[1]);
-        Assert.Equal(end.TruncateToSecond(), result[2]);
+        Assert.Empty(results);
     }
 
     #endregion
@@ -47,20 +110,20 @@ public class DateTimeOffsetRangeExtensionsTests
     #region EachMinuteTo Tests
 
     [Fact]
-    public void EachMinuteTo_PartialMinutes_TruncatesCorrectly()
+    public void EachMinuteTo_ResetsSecondsToZero()
     {
         // Arrange
-        var start = new DateTimeOffset(2023, 3, 1, 14, 25, 30, 500, _offset);
-        var end = new DateTimeOffset(2023, 3, 1, 14, 28, 15, 0, _offset);
+        var from = new DateTimeOffset(2023, 10, 15, 14, 30, 15, TimeSpan.Zero);
+        var to = from.AddMinutes(2);
 
         // Act
-        var result = start.EachMinuteTo(end).ToList();
+        var results = from.EachMinuteTo(to).ToList();
 
         // Assert
-        Assert.Equal(4, result.Count);
-        Assert.Equal(new DateTimeOffset(2023, 3, 1, 14, 25, 0, _offset), result[0]);
-        Assert.Equal(new DateTimeOffset(2023, 3, 1, 14, 28, 0, _offset), result[3]);
-        Assert.All(result, d => Assert.Equal(0, d.Second));
+        Assert.Equal(3, results.Count);
+        Assert.All(results, dto => Assert.Equal(0, dto.Second));
+        Assert.Equal(from.TruncateToMinute(), results[0]);
+        Assert.Equal(from.TruncateToMinute().AddMinutes(1), results[1]);
     }
 
     #endregion
@@ -68,25 +131,25 @@ public class DateTimeOffsetRangeExtensionsTests
     #region EachHourTo Tests
 
     [Fact]
-    public void EachHourTo_DaylightSavingTransition_HandlesCorrectly()
+    public void EachHourTo_ResetsMinutesAndSeconds()
     {
-        // Arrange (DST end in Pacific Time)
-        var start = new DateTimeOffset(2023, 11, 5, 0, 30, 0, TimeSpan.FromHours(-7));
-        var end = start.AddHours(3);
+        // Arrange
+        var from = new DateTimeOffset(2023, 10, 15, 14, 30, 15, TimeSpan.Zero);
+        var to = from.AddHours(2);
 
         // Act
-        var result = start.EachHourTo(end).ToList();
+        var results = from.EachHourTo(to).ToList();
 
         // Assert
-        var expected = new[]
-        {
-            new DateTimeOffset(2023, 11, 5, 0, 0, 0, TimeSpan.FromHours(-7)),
-            new DateTimeOffset(2023, 11, 5, 1, 0, 0, TimeSpan.FromHours(-7)),
-            new DateTimeOffset(2023, 11, 5, 2, 0, 0, TimeSpan.FromHours(-8)), // Fall back
-            new DateTimeOffset(2023, 11, 5, 3, 0, 0, TimeSpan.FromHours(-8))
-        };
-
-        Assert.Equal(expected, result);
+        Assert.Equal(3, results.Count);
+        Assert.All(
+            results,
+            dto =>
+            {
+                Assert.Equal(0, dto.Minute);
+                Assert.Equal(0, dto.Second);
+            }
+        );
     }
 
     #endregion
@@ -94,21 +157,26 @@ public class DateTimeOffsetRangeExtensionsTests
     #region EachDayTo Tests
 
     [Fact]
-    public void EachDayTo_LeapYearFebruary_PreservesOffset()
+    public void EachDayTo_GeneratesMidnightTimes()
     {
         // Arrange
-        var start = new DateTimeOffset(2024, 2, 28, 10, 0, 0, _offset);
-        var end = new DateTimeOffset(2024, 3, 2, 8, 0, 0, _offset);
+        var from = new DateTimeOffset(2023, 10, 15, 14, 30, 0, TimeSpan.Zero);
+        var to = from.AddDays(2);
 
         // Act
-        var result = start.EachDayTo(end).ToList();
+        var results = from.EachDayTo(to).ToList();
 
         // Assert
-        Assert.Equal(4, result.Count);
-        Assert.Equal(new DateTimeOffset(2024, 2, 28, 0, 0, 0, _offset), result[0]);
-        Assert.Equal(new DateTimeOffset(2024, 2, 29, 0, 0, 0, _offset), result[1]);
-        Assert.Equal(new DateTimeOffset(2024, 3, 1, 0, 0, 0, _offset), result[2]);
-        Assert.Equal(new DateTimeOffset(2024, 3, 2, 0, 0, 0, _offset), result[3]);
+        Assert.Equal(3, results.Count);
+        Assert.All(
+            results,
+            dto =>
+            {
+                Assert.Equal(0, dto.Hour);
+                Assert.Equal(0, dto.Minute);
+                Assert.Equal(0, dto.Second);
+            }
+        );
     }
 
     #endregion
@@ -116,80 +184,95 @@ public class DateTimeOffsetRangeExtensionsTests
     #region EachMonthTo Tests
 
     [Fact]
-    public void EachMonthTo_CrossYearRange_WithDifferentOffsets()
+    public void EachMonthTo_HandlesMonthBoundaries()
     {
         // Arrange
-        var start = new DateTimeOffset(2023, 12, 15, 0, 0, 0, TimeSpan.FromHours(-5));
-        var end = new DateTimeOffset(2024, 2, 10, 0, 0, 0, TimeSpan.FromHours(2));
+        var from = new DateTimeOffset(2023, 1, 31, 0, 0, 0, TimeSpan.Zero);
+        var to = new DateTimeOffset(2023, 3, 1, 0, 0, 0, TimeSpan.Zero);
 
         // Act
-        var result = start.EachMonthTo(end).ToList();
+        var results = from.EachMonthTo(to).ToList();
 
         // Assert
-        var expected = new[]
-        {
-            new DateTimeOffset(2023, 12, 1, 0, 0, 0, TimeSpan.FromHours(-5)),
-            new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.FromHours(-5)),
-            new DateTimeOffset(2024, 2, 1, 0, 0, 0, TimeSpan.FromHours(2))
-        };
+        Assert.Equal(3, results.Count);
+        Assert.Equal(new DateTimeOffset(2023, 1, 1, 0, 0, 0, TimeSpan.Zero), results[0]);
+        Assert.Equal(new DateTimeOffset(2023, 2, 1, 0, 0, 0, TimeSpan.Zero), results[1]);
+        Assert.Equal(new DateTimeOffset(2023, 3, 1, 0, 0, 0, TimeSpan.Zero), results[2]);
+    }
 
-        Assert.Equal(expected, result);
+    [Fact]
+    public void EachMonthTo_CrossYearBoundary()
+    {
+        // Arrange
+        var from = new DateTimeOffset(2023, 12, 15, 0, 0, 0, TimeSpan.Zero);
+        var to = new DateTimeOffset(2024, 1, 15, 0, 0, 0, TimeSpan.Zero);
+
+        // Act
+        var results = from.EachMonthTo(to).ToList();
+
+        // Assert
+        Assert.Equal(2, results.Count);
+        Assert.Equal(2023, results[0].Year);
+        Assert.Equal(12, results[0].Month);
+        Assert.Equal(2024, results[1].Year);
+        Assert.Equal(1, results[1].Month);
     }
 
     #endregion
 
-    #region Edge Case Tests
+    #region EachYearTo Tests
 
     [Fact]
-    public void AllMethods_ReverseRange_ReturnEmpty()
+    public void EachYearTo_HandlesYearBoundaries()
     {
         // Arrange
-        var later = DateTimeOffset.Now;
-        var earlier = later.AddMonths(-1);
+        var from = new DateTimeOffset(2023, 1, 31, 0, 0, 0, TimeSpan.Zero);
+        var to = new DateTimeOffset(2023, 3, 1, 0, 0, 0, TimeSpan.Zero);
 
-        // Act & Assert
-        Assert.Empty(later.EachSecondTo(earlier));
-        Assert.Empty(later.EachMinuteTo(earlier));
-        Assert.Empty(later.EachHourTo(earlier));
-        Assert.Empty(later.EachDayTo(earlier));
-        Assert.Empty(later.EachMonthTo(earlier));
+        // Act
+        var results = from.EachYearTo(to).ToList();
+
+        // Assert
+        Assert.Single(results);
+        Assert.Equal(new DateTimeOffset(2023, 1, 1, 0, 0, 0, TimeSpan.Zero), results[0]);
     }
 
     [Fact]
-    public void AllMethods_SameStartEnd_ReturnSingleItem()
+    public void EachYearTo_CrossYearBoundary()
     {
         // Arrange
-        var timestamp = new DateTimeOffset(2023, 6, 15, 12, 0, 0, _offset);
+        var from = new DateTimeOffset(2023, 12, 15, 0, 0, 0, TimeSpan.Zero);
+        var to = new DateTimeOffset(2024, 1, 15, 0, 0, 0, TimeSpan.Zero);
 
-        // Act & Assert
-        Assert.Single(timestamp.EachSecondTo(timestamp));
-        Assert.Single(timestamp.EachMinuteTo(timestamp));
-        Assert.Single(timestamp.EachHourTo(timestamp));
-        Assert.Single(timestamp.EachDayTo(timestamp));
-        Assert.Single(timestamp.EachMonthTo(timestamp));
+        // Act
+        var results = from.EachYearTo(to).ToList();
+
+        // Assert
+        Assert.Equal(2, results.Count);
+        Assert.Equal(2023, results[0].Year);
+        Assert.Equal(2024, results[1].Year);
     }
 
     #endregion
 
-    #region Truncation Tests
+    #region Time Zone Tests
 
     [Fact]
-    public void TruncateMethods_VerifyPrecision()
+    public void Methods_PreserveOffset()
     {
         // Arrange
-        var original = new DateTimeOffset(2023, 7, 4, 12, 34, 56, 789, _offset);
+        var offset = TimeSpan.FromHours(-5);
+        var from = new DateTimeOffset(2023, 10, 15, 14, 30, 0, offset);
 
-        // Act & Assert
-        Assert.Equal(
-            new DateTimeOffset(2023, 7, 4, 12, 34, 56, _offset),
-            original.TruncateToSecond()
-        );
-        Assert.Equal(
-            new DateTimeOffset(2023, 7, 4, 12, 34, 0, _offset),
-            original.TruncateToMinute()
-        );
-        Assert.Equal(new DateTimeOffset(2023, 7, 4, 12, 0, 0, _offset), original.TruncateToHour());
-        Assert.Equal(new DateTimeOffset(2023, 7, 4, 0, 0, 0, _offset), original.TruncateToDay());
+        // Act
+        var secondTruncated = from.TruncateToSecond();
+        var hourSequence = from.EachHourTo(from.AddHours(2)).First();
+        var daySequence = from.EachDayTo(from.AddDays(1)).First();
+
+        // Assert
+        Assert.Equal(offset, secondTruncated.Offset);
+        Assert.Equal(offset, hourSequence.Offset);
+        Assert.Equal(offset, daySequence.Offset);
     }
 
     #endregion

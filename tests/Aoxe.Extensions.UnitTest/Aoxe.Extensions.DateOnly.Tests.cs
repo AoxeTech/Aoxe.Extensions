@@ -3,198 +3,193 @@ namespace Aoxe.Extensions.UnitTest;
 
 public class DateRangeExtensionsTests
 {
-    public static IEnumerable<object[]> EachDayToTestCases =>
-        new List<object[]>
-        {
-            // Normal forward range
-            new object[]
-            {
-                new DateOnly(2023, 1, 1),
-                new DateOnly(2023, 1, 3),
-                new[] { 1, 2, 3 },
-                3
-            },
-            // Single day
-            new object[] { new DateOnly(2023, 2, 28), new DateOnly(2023, 2, 28), new[] { 28 }, 1 },
-            // Cross-month
-            new object[]
-            {
-                new DateOnly(2023, 1, 31),
-                new DateOnly(2023, 2, 2),
-                new[] { 31, 1, 2 },
-                3
-            },
-            // Leap year
-            new object[]
-            {
-                new DateOnly(2024, 2, 28),
-                new DateOnly(2024, 3, 1),
-                new[] { 28, 29, 1 },
-                3
-            }
-        };
+    #region Truncation Tests
 
-    public static IEnumerable<object[]> EachMonthToTestCases =>
-        new List<object[]>
-        {
-            // Normal month range
-            new object[]
-            {
-                new DateOnly(2023, 2, 15),
-                new DateOnly(2023, 4, 10),
-                new[] { 2, 3, 4 },
-                3
-            },
-            // Single month
-            new object[] { new DateOnly(2023, 5, 1), new DateOnly(2023, 5, 31), new[] { 5 }, 1 },
-            // Cross-year
-            new object[]
-            {
-                new DateOnly(2023, 12, 25),
-                new DateOnly(2024, 2, 10),
-                new[] { 12, 1, 2 },
-                3
-            },
-            // Non-first-day start
-            new object[]
-            {
-                new DateOnly(2023, 3, 15),
-                new DateOnly(2023, 5, 1),
-                new[] { 3, 4, 5 },
-                3
-            }
-        };
-
-    #region EachDayTo Tests
-
-    [Theory]
-    [MemberData(nameof(EachDayToTestCases))]
-    public void EachDayTo_ValidRanges_ReturnsCorrectDates(
-        DateOnly start,
-        DateOnly end,
-        int[] expectedDays,
-        int expectedCount
-    )
+    [Fact]
+    public void TruncateToMonth_ResetsDayToFirst()
     {
+        // Arrange
+        var date = new DateOnly(2023, 10, 15);
+
         // Act
-        var result = start.EachDayTo(end).ToList();
+        var result = date.TruncateToMonth();
 
         // Assert
-        Assert.Equal(expectedCount, result.Count);
-        Assert.Equal(start, result.First());
-        Assert.Equal(end, result.Last());
-
-        for (int i = 0; i < expectedDays.Length; i++)
-        {
-            Assert.Equal(expectedDays[i], result[i].Day);
-        }
+        Assert.Equal(new DateOnly(2023, 10, 1), result);
     }
 
     [Fact]
-    public void EachDayTo_ReverseDates_ReturnsEmpty()
+    public void TruncateToYear_ResetsToJanuaryFirst()
     {
         // Arrange
-        var laterDate = new DateOnly(2023, 5, 1);
-        var earlierDate = new DateOnly(2023, 4, 30);
+        var date = new DateOnly(2023, 7, 4);
 
         // Act
-        var result = laterDate.EachDayTo(earlierDate);
+        var result = date.TruncateToYear();
+
+        // Assert
+        Assert.Equal(new DateOnly(2023, 1, 1), result);
+    }
+
+    #endregion
+
+    #region EachDayTo Tests
+
+    [Fact]
+    public void EachDayTo_GeneratesDailySequence()
+    {
+        // Arrange
+        var from = new DateOnly(2023, 10, 1);
+        var to = new DateOnly(2023, 10, 3);
+        var expected = new[]
+        {
+            new DateOnly(2023, 10, 1),
+            new DateOnly(2023, 10, 2),
+            new DateOnly(2023, 10, 3)
+        };
+
+        // Act
+        var result = from.EachDayTo(to).ToList();
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void EachDayTo_WhenEndIsEarlier_ReturnsEmpty()
+    {
+        // Arrange
+        var from = new DateOnly(2023, 10, 5);
+        var to = new DateOnly(2023, 10, 1);
+
+        // Act
+        var result = from.EachDayTo(to).ToList();
 
         // Assert
         Assert.Empty(result);
     }
 
     [Fact]
-    public void EachDayTo_LargeRange_HandlesCorrectly()
+    public void EachDayTo_LeapYear_HandlesFebruary()
     {
         // Arrange
-        var start = new DateOnly(2020, 1, 1);
-        var end = new DateOnly(2020, 12, 31);
-        const int expectedDays = 366; // 2020 is a leap year
+        var from = new DateOnly(2020, 2, 28);
+        var to = new DateOnly(2020, 3, 1);
 
         // Act
-        var result = start.EachDayTo(end).ToList();
+        var result = from.EachDayTo(to).ToList();
 
         // Assert
-        Assert.Equal(expectedDays, result.Count);
-        Assert.Equal(start, result.First());
-        Assert.Equal(end, result.Last());
+        Assert.Equal(3, result.Count);
+        Assert.Contains(new DateOnly(2020, 2, 29), result);
     }
 
     #endregion
 
     #region EachMonthTo Tests
 
-    [Theory]
-    [MemberData(nameof(EachMonthToTestCases))]
-    public void EachMonthTo_ValidRanges_ReturnsCorrectMonths(
-        DateOnly start,
-        DateOnly end,
-        int[] expectedMonths,
-        int expectedCount
-    )
+    [Fact]
+    public void EachMonthTo_GeneratesFirstOfMonth()
     {
-        // Act
-        var result = start.EachMonthTo(end).ToList();
-
-        // Assert
-        Assert.Equal(expectedCount, result.Count);
-        Assert.Equal(start.Year, result.First().Year);
-        Assert.Equal(end.Year, result.Last().Year);
-
-        for (int i = 0; i < expectedMonths.Length; i++)
+        // Arrange
+        var from = new DateOnly(2023, 1, 15);
+        var to = new DateOnly(2023, 3, 15);
+        var expected = new[]
         {
-            Assert.Equal(expectedMonths[i], result[i].Month);
-            Assert.Equal(1, result[i].Day);
-        }
+            new DateOnly(2023, 1, 1),
+            new DateOnly(2023, 2, 1),
+            new DateOnly(2023, 3, 1)
+        };
+
+        // Act
+        var result = from.EachMonthTo(to).ToList();
+
+        // Assert
+        Assert.Equal(expected, result);
     }
 
     [Fact]
-    public void EachMonthTo_ReverseDates_ReturnsEmpty()
+    public void EachMonthTo_CrossYearBoundary()
     {
         // Arrange
-        var laterDate = new DateOnly(2023, 5, 1);
-        var earlierDate = new DateOnly(2023, 4, 30);
+        var from = new DateOnly(2023, 12, 15);
+        var to = new DateOnly(2024, 2, 15);
+        var expected = new[]
+        {
+            new DateOnly(2023, 12, 1),
+            new DateOnly(2024, 1, 1),
+            new DateOnly(2024, 2, 1)
+        };
 
         // Act
-        var result = laterDate.EachMonthTo(earlierDate);
+        var result = from.EachMonthTo(to).ToList();
 
         // Assert
-        Assert.Empty(result);
+        Assert.Equal(expected, result);
+    }
+
+    #endregion
+
+    #region EachYearTo Tests
+
+    [Fact]
+    public void EachYearTo_GeneratesJanuaryFirst()
+    {
+        // Arrange
+        var from = new DateOnly(2020, 5, 5);
+        var to = new DateOnly(2023, 5, 5);
+        var expected = new[]
+        {
+            new DateOnly(2020, 1, 1),
+            new DateOnly(2021, 1, 1),
+            new DateOnly(2022, 1, 1),
+            new DateOnly(2023, 1, 1)
+        };
+
+        // Act
+        var result = from.EachYearTo(to).ToList();
+
+        // Assert
+        Assert.Equal(expected, result);
     }
 
     [Fact]
-    public void EachMonthTo_LeapYearFebruary_HandlesCorrectly()
+    public void EachYearTo_SingleYear_ReturnsOneItem()
     {
         // Arrange
-        var start = new DateOnly(2024, 2, 29);
-        var end = new DateOnly(2024, 3, 1);
+        var date = new DateOnly(2023, 7, 4);
 
         // Act
-        var result = start.EachMonthTo(end).ToList();
+        var result = date.EachYearTo(date).Single();
 
         // Assert
-        Assert.Equal(2, result.Count);
-        Assert.Equal(new DateOnly(2024, 2, 1), result[0]);
-        Assert.Equal(new DateOnly(2024, 3, 1), result[1]);
+        Assert.Equal(new DateOnly(2023, 1, 1), result);
+    }
+
+    #endregion
+
+    #region Edge Cases
+
+    [Fact]
+    public void Methods_HandleMaxDate()
+    {
+        // Arrange
+        var maxDate = DateOnly.MaxValue;
+
+        // Act & Assert
+        Assert.Equal(maxDate, maxDate.EachDayTo(maxDate).Single());
+        Assert.Equal(maxDate.TruncateToMonth(), maxDate.EachMonthTo(maxDate).Single());
     }
 
     [Fact]
-    public void EachMonthTo_MultiYearRange_HandlesCorrectly()
+    public void Methods_HandleMinDate()
     {
         // Arrange
-        var start = new DateOnly(2022, 11, 15);
-        var end = new DateOnly(2023, 2, 28);
+        var minDate = DateOnly.MinValue;
 
-        // Act
-        var result = start.EachMonthTo(end).ToList();
-
-        // Assert
-        Assert.Equal(4, result.Count);
-        Assert.Equal(new DateOnly(2022, 11, 1), result[0]);
-        Assert.Equal(new DateOnly(2022, 12, 1), result[1]);
-        Assert.Equal(new DateOnly(2023, 1, 1), result[2]);
-        Assert.Equal(new DateOnly(2023, 2, 1), result[3]);
+        // Act & Assert
+        Assert.Equal(minDate, minDate.EachDayTo(minDate).Single());
+        Assert.Equal(minDate.TruncateToMonth(), minDate.EachMonthTo(minDate).Single());
     }
 
     #endregion

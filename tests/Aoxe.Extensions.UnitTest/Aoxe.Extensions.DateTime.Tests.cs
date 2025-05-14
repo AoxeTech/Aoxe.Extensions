@@ -16,9 +16,9 @@ public class AoxeExtensionsDateTimeTests
 
         // Assert
         Assert.Equal(3, result.Count);
-        Assert.Equal(TruncateToSecond(start), result[0]);
-        Assert.Equal(TruncateToSecond(start).AddSeconds(1), result[1]);
-        Assert.Equal(TruncateToSecond(end), result[2]);
+        Assert.Equal(start.TruncateToSecond(), result[0]);
+        Assert.Equal(start.TruncateToSecond().AddSeconds(1), result[1]);
+        Assert.Equal(end.TruncateToSecond(), result[2]);
         Assert.All(result, d => Assert.Equal(DateTimeKind.Utc, d.Kind));
     }
 
@@ -58,8 +58,8 @@ public class AoxeExtensionsDateTimeTests
 
         // Assert
         Assert.Equal(expectedCount, result.Count);
-        Assert.Equal(TruncateToMinute(start), result.First());
-        Assert.Equal(TruncateToMinute(end), result.Last());
+        Assert.Equal(start.TruncateToMinute(), result.First());
+        Assert.Equal(end.TruncateToMinute(), result.Last());
         Assert.All(result, d => Assert.Equal(0, d.Second));
     }
 
@@ -155,13 +155,44 @@ public class AoxeExtensionsDateTimeTests
 
     #endregion
 
-    #region Helper Methods
+    #region EachYearTo Tests
 
-    public static DateTime TruncateToSecond(DateTime dt) =>
-        new DateTime(dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second, dt.Kind);
+    [Theory]
+    [InlineData("2023-01-15", "2023-03-10", 1)]
+    [InlineData("2023-12-25", "2024-02-28", 2)]
+    public void EachYearTo_VariousRanges_ReturnsFirstDays(
+        string startStr,
+        string endStr,
+        int expectedCount
+    )
+    {
+        // Arrange
+        var start = DateTime.Parse(startStr);
+        var end = DateTime.Parse(endStr);
 
-    public static DateTime TruncateToMinute(DateTime dt) =>
-        new DateTime(dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, 0, dt.Kind);
+        // Act
+        var result = start.EachYearTo(end).ToList();
+
+        // Assert
+        Assert.Equal(expectedCount, result.Count);
+        Assert.Equal(1, result.First().Day);
+        Assert.Equal(1, result.Last().Day);
+        Assert.All(result, d => Assert.Equal(0, d.Hour));
+    }
+
+    [Fact]
+    public void EachYearTo_EndBeforeStart_ReturnsEmpty()
+    {
+        // Arrange
+        var start = new DateTime(2023, 5, 1);
+        var end = new DateTime(2022, 4, 30);
+
+        // Act
+        var result = start.EachYearTo(end);
+
+        // Assert
+        Assert.Empty(result);
+    }
 
     #endregion
 }
