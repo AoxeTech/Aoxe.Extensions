@@ -9,7 +9,7 @@ public static partial class AoxeExtension
         CancellationToken cancellationToken = default
     )
     {
-        if (str == null)
+        if (str is null)
             throw new ArgumentNullException(nameof(str));
         if (stream is null)
             throw new ArgumentNullException(nameof(stream));
@@ -32,7 +32,7 @@ public static partial class AoxeExtension
         CancellationToken cancellationToken = default
     )
     {
-        if (str == null)
+        if (str is null)
             throw new ArgumentNullException(nameof(str));
         if (stream is null || !stream.CanWrite)
             return false;

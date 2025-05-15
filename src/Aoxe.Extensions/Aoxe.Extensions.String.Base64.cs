@@ -4,14 +4,14 @@ public static partial class AoxeExtension
 {
     public static string ToBase64String(this string value, Encoding? encoding = null)
     {
-        if (value == null)
+        if (value is null)
             throw new ArgumentNullException(nameof(value));
         return Convert.ToBase64String((encoding ?? Encoding.UTF8).GetBytes(value));
     }
 
     public static byte[] ToBase64Bytes(this string value, Encoding? encoding = null)
     {
-        if (value == null)
+        if (value is null)
             throw new ArgumentNullException(nameof(value));
         return Encoding.ASCII.GetBytes(value.ToBase64String(encoding));
     }
@@ -33,7 +33,7 @@ public static partial class AoxeExtension
 
     public static string DecodeBase64(this string base64String, Encoding? encoding = null)
     {
-        if (base64String == null)
+        if (base64String is null)
             throw new ArgumentNullException(nameof(base64String));
         var bytes = base64String.FromBase64ToBytes();
         return (encoding ?? Encoding.UTF8).GetString(bytes);

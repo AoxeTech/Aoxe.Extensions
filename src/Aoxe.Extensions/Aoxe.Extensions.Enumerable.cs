@@ -51,32 +51,28 @@ public static partial class AoxeExtension
             throw new ArgumentNullException(nameof(action));
 #if NET9_0_OR_GREATER
         foreach (var (index, item) in source.Index())
-        {
             action(index, item);
-        }
 #else
         var index = 0;
         foreach (var item in source)
-        {
             action(index++, item);
-        }
 #endif
     }
 
     public static bool NotContains<T>(this IEnumerable<T> source, T item)
     {
-        if (source == null)
+        if (source is null)
             throw new ArgumentNullException(nameof(source));
-        if (item == null)
+        if (item is null)
             throw new ArgumentNullException(nameof(item));
         return !source.Contains(item);
     }
 
     public static List<T?> ToList<T>(this IEnumerable<T?> source, Func<T?, bool> predicate)
     {
-        if (source == null)
+        if (source is null)
             throw new ArgumentNullException(nameof(source));
-        if (predicate == null)
+        if (predicate is null)
             throw new ArgumentNullException(nameof(predicate));
         return source.Where(predicate).ToList();
     }

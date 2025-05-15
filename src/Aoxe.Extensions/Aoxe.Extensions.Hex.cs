@@ -5,7 +5,7 @@ public static partial class AoxeExtension
     #region ToHex
     public static string ToHexString(this string input, Encoding? encoding = null)
     {
-        if (input == null)
+        if (input is null)
             throw new ArgumentNullException(nameof(input));
         encoding ??= Encoding.UTF8;
         return encoding.GetBytes(input).ToHexString();
@@ -13,7 +13,7 @@ public static partial class AoxeExtension
 
     public static string ToHexString(this byte[] bytes)
     {
-        if (bytes == null)
+        if (bytes is null)
             throw new ArgumentNullException(nameof(bytes));
         return
 #if  NETSTANDARD
@@ -25,7 +25,7 @@ public static partial class AoxeExtension
 
     public static byte[] ToHexBytes(this string input, Encoding? encoding = null)
     {
-        if (input == null)
+        if (input is null)
             throw new ArgumentNullException(nameof(input));
         encoding ??= Encoding.UTF8;
         return encoding.GetBytes(input).ToHexBytes();
@@ -33,7 +33,7 @@ public static partial class AoxeExtension
 
     public static byte[] ToHexBytes(this byte[] bytes)
     {
-        if (bytes == null)
+        if (bytes is null)
             throw new ArgumentNullException(nameof(bytes));
         return Encoding.ASCII.GetBytes(bytes.ToHexString());
     }
@@ -44,7 +44,7 @@ public static partial class AoxeExtension
 
     public static string FromHexToString(this string hexString, Encoding? encoding = null)
     {
-        if (hexString == null)
+        if (hexString is null)
             throw new ArgumentNullException(nameof(hexString));
         encoding ??= Encoding.UTF8;
         return encoding.GetString(hexString.FromHexToBytes());
@@ -52,7 +52,7 @@ public static partial class AoxeExtension
 
     public static byte[] FromHexToBytes(this string hexString)
     {
-        if (hexString == null)
+        if (hexString is null)
             throw new ArgumentNullException(nameof(hexString));
         ValidateHexFormat(hexString);
 
@@ -66,7 +66,7 @@ public static partial class AoxeExtension
 
     public static string FromHexToString(this byte[] hexBytes, Encoding? encoding = null)
     {
-        if (hexBytes == null)
+        if (hexBytes is null)
             throw new ArgumentNullException(nameof(hexBytes));
         encoding ??= Encoding.UTF8;
         return encoding.GetString(hexBytes.FromHexToBytes());
@@ -74,7 +74,7 @@ public static partial class AoxeExtension
 
     public static byte[] FromHexToBytes(this byte[] hexBytes)
     {
-        if (hexBytes == null)
+        if (hexBytes is null)
             throw new ArgumentNullException(nameof(hexBytes));
         return Encoding.ASCII.GetString(hexBytes).FromHexToBytes();
     }

@@ -8,7 +8,7 @@ public static partial class AoxeExtension
         IFormatProvider? provider = null
     )
     {
-        if (value == null)
+        if (value is null)
             throw new ArgumentNullException(nameof(value));
         return sbyte.Parse(value, styles, provider ?? CultureInfo.InvariantCulture);
     }
@@ -19,7 +19,7 @@ public static partial class AoxeExtension
         IFormatProvider? provider = null
     )
     {
-        if (value == null)
+        if (value is null)
             throw new ArgumentNullException(nameof(value));
         return byte.Parse(value, styles, provider ?? CultureInfo.InvariantCulture);
     }
@@ -30,7 +30,7 @@ public static partial class AoxeExtension
         IFormatProvider? provider = null
     )
     {
-        if (value == null)
+        if (value is null)
             throw new ArgumentNullException(nameof(value));
         return short.Parse(value, styles, provider ?? CultureInfo.InvariantCulture);
     }
@@ -41,7 +41,7 @@ public static partial class AoxeExtension
         IFormatProvider? provider = null
     )
     {
-        if (value == null)
+        if (value is null)
             throw new ArgumentNullException(nameof(value));
         return ushort.Parse(value, styles, provider ?? CultureInfo.InvariantCulture);
     }
@@ -52,7 +52,7 @@ public static partial class AoxeExtension
         IFormatProvider? provider = null
     )
     {
-        if (value == null)
+        if (value is null)
             throw new ArgumentNullException(nameof(value));
         return int.Parse(value, styles, provider ?? CultureInfo.InvariantCulture);
     }
@@ -63,7 +63,7 @@ public static partial class AoxeExtension
         IFormatProvider? provider = null
     )
     {
-        if (value == null)
+        if (value is null)
             throw new ArgumentNullException(nameof(value));
         return uint.Parse(value, styles, provider ?? CultureInfo.InvariantCulture);
     }
@@ -74,7 +74,7 @@ public static partial class AoxeExtension
         IFormatProvider? provider = null
     )
     {
-        if (value == null)
+        if (value is null)
             throw new ArgumentNullException(nameof(value));
         return long.Parse(value, styles, provider ?? CultureInfo.InvariantCulture);
     }
@@ -85,7 +85,7 @@ public static partial class AoxeExtension
         IFormatProvider? provider = null
     )
     {
-        if (value == null)
+        if (value is null)
             throw new ArgumentNullException(nameof(value));
         return ulong.Parse(value, styles, provider ?? CultureInfo.InvariantCulture);
     }
@@ -96,7 +96,7 @@ public static partial class AoxeExtension
         IFormatProvider? provider = null
     )
     {
-        if (value == null)
+        if (value is null)
             throw new ArgumentNullException(nameof(value));
         return float.Parse(value, styles, provider ?? CultureInfo.InvariantCulture);
     }
@@ -107,7 +107,7 @@ public static partial class AoxeExtension
         IFormatProvider? provider = null
     )
     {
-        if (value == null)
+        if (value is null)
             throw new ArgumentNullException(nameof(value));
         return double.Parse(value, styles, provider ?? CultureInfo.InvariantCulture);
     }
@@ -118,14 +118,14 @@ public static partial class AoxeExtension
         IFormatProvider? provider = null
     )
     {
-        if (value == null)
+        if (value is null)
             throw new ArgumentNullException(nameof(value));
         return decimal.Parse(value, styles, provider ?? CultureInfo.InvariantCulture);
     }
 
     public static bool ParseBool(this string value)
     {
-        if (value == null)
+        if (value is null)
             throw new ArgumentNullException(nameof(value));
         return bool.Parse(value);
     }
@@ -136,7 +136,7 @@ public static partial class AoxeExtension
         DateTimeStyles styles = DateTimeStyles.None
     )
     {
-        if (value == null)
+        if (value is null)
             throw new ArgumentNullException(nameof(value));
         return DateTime.Parse(value, provider ?? CultureInfo.CurrentCulture, styles);
     }
@@ -147,7 +147,7 @@ public static partial class AoxeExtension
         DateTimeStyles styles = DateTimeStyles.None
     )
     {
-        if (value == null)
+        if (value is null)
             throw new ArgumentNullException(nameof(value));
         return DateTimeOffset.Parse(value, provider ?? CultureInfo.CurrentCulture, styles);
     }
@@ -155,14 +155,14 @@ public static partial class AoxeExtension
     public static TEnum ParseEnum<TEnum>(this string value, bool ignoreCase = false)
         where TEnum : struct, Enum
     {
-        if (value == null)
+        if (value is null)
             throw new ArgumentNullException(nameof(value));
         return (TEnum)Enum.Parse(typeof(TEnum), value, ignoreCase);
     }
 
     public static object ParseEnum(this string value, Type enumType, bool ignoreCase = false)
     {
-        if (value == null)
+        if (value is null)
             throw new ArgumentNullException(nameof(value));
         return Enum.Parse(enumType, value, ignoreCase);
     }

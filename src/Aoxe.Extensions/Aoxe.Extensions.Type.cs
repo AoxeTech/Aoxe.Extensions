@@ -4,7 +4,7 @@ public static partial class AoxeExtension
 {
     public static object? CreateInstance(this Type type, params object?[]? args)
     {
-        if (type == null)
+        if (type is null)
             throw new ArgumentNullException(nameof(type));
         return Activator.CreateInstance(type, args);
     }
@@ -14,7 +14,7 @@ public static partial class AoxeExtension
 
     public static bool IsNumericType(this Type type)
     {
-        if (type == null)
+        if (type is null)
             throw new ArgumentNullException(nameof(type));
         return Type.GetTypeCode(Nullable.GetUnderlyingType(type) ?? type) switch
         {

@@ -23,9 +23,9 @@ public static partial class AoxeExtension
 
     public static string GetDescriptions(this Enum enumerationValue, string separator = ", ")
     {
-        if (enumerationValue == null)
+        if (enumerationValue is null)
             throw new ArgumentNullException(nameof(enumerationValue));
-        if (separator == null)
+        if (separator is null)
             throw new ArgumentNullException(nameof(separator));
         return DescriptionsCache.GetOrAdd(
             Tuple.Create(enumerationValue, separator),
@@ -35,9 +35,9 @@ public static partial class AoxeExtension
 
     private static string ProcessDescriptions(Enum enumerationValue, string separator)
     {
-        if (enumerationValue == null)
+        if (enumerationValue is null)
             throw new ArgumentNullException(nameof(enumerationValue));
-        if (separator == null)
+        if (separator is null)
             throw new ArgumentNullException(nameof(separator));
         var names = enumerationValue.ToString().Split(',');
         var type = enumerationValue.GetType();
