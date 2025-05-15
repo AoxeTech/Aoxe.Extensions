@@ -4,11 +4,10 @@ public static partial class AoxeExtension
 {
     public static bool TryWrite(this Stream? stream, byte[] buffer)
     {
+        if (stream is not { CanWrite: true })
+            return false;
         try
         {
-            if (stream is not { CanWrite: true })
-                return false;
-
 #if NETSTANDARD2_0
             stream.Write(buffer, 0, buffer.Length);
 #else
@@ -78,11 +77,10 @@ public static partial class AoxeExtension
 
     public static bool TryWrite(this Stream? stream, string? str, Encoding? encoding = null)
     {
+        if (stream is null || str is null)
+            return false;
         try
         {
-            if (stream is null || str is null)
-                return false;
-
             var bytes = (encoding ?? Encoding.UTF8).GetBytes(str);
             return stream.TryWrite(bytes);
         }

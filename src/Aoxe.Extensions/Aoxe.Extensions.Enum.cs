@@ -6,8 +6,11 @@ public static partial class AoxeExtension
     private static readonly ConcurrentDictionary<Tuple<Enum, string>, string> DescriptionsCache =
         new();
 
-    public static string GetDescription(this Enum enumerationValue) =>
-        DescriptionCache.GetOrAdd(
+    public static string GetDescription(this Enum enumerationValue)
+    {
+        if (enumerationValue is null)
+            throw new ArgumentNullException(nameof(enumerationValue));
+        return DescriptionCache.GetOrAdd(
             enumerationValue,
             key =>
             {
@@ -16,15 +19,26 @@ public static partial class AoxeExtension
                     ?? key.GetDescriptions();
             }
         );
+    }
 
-    public static string GetDescriptions(this Enum enumerationValue, string separator = ", ") =>
-        DescriptionsCache.GetOrAdd(
+    public static string GetDescriptions(this Enum enumerationValue, string separator = ", ")
+    {
+        if (enumerationValue == null)
+            throw new ArgumentNullException(nameof(enumerationValue));
+        if (separator == null)
+            throw new ArgumentNullException(nameof(separator));
+        return DescriptionsCache.GetOrAdd(
             Tuple.Create(enumerationValue, separator),
             _ => ProcessDescriptions(enumerationValue, separator)
         );
+    }
 
     private static string ProcessDescriptions(Enum enumerationValue, string separator)
     {
+        if (enumerationValue == null)
+            throw new ArgumentNullException(nameof(enumerationValue));
+        if (separator == null)
+            throw new ArgumentNullException(nameof(separator));
         var names = enumerationValue.ToString().Split(',');
         var type = enumerationValue.GetType();
         var descriptions = new string[names.Length];

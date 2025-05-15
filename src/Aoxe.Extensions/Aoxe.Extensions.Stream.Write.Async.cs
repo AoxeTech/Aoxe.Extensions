@@ -37,11 +37,10 @@ public static partial class AoxeExtension
         CancellationToken cancellationToken = default
     )
     {
+        if (stream is not { CanWrite: true })
+            return false;
         try
         {
-            if (stream is not { CanWrite: true })
-                return false;
-
 #if NETSTANDARD2_0
             await stream.WriteAsync(buffer, offset, count, cancellationToken).ConfigureAwait(false);
 #else
@@ -84,11 +83,10 @@ public static partial class AoxeExtension
         CancellationToken cancellationToken = default
     )
     {
+        if (stream is not { CanWrite: true } || str is null)
+            return false;
         try
         {
-            if (stream is not { CanWrite: true } || str is null)
-                return false;
-
             var bytes = (encoding ?? Encoding.UTF8).GetBytes(str);
             return await stream.TryWriteAsync(bytes, cancellationToken).ConfigureAwait(false);
         }

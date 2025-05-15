@@ -63,10 +63,23 @@ public static partial class AoxeExtension
 #endif
     }
 
-    public static bool NotContains<T>(this IEnumerable<T> source, T item) => !source.Contains(item);
+    public static bool NotContains<T>(this IEnumerable<T> source, T item)
+    {
+        if (source == null)
+            throw new ArgumentNullException(nameof(source));
+        if (item == null)
+            throw new ArgumentNullException(nameof(item));
+        return !source.Contains(item);
+    }
 
-    public static List<T?> ToList<T>(this IEnumerable<T?> source, Func<T?, bool> predicate) =>
-        source.Where(predicate).ToList();
+    public static List<T?> ToList<T>(this IEnumerable<T?> source, Func<T?, bool> predicate)
+    {
+        if (source == null)
+            throw new ArgumentNullException(nameof(source));
+        if (predicate == null)
+            throw new ArgumentNullException(nameof(predicate));
+        return source.Where(predicate).ToList();
+    }
 
     public static void ForEach<T>(this IEnumerable<T?> source, Action<T?>? action)
     {

@@ -2,14 +2,21 @@ namespace Aoxe.Extensions;
 
 public static partial class AoxeExtension
 {
-    public static object? CreateInstance(this Type type, params object?[]? args) =>
-        Activator.CreateInstance(type, args);
+    public static object? CreateInstance(this Type type, params object?[]? args)
+    {
+        if (type == null)
+            throw new ArgumentNullException(nameof(type));
+        return Activator.CreateInstance(type, args);
+    }
 
     public static bool IsNullableType(this Type? type) =>
         type?.IsGenericType is true && type.GetGenericTypeDefinition() == typeof(Nullable<>);
 
-    public static bool IsNumericType(this Type type) =>
-        Type.GetTypeCode(Nullable.GetUnderlyingType(type) ?? type) switch
+    public static bool IsNumericType(this Type type)
+    {
+        if (type == null)
+            throw new ArgumentNullException(nameof(type));
+        return Type.GetTypeCode(Nullable.GetUnderlyingType(type) ?? type) switch
         {
             TypeCode.Byte => true,
             TypeCode.SByte => true,
@@ -24,4 +31,5 @@ public static partial class AoxeExtension
             TypeCode.Single => true,
             _ => false
         };
+    }
 }

@@ -9,6 +9,8 @@ public static partial class AoxeExtension
         CancellationToken cancellationToken = default
     )
     {
+        if (str == null)
+            throw new ArgumentNullException(nameof(str));
         if (stream is null)
             throw new ArgumentNullException(nameof(stream));
         if (!stream.CanWrite)
@@ -30,11 +32,12 @@ public static partial class AoxeExtension
         CancellationToken cancellationToken = default
     )
     {
+        if (str == null)
+            throw new ArgumentNullException(nameof(str));
+        if (stream is null || !stream.CanWrite)
+            return false;
         try
         {
-            if (stream is null || !stream.CanWrite)
-                return false;
-
             var buffer = (encoding ?? Encoding.UTF8).GetBytes(str);
 
 #if NETSTANDARD2_0

@@ -2,11 +2,19 @@ namespace Aoxe.Extensions;
 
 public static partial class AoxeExtension
 {
-    public static string ToBase64String(this string value, Encoding? encoding = null) =>
-        Convert.ToBase64String((encoding ?? Encoding.UTF8).GetBytes(value));
+    public static string ToBase64String(this string value, Encoding? encoding = null)
+    {
+        if (value == null)
+            throw new ArgumentNullException(nameof(value));
+        return Convert.ToBase64String((encoding ?? Encoding.UTF8).GetBytes(value));
+    }
 
-    public static byte[] ToBase64Bytes(this string value, Encoding? encoding = null) =>
-        Encoding.ASCII.GetBytes(value.ToBase64String(encoding));
+    public static byte[] ToBase64Bytes(this string value, Encoding? encoding = null)
+    {
+        if (value == null)
+            throw new ArgumentNullException(nameof(value));
+        return Encoding.ASCII.GetBytes(value.ToBase64String(encoding));
+    }
 
     public static byte[] FromBase64ToBytes(this string base64String)
     {
@@ -25,6 +33,8 @@ public static partial class AoxeExtension
 
     public static string DecodeBase64(this string base64String, Encoding? encoding = null)
     {
+        if (base64String == null)
+            throw new ArgumentNullException(nameof(base64String));
         var bytes = base64String.FromBase64ToBytes();
         return (encoding ?? Encoding.UTF8).GetString(bytes);
     }

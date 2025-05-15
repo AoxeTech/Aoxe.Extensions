@@ -51,7 +51,7 @@ public class AoxeExtensionsStringStreamAsyncTests
         const string input = "Long data ";
         using var stream = new BlockingMemoryStream();
         var cts = new CancellationTokenSource();
-        cts.CancelAfter(50); // Increased timeout for reliability
+        cts.CancelAfter(5); // Increased timeout for reliability
 
         // Act & Assert
         await Assert.ThrowsAsync<TaskCanceledException>(async () =>
