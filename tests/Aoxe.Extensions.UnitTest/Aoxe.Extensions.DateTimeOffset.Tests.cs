@@ -276,4 +276,17 @@ public class DateTimeOffsetRangeExtensionsTests
     }
 
     #endregion
+
+    [Fact]
+    public void IsMin_ReturnsTrueForMinDate()
+    {
+        // Arrange
+        var minDate = DateTimeOffset.MinValue;
+
+        // Act
+        var result = minDate.IsMin();
+
+        // Assert
+        Assert.True(result);
+    }
 }

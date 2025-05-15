@@ -22,7 +22,6 @@ public class EncodingTests
         null
     )]
     [InlineData(typeof(ArgumentNullException), nameof(AoxeExtension.GetStringByDefault), null)]
-    [InlineData(typeof(ArgumentNullException), nameof(AoxeExtension.GetString), null)]
     public void NullInput_ThrowsArgumentNullException(
         Type exceptionType,
         string methodName,
@@ -36,6 +35,13 @@ public class EncodingTests
         var ex = Assert.Throws<TargetInvocationException>(() => method!.Invoke(null, [input]));
         Assert.IsType(exceptionType, ex.InnerException);
         Assert.Contains("bytes", ex.InnerException!.Message);
+    }
+
+    [Fact]
+    public void NullInput_ThrowsArgumentNullException2()
+    {
+        byte[]? bytes = null;
+        Assert.Throws<ArgumentNullException>(() => bytes.GetString());
     }
 
     #endregion

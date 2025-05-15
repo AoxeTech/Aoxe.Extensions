@@ -195,4 +195,17 @@ public class AoxeExtensionsDateTimeTests
     }
 
     #endregion
+
+    [Fact]
+    public void IsMin_ReturnsTrueForMinDate()
+    {
+        // Arrange
+        var minDate = DateTime.MinValue;
+
+        // Act
+        var result = minDate.IsMin();
+
+        // Assert
+        Assert.True(result);
+    }
 }

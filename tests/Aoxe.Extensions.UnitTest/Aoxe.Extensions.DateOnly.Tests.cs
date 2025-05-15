@@ -193,5 +193,18 @@ public class DateRangeExtensionsTests
     }
 
     #endregion
+
+    [Fact]
+    public void IsMin_ReturnsTrueForMinDate()
+    {
+        // Arrange
+        var minDate = DateOnly.MinValue;
+
+        // Act
+        var result = minDate.IsMin();
+
+        // Assert
+        Assert.True(result);
+    }
 }
 #endif
