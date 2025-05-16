@@ -163,7 +163,6 @@ public class AoxeExtensionsStringParseTests
     )
     {
         var provider = new CultureInfo(culture);
-        var i = provider.NumberFormat.NumberGroupSeparator;
         var result = input.ParseDouble(NumberStyles.Number, provider);
         Assert.Equal(expected, result);
     }
