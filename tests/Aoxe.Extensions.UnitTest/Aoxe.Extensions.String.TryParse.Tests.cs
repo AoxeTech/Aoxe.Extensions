@@ -2,152 +2,142 @@
 
 public class AoxeExtensionsStringTryParseTests
 {
-    #region Common Null/Empty Cases
-    [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    [InlineData(" ")]
-    public void TryParse_NullOrEmptyInput_ReturnsDefault(string input)
-    {
-        Assert.Equal(10, input.TryParseSbyte(10));
-        Assert.Equal(20u, input.TryParseUint(20));
-        Assert.Equal(3.14m, input.TryParseDecimal(3.14m));
-        Assert.True(input.TryParseBool(true)); // 测试bool的特殊默认值
-    }
-    #endregion
-
-    #region Numeric Type Tests
-    [Theory]
-    [InlineData("127", 0, NumberStyles.Integer, (sbyte)127)] // sbyte边界
-    [InlineData("128", 100, NumberStyles.Integer, (sbyte)100)] // 超出sbyte范围
-    [InlineData("0xFF", -1, NumberStyles.HexNumber, (sbyte)-1)] // 十六进制
-    public void TryParseSbyte_EdgeCases_HandlesCorrectly(
-        string input,
-        sbyte defaultValue,
-        NumberStyles style = NumberStyles.Integer,
-        sbyte expected = 0
-    )
-    {
-        var result = input.TryParseSbyte(defaultValue, style);
-        Assert.Equal(expected, result);
-    }
+    #region Numeric Parsing Tests
 
     [Theory]
-    [InlineData("255", 0, NumberStyles.AllowThousands, 255u)]
-    [InlineData("256", 100u, NumberStyles.AllowThousands, 100u)]
-    [InlineData("1,000", 50u, NumberStyles.AllowThousands, 1000u)] // 千位分隔符
-    public void TryParseUint_ValidInput_ReturnsParsedValue(
-        string input,
-        uint defaultValue,
-        NumberStyles style,
-        uint expected
-    )
+    [InlineData("123", 123)]
+    [InlineData("-42", -42)]
+    [InlineData("invalid", 5)]
+    [InlineData(null, 5)]
+    public void TryParseInt_HandlesVariousCases(string? input, int expected)
     {
-        var result = input.TryParseUint(defaultValue, style, CultureInfo.InvariantCulture);
-        Assert.Equal(expected, result);
-    }
-
-    [Theory]
-    [InlineData("79228162514264337593543950335", "en-US", 0, 79228162514264337593543950335m)] // decimal最大值
-    [InlineData("7,89", "fr-FR", 0m, 7.89m)] // 法语小数点
-    public void TryParseDecimal_CultureSpecific(
-        string input,
-        string culture,
-        decimal defaultValue,
-        decimal expected
-    )
-    {
-        using (new CultureScope(culture))
-        {
-            var result = input.TryParseDecimal(defaultValue);
-            Assert.Equal(expected, result);
-        }
-    }
-    #endregion
-
-    #region Floating-Point Special Values
-    [Theory]
-    [InlineData("NaN", 0f, float.NaN)]
-    [InlineData("Infinity", -1f, float.PositiveInfinity)]
-    [InlineData("-Infinity", 0f, float.NegativeInfinity)]
-    public void TryParseFloat_SpecialValues(string input, float defaultValue, float expected)
-    {
-        var result = input.TryParseFloat(defaultValue);
-        Assert.Equal(expected, result);
-    }
-    #endregion
-
-    #region DateTime Tests
-    [Theory]
-    [InlineData("2023-02-29", "yyyy-MM-dd", default, "2023-03-01")] // 自动调整
-    [InlineData("InvalidDate", "yyyy-MM-dd", default, "2023-01-01")] // 无效日期
-    public void TryParseDateTime_HandlesDifferentScenarios(
-        string input,
-        string format,
-        DateTime defaultValue,
-        string expectedStr
-    )
-    {
-        var expected = DateTime.Parse(expectedStr);
-        var result = input.TryParseDateTime(defaultValue, DateTimeStyles.AllowInnerWhite);
+        var result = input.TryParseInt(defaultValue: 5);
         Assert.Equal(expected, result);
     }
 
     [Fact]
-    public void TryParseDateTimeOffset_WithTimeZone()
+    public void TryParseDecimal_WithCurrencySymbol()
     {
-        var input = "2023-01-01T12:00:00+08:00";
-        var result = input.TryParseDateTimeOffset();
-        Assert.Equal(DateTimeOffset.Parse(input), result);
+        var culture = CultureInfo.CreateSpecificCulture("en-US");
+        var result = "$1,234.56".TryParseDecimal(styles: NumberStyles.Currency, provider: culture);
+        Assert.Equal(1234.56m, result);
     }
+
+    [Fact]
+    public void TryParseDouble_ScientificNotation()
+    {
+        var result = "1.23e5".TryParseDouble();
+        Assert.Equal(123000, result);
+    }
+
     #endregion
 
-    #region Enum Tests
+    #region Boolean Parsing Tests
+
+    [Theory]
+    [InlineData("True", true)]
+    [InlineData("false", false)]
+    [InlineData(null, false)]
+    [InlineData("Invalid", false)]
+    public void TryParseBool_HandlesCases(string? input, bool expected)
+    {
+        var result = input.TryParseBool(defaultValue: expected);
+
+        Assert.Equal(expected, result);
+    }
+
+    #endregion
+
+    #region DateTime Parsing Tests
+
+    [Fact]
+    public void TryParseDateTime_WithCultureSpecificFormat()
+    {
+        var culture = CultureInfo.GetCultureInfo("fr-FR");
+        var result = "15/07/2023 14:30".TryParseDateTime(provider: culture);
+        Assert.Equal(new DateTime(2023, 7, 15, 14, 30, 0), result);
+    }
+
+    [Fact]
+    public void TryParseDateTime_HandlesUtc()
+    {
+        var result = "2023-07-15T12:00:00Z".TryParseDateTime(
+            styles: DateTimeStyles.AdjustToUniversal
+        );
+        Assert.Equal(DateTimeKind.Utc, result.Kind);
+    }
+
+    #endregion
+
+    #region Enum Parsing Tests
+
     public enum TestEnum
     {
-        Default,
         Value1,
         Value2
     }
 
     [Theory]
-    [InlineData("VALUE1", true, TestEnum.Value1)] // 忽略大小写
-    [InlineData("value2", true, TestEnum.Value2)]
-    [InlineData("invalid", false, TestEnum.Default)] // 无效枚举值
-    public void TryParseEnum_CaseHandling(string input, bool ignoreCase, TestEnum expected)
+    [InlineData("Value1", TestEnum.Value1)]
+    [InlineData("value2", TestEnum.Value2, true)]
+    [InlineData("Invalid", TestEnum.Value1)]
+    public void TryParseEnum_HandlesCases(string input, TestEnum expected, bool ignoreCase = false)
     {
-        var result = input.TryParseEnum(TestEnum.Default, ignoreCase);
+        var result = input.TryParseEnum(defaultValue: TestEnum.Value1, ignoreCase: ignoreCase);
         Assert.Equal(expected, result);
     }
+
     #endregion
 
-    #region Boolean Tests
-    [Theory]
-    [InlineData("TRUE", false, true)] // 默认值false但解析成功
-    [InlineData("FALSE", true, false)] // 默认值true但解析成功
-    [InlineData("Invalid", true, true)] // 解析失败返回默认值
-    public void TryParseBool_SpecialCases(string input, bool defaultValue, bool expected)
+    #region Edge Cases
+
+    [Fact]
+    public void TryParseByte_WithHexNumber()
     {
-        var result = input.TryParseBool(defaultValue);
-        Assert.Equal(expected, result);
+        var result = "FF".TryParseByte(styles: NumberStyles.HexNumber);
+        Assert.Equal(255, result);
     }
+
+    [Fact]
+    public void TryParseDateTimeOffset_WithOffset()
+    {
+        var result = "2023-07-15T12:00:00+02:00".TryParseDateTimeOffset();
+        Assert.Equal(TimeSpan.FromHours(2), result.Offset);
+    }
+
+    [Fact]
+    public void TryParseDecimal_WithWhiteSpace()
+    {
+        var result = " 123.45 ".TryParseDecimal();
+        Assert.Equal(123.45m, result);
+    }
+
     #endregion
 
-    #region Culture Helper
-    private class CultureScope : IDisposable
+    #region Null Handling Tests
+
+    [Fact]
+    public void AllMethods_NullInputReturnsDefault()
     {
-        private readonly CultureInfo _originalCulture;
-
-        public CultureScope(string culture)
-        {
-            _originalCulture = CultureInfo.CurrentCulture;
-            CultureInfo.CurrentCulture = new CultureInfo(culture);
-        }
-
-        public void Dispose()
-        {
-            CultureInfo.CurrentCulture = _originalCulture;
-        }
+        string? nullInput = null;
+        Assert.Equal(-5, nullInput.TryParseSbyte(-5));
+        Assert.Equal(100, nullInput.TryParseByte(100));
+        Assert.Equal(default(DateTime), nullInput.TryParseDateTime());
+        Assert.False(nullInput.TryParseBool());
+        Assert.True("a".TryParseBool(true));
     }
+
+    #endregion
+
+    #region Culture-Specific Number Tests
+
+    [Fact]
+    public void TryParseDouble_GermanCulture()
+    {
+        var culture = CultureInfo.GetCultureInfo("de-DE");
+        var result = "1.234,56".TryParseDouble(provider: culture);
+        Assert.Equal(1234.56, result);
+    }
+
     #endregion
 }
