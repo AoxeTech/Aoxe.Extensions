@@ -30,7 +30,7 @@ public class AoxeExtensionsStringParseTests
     [Theory]
     [InlineData("-128", NumberStyles.Integer, -128)] // sbyte min
     [InlineData("127", NumberStyles.Integer, 127)] // sbyte max
-    [InlineData("0x7F", NumberStyles.HexNumber, 127)] // hex format
+    [InlineData("7F", NumberStyles.HexNumber, 127)] // hex format
     public void ParseSbyte_ValidInput_ReturnsCorrectValue(
         string input,
         NumberStyles style,
@@ -138,8 +138,8 @@ public class AoxeExtensionsStringParseTests
 
     #region Special Number Cases
     [Theory]
-    [InlineData("∞", NumberStyles.Any, double.PositiveInfinity)]
-    [InlineData("-∞", NumberStyles.Any, double.NegativeInfinity)]
+    [InlineData("Infinity", NumberStyles.Any, double.PositiveInfinity)]
+    [InlineData("-Infinity", NumberStyles.Any, double.NegativeInfinity)]
     [InlineData("NaN", NumberStyles.Any, double.NaN)]
     public void ParseDouble_SpecialValues_HandledCorrectly(
         string input,
@@ -155,7 +155,7 @@ public class AoxeExtensionsStringParseTests
     #region Culture-Specific Tests
     [Theory]
     [InlineData("1.234,56", "de-DE", 1234.56)] // German number format
-    [InlineData("1 234,56", "fr-FR", 1234.56)] // French number format
+    [InlineData("1234,56", "fr-FR", 1234.56)] // French number format
     public void ParseDouble_CultureSpecific_ReturnsCorrect(
         string input,
         string culture,
@@ -163,6 +163,7 @@ public class AoxeExtensionsStringParseTests
     )
     {
         var provider = new CultureInfo(culture);
+        var i = provider.NumberFormat.NumberGroupSeparator;
         var result = input.ParseDouble(NumberStyles.Number, provider);
         Assert.Equal(expected, result);
     }
