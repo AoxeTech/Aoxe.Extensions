@@ -1,6 +1,6 @@
 namespace Aoxe.Extensions.UnitTest;
 
-public class HexExtensionTest
+public class AoxeExtensionsHexTests
 {
     #region ToHexString Tests
 

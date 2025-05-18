@@ -1,7 +1,7 @@
 #if NETCOREAPP
 namespace Aoxe.Extensions.UnitTest;
 
-public class DateRangeExtensionsTests
+public class AoxeExtensionsDateOnlyTests
 {
     #region Truncation Tests
 

@@ -1,6 +1,6 @@
 namespace Aoxe.Extensions.UnitTest;
 
-public class DateTimeOffsetRangeExtensionsTests
+public class AoxeExtensionsDateTimeOffsetTests
 {
     private readonly DateTimeOffset _testDate = new DateTimeOffset(
         2023,
