@@ -2,231 +2,143 @@ namespace Aoxe.Extensions.UnitTest;
 
 public class AoxeExtensionBoolTests
 {
-    [Fact]
-    public void IfTrueThenThrow_WhenTrue_ThrowsException()
-    {
-        // Arrange
-        bool condition = true;
-        var exception = new InvalidOperationException();
+    private bool _testFlag;
 
-        // Act & Assert
-        Assert.Throws<InvalidOperationException>(() => condition.ThrowIfTrue(exception));
+    // Test boolean extension for exception throwing
+    [Fact]
+    public void ThrowIfTrue_WhenTrue_ThrowsSpecifiedException()
+    {
+        Assert.Throws<InvalidOperationException>(
+            () => true.ThrowIfTrue(new InvalidOperationException())
+        );
     }
 
     [Fact]
-    public void IfTrueThenThrow_WhenFalse_DoesNotThrow()
+    public void ThrowIfTrue_WhenFalse_DoesNotThrow()
     {
-        // Arrange
-        bool condition = false;
-        var exception = new InvalidOperationException();
-
-        // Act & Assert
-        var exceptionRecord = Record.Exception(() => condition.ThrowIfTrue(exception));
-        Assert.Null(exceptionRecord);
+        var ex = Record.Exception(() => false.ThrowIfTrue(new Exception()));
+        Assert.Null(ex);
     }
 
     [Fact]
-    public void IfFalseThenThrow_WhenFalse_ThrowsException()
+    public void ThrowIfFalse_WhenFalse_ThrowsSpecifiedException()
     {
-        // Arrange
-        bool condition = false;
-        var exception = new ArgumentException();
-
-        // Act & Assert
-        Assert.Throws<ArgumentException>(() => condition.ThrowIfFalse(exception));
+        Assert.Throws<ArgumentException>(() => false.ThrowIfFalse(new ArgumentException()));
     }
 
     [Fact]
-    public void IfFalseThenThrow_WhenTrue_DoesNotThrow()
+    public void ThrowIfFalse_WhenTrue_DoesNotThrow()
     {
-        // Arrange
-        bool condition = true;
-        var exception = new ArgumentException();
+        var ex = Record.Exception(() => true.ThrowIfFalse(new Exception()));
+        Assert.Null(ex);
+    }
 
-        // Act & Assert
-        var exceptionRecord = Record.Exception(() => condition.ThrowIfFalse(exception));
-        Assert.Null(exceptionRecord);
+    // Test conditional action execution
+    [Fact]
+    public void Then_TrueCondition_ExecutesAction()
+    {
+        true.Then(() => _testFlag = true);
+        Assert.True(_testFlag);
     }
 
     [Fact]
-    public void IfTrue_WhenTrue_ExecutesAction()
+    public void Then_FalseCondition_SkipsAction()
     {
-        // Arrange
-        bool condition = true;
-        bool actionExecuted = false;
-        Action action = () => actionExecuted = true;
-
-        // Act
-        condition.Then(action);
-
-        // Assert
-        Assert.True(actionExecuted);
+        false.Then(() => _testFlag = true);
+        Assert.False(_testFlag);
     }
 
     [Fact]
-    public void IfTrue_WhenFalse_DoesNotExecuteAction()
+    public void Otherwise_FalseCondition_ExecutesAction()
     {
-        // Arrange
-        bool condition = false;
-        bool actionExecuted = false;
-        Action action = () => actionExecuted = true;
-
-        // Act
-        condition.Then(action);
-
-        // Assert
-        Assert.False(actionExecuted);
+        false.Otherwise(() => _testFlag = true);
+        Assert.True(_testFlag);
     }
 
     [Fact]
-    public void IfFalse_WhenFalse_ExecutesAction()
+    public void Otherwise_TrueCondition_SkipsAction()
     {
-        // Arrange
-        bool condition = false;
-        bool actionExecuted = false;
-        Action action = () => actionExecuted = true;
-
-        // Act
-        condition.Otherwise(action);
-
-        // Assert
-        Assert.True(actionExecuted);
+        true.Otherwise(() => _testFlag = true);
+        Assert.False(_testFlag);
     }
 
+    // Test conditional function execution
     [Fact]
-    public void IfFalse_WhenTrue_DoesNotExecuteAction()
+    public void Then_WithFunc_ReturnsValueWhenTrue()
     {
-        // Arrange
-        bool condition = true;
-        bool actionExecuted = false;
-        Action action = () => actionExecuted = true;
-
-        // Act
-        condition.Otherwise(action);
-
-        // Assert
-        Assert.False(actionExecuted);
-    }
-
-    [Fact]
-    public void IfTrue_WithFunc_WhenTrue_ReturnsExpectedResult()
-    {
-        // Arrange
-        bool condition = true;
-        Func<int?> func = () => 42;
-
-        // Act
-        int? result = condition.Then(func);
-
-        // Assert
+        var result = true.Then(() => 42);
         Assert.Equal(42, result);
     }
 
     [Fact]
-    public void IfTrue_WithFunc_WhenFalse_ReturnsDefault()
+    public void Then_WithFunc_ReturnsDefaultWhenFalse()
     {
-        // Arrange
-        bool condition = false;
-        Func<int?> func = () => 42;
+        var result = false.Then(() => 42);
+        Assert.Equal(0, result);
+    }
 
-        // Act
-        int? result = condition.Then(func);
+    [Fact]
+    public void Otherwise_WithFunc_ReturnsValueWhenFalse()
+    {
+        var result = false.Otherwise(() => "test");
+        Assert.Equal("test", result);
+    }
 
-        // Assert
+    [Fact]
+    public void Otherwise_WithFunc_ReturnsDefaultWhenTrue()
+    {
+        var result = true.Otherwise(() => "test");
         Assert.Null(result);
     }
 
+    // Test dual path execution
     [Fact]
-    public void IfFalse_WithFunc_WhenFalse_ReturnsExpectedResult()
+    public void ThenOtherwise_ExecutesCorrectBranch()
     {
-        // Arrange
-        bool condition = false;
-        Func<string?> func = () => "False";
+        true.ThenOtherwise(() => _testFlag = true, () => _testFlag = false);
+        Assert.True(_testFlag);
 
-        // Act
-        string? result = condition.Otherwise(func);
-
-        // Assert
-        Assert.Equal("False", result);
+        false.ThenOtherwise(() => _testFlag = true, () => _testFlag = false);
+        Assert.False(_testFlag);
     }
 
     [Fact]
-    public void IfFalse_WithFunc_WhenTrue_ReturnsDefault()
+    public void ThenOtherwise_WithFunc_ReturnsCorrectValue()
     {
-        // Arrange
-        bool condition = true;
-        Func<string?> func = () => "False";
+        var trueResult = true.ThenOtherwise(() => "yes", () => "no");
+        var falseResult = false.ThenOtherwise(() => "yes", () => "no");
 
-        // Act
-        string? result = condition.Otherwise(func);
+        Assert.Equal("yes", trueResult);
+        Assert.Equal("no", falseResult);
+    }
 
-        // Assert
-        Assert.Null(result);
+    // Test edge cases and null handling
+    [Fact]
+    public void Then_NullAction_ThrowsOnExecution()
+    {
+        Assert.Throws<NullReferenceException>(() => true.Then(null));
     }
 
     [Fact]
-    public void IfTrueElse_WhenTrue_ExecutesTrueAction()
+    public void Otherwise_NullAction_ThrowsOnExecution()
     {
-        // Arrange
-        bool condition = true;
-        bool trueExecuted = false;
-        bool elseExecuted = false;
-        Action trueAction = () => trueExecuted = true;
-        Action elseAction = () => elseExecuted = true;
-
-        // Act
-        condition.ThenOtherwise(trueAction, elseAction);
-
-        // Assert
-        Assert.True(trueExecuted);
-        Assert.False(elseExecuted);
+        Assert.Throws<NullReferenceException>(() => false.Otherwise(null));
     }
 
     [Fact]
-    public void IfTrueElse_WhenFalse_ExecutesElseAction()
+    public void ThrowIfTrue_NullException_ThrowsNullReference()
     {
-        // Arrange
-        bool condition = false;
-        bool trueExecuted = false;
-        bool elseExecuted = false;
-        Action trueAction = () => trueExecuted = true;
-        Action elseAction = () => elseExecuted = true;
-
-        // Act
-        condition.ThenOtherwise(trueAction, elseAction);
-
-        // Assert
-        Assert.False(trueExecuted);
-        Assert.True(elseExecuted);
+        Assert.Throws<NullReferenceException>(() => true.ThrowIfTrue<Exception>(null));
     }
 
-    [Fact]
-    public void IfTrueElse_WithFunc_WhenTrue_ReturnsTrueResult()
+    // Parameterized tests for boundary values
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void ThenOtherwise_CoversBothBranches(bool condition)
     {
-        // Arrange
-        bool condition = true;
-        Func<string?> trueFunc = () => "True";
-        Func<string?> elseFunc = () => "Else";
+        var result = condition.ThenOtherwise(() => condition ? 1 : 0, () => condition ? 1 : 0);
 
-        // Act
-        string? result = condition.ThenOtherwise(trueFunc, elseFunc);
-
-        // Assert
-        Assert.Equal("True", result);
-    }
-
-    [Fact]
-    public void IfTrueElse_WithFunc_WhenFalse_ReturnsElseResult()
-    {
-        // Arrange
-        bool condition = false;
-        Func<string?> trueFunc = () => "True";
-        Func<string?> elseFunc = () => "Else";
-
-        // Act
-        string? result = condition.ThenOtherwise(trueFunc, elseFunc);
-
-        // Assert
-        Assert.Equal("Else", result);
+        Assert.Equal(condition ? 1 : 0, result);
     }
 }

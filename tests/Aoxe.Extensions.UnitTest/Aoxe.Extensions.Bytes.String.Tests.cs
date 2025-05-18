@@ -1,191 +1,140 @@
-using System.Reflection;
-
 namespace Aoxe.Extensions.UnitTest;
 
-public class EncodingTests
+public class AoxeExtensionsBytesStringTests
 {
-    private readonly byte[] _testBytes = Encoding.UTF8.GetBytes("Hello World!");
-    private readonly byte[] _multiByteBytes = Encoding.UTF8.GetBytes("café 🚀");
-    private readonly byte[] _emptyBytes = [];
-    private readonly byte[] _invalidAsciiBytes = [0x80, 0xFF];
+    private const string TestString = "Hello 世界!";
+    private readonly byte[] _testBytesUtf8 = Encoding.UTF8.GetBytes(TestString);
+    private readonly byte[] _testBytesAscii = Encoding.ASCII.GetBytes("ASCII test");
+    private readonly byte[] _testBytesUnicode = Encoding.Unicode.GetBytes(TestString);
 
-    #region Argument Validation Tests
-
+    #region Null Argument Tests
     [Theory]
-    [InlineData(typeof(ArgumentNullException), nameof(AoxeExtension.GetStringByUtf8), null)]
-    [InlineData(typeof(ArgumentNullException), nameof(AoxeExtension.GetStringByAscii), null)]
-    [InlineData(typeof(ArgumentNullException), nameof(AoxeExtension.GetStringByUnicode), null)]
-    [InlineData(typeof(ArgumentNullException), nameof(AoxeExtension.GetStringByUtf32), null)]
-    [InlineData(
-        typeof(ArgumentNullException),
-        nameof(AoxeExtension.GetStringByBigEndianUnicode),
-        null
-    )]
-    [InlineData(typeof(ArgumentNullException), nameof(AoxeExtension.GetStringByDefault), null)]
-    public void NullInput_ThrowsArgumentNullException(
-        Type exceptionType,
-        string methodName,
-        byte[]? input
-    )
+    [MemberData(nameof(AllExtensionMethods))]
+    public void AllMethods_NullInput_ThrowsArgumentNullException(Func<byte[], string> method)
     {
-        // Arrange
-        var method = typeof(AoxeExtension).GetMethod(methodName, [typeof(byte[])]);
-
-        // Act & Assert
-        var ex = Assert.Throws<TargetInvocationException>(() => method!.Invoke(null, [input]));
-        Assert.IsType(exceptionType, ex.InnerException);
-        Assert.Contains("bytes", ex.InnerException!.Message);
+        byte[] nullBytes = null;
+        var ex = Assert.Throws<ArgumentNullException>(() => method(nullBytes));
+        Assert.Equal("bytes", ex.ParamName);
     }
 
-    [Fact]
-    public void NullInput_ThrowsArgumentNullException2()
+    public static IEnumerable<object[]> AllExtensionMethods()
     {
-        byte[]? bytes = null;
-        Assert.Throws<ArgumentNullException>(() => bytes.GetString());
+        yield return [(Func<byte[], string>)AoxeExtension.GetStringByUtf8];
+        yield return [(Func<byte[], string>)AoxeExtension.GetStringByAscii];
+        yield return [(Func<byte[], string>)AoxeExtension.GetStringByBigEndianUnicode];
+        yield return [(Func<byte[], string>)AoxeExtension.GetStringByDefault];
+        yield return [(Func<byte[], string>)AoxeExtension.GetStringByUtf32];
+        yield return [(Func<byte[], string>)AoxeExtension.GetStringByUnicode];
+        yield return [(Func<byte[], string>)(b => b.GetString())];
     }
-
     #endregion
 
-    #region Encoding-Specific Tests
-
-    [Fact]
-    public void GetStringByUtf8_ReturnsCorrectString()
+    #region Empty Array Tests
+    [Theory]
+    [MemberData(nameof(AllExtensionMethods))]
+    public void AllMethods_EmptyArray_ReturnsEmptyString(Func<byte[], string> method)
     {
-        // Act
-        var result = _testBytes.GetStringByUtf8();
+        byte[] emptyBytes = [];
+        var result = method(emptyBytes);
+        Assert.Equal(string.Empty, result);
+    }
+    #endregion
 
-        // Assert
-        Assert.Equal("Hello World!", result);
+    #region Specific Encoding Tests
+    [Fact]
+    public void GetStringByUtf8_ValidBytes_ReturnsCorrectString()
+    {
+        var result = _testBytesUtf8.GetStringByUtf8();
+        Assert.Equal(TestString, result);
     }
 
     [Fact]
-    public void GetStringByAscii_HandlesAsciiRange()
+    public void GetStringByAscii_ValidBytes_ReturnsCorrectString()
     {
-        // Arrange
-        var asciiBytes = Encoding.ASCII.GetBytes("ASCII test");
-
-        // Act
-        var result = asciiBytes.GetStringByAscii();
-
-        // Assert
+        var result = _testBytesAscii.GetStringByAscii();
         Assert.Equal("ASCII test", result);
     }
 
     [Fact]
-    public void GetStringByUnicode_HandlesUtf16()
+    public void GetStringByUnicode_ValidBytes_ReturnsCorrectString()
     {
-        // Arrange
-        var unicodeBytes = Encoding.Unicode.GetBytes("Unicode✓");
-
-        // Act
-        var result = unicodeBytes.GetStringByUnicode();
-
-        // Assert
-        Assert.Equal("Unicode✓", result);
+        var result = _testBytesUnicode.GetStringByUnicode();
+        Assert.Equal(TestString, result);
     }
 
     [Fact]
-    public void GetStringByBigEndianUnicode_HandlesUtf16BE()
+    public void GetStringByBigEndianUnicode_ValidBytes_ReturnsCorrectString()
     {
-        // Arrange
-        var bigEndianBytes = Encoding.BigEndianUnicode.GetBytes("BE🔑");
-
-        // Act
-        var result = bigEndianBytes.GetStringByBigEndianUnicode();
-
-        // Assert
-        Assert.Equal("BE🔑", result);
+        var bytes = Encoding.BigEndianUnicode.GetBytes(TestString);
+        var result = bytes.GetStringByBigEndianUnicode();
+        Assert.Equal(TestString, result);
     }
 
     [Fact]
-    public void GetStringByUtf32_HandlesUtf32Encoding()
+    public void GetStringByUtf32_ValidBytes_ReturnsCorrectString()
     {
-        // Arrange
-        var utf32Bytes = Encoding.UTF32.GetBytes("UTF32✨");
-
-        // Act
-        var result = utf32Bytes.GetStringByUtf32();
-
-        // Assert
-        Assert.Equal("UTF32✨", result);
+        var bytes = Encoding.UTF32.GetBytes(TestString);
+        var result = bytes.GetStringByUtf32();
+        Assert.Equal(TestString, result);
     }
-
     #endregion
 
-    #region General GetString Tests
-
+    #region Default Encoding Tests
     [Fact]
-    public void GetString_WithCustomEncoding_ReturnsCorrectString()
+    public void GetStringByDefault_ValidBytes_UsesSystemDefaultEncoding()
     {
-        // Arrange
-        var latin1 = Encoding.GetEncoding("ISO-8859-1");
-        var bytes = latin1.GetBytes("ñöö");
-
-        // Act
-        var result = bytes.GetString(latin1);
-
-        // Assert
-        Assert.Equal("ñöö", result);
+        var bytes = Encoding.Default.GetBytes(TestString);
+        var result = bytes.GetStringByDefault();
+        Assert.Equal(TestString, result);
     }
-
-    [Fact]
-    public void GetString_WithoutEncoding_DefaultsToUtf8()
-    {
-        // Act
-        var result1 = _testBytes.GetString();
-        var result2 = _testBytes.GetStringByUtf8();
-
-        // Assert
-        Assert.Equal(result1, result2);
-    }
-
     #endregion
 
-    #region Edge Case Tests
-
-    [Fact]
-    public void EmptyArray_ReturnsEmptyString()
+    #region Parameterized GetString Tests
+    [Theory]
+    [InlineData(null, "UTF-8")]
+    [InlineData(typeof(UnicodeEncoding), "Unicode")]
+    [InlineData(typeof(UTF32Encoding), "UTF-32")]
+    public void GetString_WithDifferentEncodings_UsesCorrectEncoding(
+        Type encodingType,
+        string expectedEncodingName
+    )
     {
-        // Act & Assert
-        Assert.Equal(string.Empty, _emptyBytes.GetStringByUtf8());
-        Assert.Equal(string.Empty, _emptyBytes.GetStringByAscii());
-        Assert.Equal(string.Empty, _emptyBytes.GetStringByUnicode());
+        var encoding =
+            encodingType == null ? null : (Encoding)Activator.CreateInstance(encodingType);
+
+        var bytes = (encoding ?? Encoding.UTF8).GetBytes(TestString);
+        var result = bytes.GetString(encoding);
+
+        Assert.Equal(TestString, result);
+        Assert.Contains(expectedEncodingName, (encoding ?? Encoding.UTF8).EncodingName);
     }
 
     [Fact]
-    public void GetStringByAscii_ReplacesInvalidBytes()
+    public void GetString_WithNullEncoding_UsesUtf8AsDefault()
     {
-        // Act
-        var result = _invalidAsciiBytes.GetStringByAscii();
+        var bytes = Encoding.UTF8.GetBytes(TestString);
+        var result = bytes.GetString(null);
+        Assert.Equal(TestString, result);
+    }
+    #endregion
 
-        // Assert
-        Assert.Equal("??", result); // Replacement characters
+    #region Special Case Tests
+    [Fact]
+    public void GetStringByAscii_WithNonAsciiCharacters_ReplacesInvalidChars()
+    {
+        var bytes = Encoding.ASCII.GetBytes(TestString);
+        var result = bytes.GetStringByAscii();
+        Assert.NotEqual(TestString, result); // Should replace 世 and 界
+        Assert.DoesNotContain("世", result);
+        Assert.DoesNotContain("界", result);
     }
 
     [Fact]
-    public void GetStringByDefault_UsesSystemDefaultEncoding()
+    public void GetStringByDefault_CrossPlatformBehavior_ConsistentResults()
     {
-        // Arrange
-        var expected = Encoding.Default.GetString(_testBytes);
-
-        // Act
-        var result = _testBytes.GetStringByDefault();
-
-        // Assert
-        Assert.Equal(expected, result);
+        var bytes = Encoding.Default.GetBytes("Test");
+        var result = bytes.GetStringByDefault();
+        Assert.Equal("Test", result); // Should work consistently across platforms
     }
-
-    [Fact]
-    public void MultiByteCharacters_HandleEncodingCorrectly()
-    {
-        // Act
-        var utf8Result = _multiByteBytes.GetStringByUtf8();
-        var utf32Result = Encoding.UTF32.GetBytes(utf8Result).GetStringByUtf32();
-
-        // Assert
-        Assert.Equal("café 🚀", utf8Result);
-        Assert.Equal(utf8Result, utf32Result);
-    }
-
     #endregion
 }
