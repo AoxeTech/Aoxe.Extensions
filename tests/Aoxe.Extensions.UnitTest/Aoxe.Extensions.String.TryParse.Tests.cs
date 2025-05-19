@@ -47,7 +47,10 @@ public class AoxeExtensionsStringTryParseTests
     [Fact]
     public void TryParseShort_WithCultureFormat_ReturnsParsed()
     {
-        var result = "1.234".TryParseShort(provider: CultureInfo.GetCultureInfo("de-DE"));
+        var result = "1.234".TryParseShort(
+            styles: NumberStyles.AllowThousands,
+            provider: CultureInfo.GetCultureInfo("de-DE")
+        );
         Assert.Equal(1234, result);
     }
 
@@ -129,7 +132,7 @@ public class AoxeExtensionsStringTryParseTests
 
     [Theory]
     [InlineData("First", TestEnum.First)]
-    [InlineData("FIRST", TestEnum.Default, true)]
+    [InlineData("FIRST", TestEnum.First, true)]
     [InlineData("Third", TestEnum.Default)]
     public void TryParseEnum_VariousCases_ReturnsExpected(
         string input,
