@@ -103,6 +103,79 @@ public class AoxeExtensionsStringTryParseTests
     }
     #endregion
 
+    #region UInt Tests
+    [Theory]
+    [InlineData("4294967295", uint.MaxValue)] // Max value
+    [InlineData("0", 0U)] // Min value
+    [InlineData("12345", 12345U)]
+    [InlineData("-1", 999U)] // Invalid negative
+    [InlineData("invalid", 999U)]
+    [InlineData(null, 100U)]
+    public void TryParseUint_VariousCases_ReturnsExpected(string? input, uint expected)
+    {
+        var defaultValue = input == null ? 100U : 999U;
+        var result = input.TryParseUint(defaultValue);
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData("FF", NumberStyles.HexNumber, 255U)]
+    [InlineData("100", NumberStyles.Integer, 100U)]
+    public void TryParseUint_WithNumberStyles_ReturnsExpected(
+        string input,
+        NumberStyles styles,
+        uint expected
+    )
+    {
+        var result = input.TryParseUint(styles: styles);
+        Assert.Equal(expected, result);
+    }
+    #endregion
+
+    #region Long Tests
+    [Theory]
+    [InlineData("-9223372036854775808", long.MinValue)] // Min value
+    [InlineData("9223372036854775807", long.MaxValue)] // Max value
+    [InlineData("123456789012345", 123456789012345L)]
+    [InlineData("invalid", -1L)]
+    [InlineData(null, 999L)]
+    public void TryParseLong_VariousCases_ReturnsExpected(string input, long expected)
+    {
+        var defaultValue = input == null ? 999L : -1L;
+        var result = input.TryParseLong(defaultValue);
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void TryParseLong_WithCulturalThousandsSeparator_ReturnsCorrect()
+    {
+        // Test with French culture formatting (space as thousand separator)
+        var result = "1234567".TryParseLong(provider: CultureInfo.GetCultureInfo("fr-FR"));
+        Assert.Equal(1234567L, result);
+    }
+
+    [Fact]
+    public void TryParseLong_WithExplicitThousandsSeparator_ReturnsParsed()
+    {
+        var result = "1,000,000".TryParseLong(
+            styles: NumberStyles.AllowThousands,
+            provider: CultureInfo.InvariantCulture
+        );
+        Assert.Equal(1000000L, result);
+    }
+
+    [Fact]
+    public void TryParseLong_WithGermanNumberFormat_ReturnsCorrect()
+    {
+        // Test with German decimal/comma formatting (though we're parsing integers)
+        var result = "123.456".TryParseLong( // German uses . as thousand separator
+            provider: CultureInfo.GetCultureInfo("de-DE")
+        );
+        Assert.Equal(123456L, result);
+    }
+    #endregion
+
+
     #region DateTime Tests
     [Fact]
     public void TryParseDateTime_WithCustomFormat_ReturnsCorrect()

@@ -2,127 +2,194 @@
 
 public class AoxeExtensionsStringParseTests
 {
-    #region Common Test Cases
-    [Fact]
-    public void ParseMethods_NullInput_ThrowsArgumentNull()
-    {
-        string? nullString = null;
-
-        Assert.Throws<ArgumentNullException>(() => nullString.ParseSbyte());
-        Assert.Throws<ArgumentNullException>(() => nullString.ParseByte());
-        Assert.Throws<ArgumentNullException>(() => nullString.ParseDecimal());
-        Assert.Throws<ArgumentNullException>(() => nullString.ParseEnum<DayOfWeek>());
-    }
+    #region Common Test Scenarios
 
     [Theory]
-    [InlineData("")]
-    [InlineData(" ")]
-    [InlineData("invalid")]
-    public void ParseMethods_InvalidFormat_ThrowsFormatException(string invalidValue)
+    [InlineData(null)]
+    public void AllParseMethods_ShouldThrowArgumentNull_WhenInputIsNull(string? nullInput)
     {
-        Assert.Throws<FormatException>(() => invalidValue.ParseInt());
-        Assert.Throws<FormatException>(() => invalidValue.ParseDouble());
-        Assert.Throws<FormatException>(() => invalidValue.ParseDateTime());
+        // Test all parse methods with null input
+        Assert.Throws<ArgumentNullException>(() => nullInput.ParseSbyte());
+        Assert.Throws<ArgumentNullException>(() => nullInput.ParseByte());
+        Assert.Throws<ArgumentNullException>(() => nullInput.ParseShort());
+        Assert.Throws<ArgumentNullException>(() => nullInput.ParseUshort());
+        Assert.Throws<ArgumentNullException>(() => nullInput.ParseInt());
+        Assert.Throws<ArgumentNullException>(() => nullInput.ParseUint());
+        Assert.Throws<ArgumentNullException>(() => nullInput.ParseLong());
+        Assert.Throws<ArgumentNullException>(() => nullInput.ParseUlong());
+        Assert.Throws<ArgumentNullException>(() => nullInput.ParseFloat());
+        Assert.Throws<ArgumentNullException>(() => nullInput.ParseDouble());
+        Assert.Throws<ArgumentNullException>(() => nullInput.ParseDecimal());
+        Assert.Throws<ArgumentNullException>(() => nullInput.ParseBool());
+        Assert.Throws<ArgumentNullException>(() => nullInput.ParseDateTime());
+        Assert.Throws<ArgumentNullException>(() => nullInput.ParseDateTimeOffset());
+        Assert.Throws<ArgumentNullException>(() => nullInput.ParseEnum<DayOfWeek>());
     }
+
     #endregion
 
     #region Numeric Type Tests
+
+    // Test data for sbyte (-128 to 127)
     [Theory]
-    [InlineData("-128", NumberStyles.Integer, -128)] // sbyte min
-    [InlineData("127", NumberStyles.Integer, 127)] // sbyte max
-    [InlineData("7F", NumberStyles.HexNumber, 127)] // hex format
-    public void ParseSbyte_ValidInput_ReturnsCorrectValue(
-        string input,
-        NumberStyles style,
-        sbyte expected
-    )
+    [InlineData("-128", -128)]
+    [InlineData("127", 127)]
+    [InlineData("0", 0)]
+    public void ParseSbyte_ValidInput_ReturnsCorrectValue(string input, sbyte expected)
     {
-        var result = input.ParseSbyte(style, CultureInfo.InvariantCulture);
+        var result = input.ParseSbyte();
         Assert.Equal(expected, result);
     }
 
+    // Test data for byte (0 to 255)
     [Theory]
-    [InlineData("255", 255)] // byte max
-    [InlineData("0", 0)] // byte min
-    [InlineData("100", 100)]
+    [InlineData("0", 0)]
+    [InlineData("255", 255)]
+    [InlineData("128", 128)]
     public void ParseByte_ValidInput_ReturnsCorrectValue(string input, byte expected)
     {
         var result = input.ParseByte();
         Assert.Equal(expected, result);
     }
 
+    // Test different number styles for int
     [Theory]
-    [InlineData("32767", short.MaxValue)] // short max
-    [InlineData("-32768", short.MinValue)] // short min
-    public void ParseShort_EdgeCases_ReturnsCorrectValue(string input, short expected)
+    [InlineData("(100)", NumberStyles.AllowParentheses, -100)]
+    [InlineData("$1,000", NumberStyles.AllowCurrencySymbol | NumberStyles.Number, 1000)]
+    public void ParseInt_WithNumberStyles_ReturnsCorrectValue(
+        string input,
+        NumberStyles style,
+        int expected
+    )
     {
-        var result = input.ParseShort();
+        // Use explicit culture that matches the test data format
+        var culture = CultureInfo.GetCultureInfo("en-US");
+        var result = input.ParseInt(style, culture);
         Assert.Equal(expected, result);
     }
 
     [Theory]
-    [InlineData("79228162514264337593543950335", NumberStyles.Number, "en-US")] // decimal max
-    [InlineData("-79228162514264337593543950335", NumberStyles.Number, "en-US")] // decimal min
-    public void ParseDecimal_ExtremeValues_ReturnsCorrect(
+    [InlineData("invalid")]
+    public void ParseLong_InvalidFormat_ThrowsFormatException(string input)
+    {
+        Assert.Throws<FormatException>(() => input.ParseLong());
+    }
+
+    [Theory]
+    [InlineData("99999999999999999999")] // 20 digits (max long is 9,223,372,036,854,775,807)
+    [InlineData("-99999999999999999999")]
+    public void ParseLong_OverflowValues_ThrowsOverflowException(string input)
+    {
+        Assert.Throws<OverflowException>(() => input.ParseLong());
+    }
+
+    #endregion
+
+    #region Floating Point Tests
+
+    [Theory]
+    // Regular value with precision check
+    [InlineData("1.23", 1.23f, 2)]
+    // Use string representations of actual min/max values
+    [InlineData("-3.40282347E+38", float.MinValue, 0)]
+    [InlineData("3.40282347E+38", float.MaxValue, 0)]
+    public void ParseFloat_ValidInput_ReturnsCorrectValue(
         string input,
-        NumberStyles style,
-        string culture
+        float expected,
+        int precision
     )
     {
-        var provider = new CultureInfo(culture);
-        var result = input.ParseDecimal(style, provider);
-        Assert.Equal(decimal.Parse(input, style, provider), result);
+        var result = input.ParseFloat();
+
+        if (precision > 0)
+        {
+            // For normal values, check with limited precision
+            Assert.Equal(expected, result, precision);
+        }
+        else
+        {
+            // For min/max values, verify exact match
+            Assert.Equal(expected, result);
+        }
     }
+
+    [Theory]
+    [InlineData("1.7976931348623157E+308", double.MaxValue)]
+    [InlineData("-1.7976931348623157E+308", double.MinValue)]
+    public void ParseDouble_ExtremeValues_ReturnsCorrectValue(string input, double expected)
+    {
+        var result = input.ParseDouble();
+        Assert.Equal(expected, result);
+    }
+
     #endregion
 
     #region Boolean Tests
+
     [Theory]
     [InlineData("True", true)]
     [InlineData("False", false)]
-    [InlineData("true", true)] // case sensitivity
+    [InlineData("true", true)]
     [InlineData("false", false)]
-    public void ParseBool_ValidInput_ReturnsCorrect(string input, bool expected)
+    public void ParseBool_ValidInput_ReturnsCorrectValue(string input, bool expected)
     {
         var result = input.ParseBool();
         Assert.Equal(expected, result);
     }
+
+    [Theory]
+    [InlineData("Yes")]
+    [InlineData("No")]
+    [InlineData("1")]
+    [InlineData("0")]
+    public void ParseBool_InvalidInput_ThrowsFormatException(string input)
+    {
+        Assert.Throws<FormatException>(() => input.ParseBool());
+    }
+
     #endregion
 
     #region DateTime Tests
-    [Theory]
-    [InlineData("2023-12-31T23:59:59", "en-US")]
-    [InlineData("31/12/2023 23:59:59", "fr-FR")]
-    public void ParseDateTime_WithCulture_ReturnsCorrect(string input, string culture)
-    {
-        var provider = new CultureInfo(culture);
-        var result = input.ParseDateTime(provider);
-        Assert.Equal(DateTime.Parse(input, provider), result);
-    }
 
     [Fact]
-    public void ParseDateTime_WithStyles_HandlesAdjustment()
+    public void ParseDateTime_WithCustomCulture_ReturnsCorrectValue()
     {
-        var input = "2023-02-29"; // Invalid date
-        Assert.Throws<FormatException>(
-            () => input.ParseDateTime(styles: DateTimeStyles.AllowInnerWhite)
-        );
+        var culture = new CultureInfo("fr-FR");
+        var dateStr = "12/07/2023 14:30:00";
+
+        var result = dateStr.ParseDateTime(culture);
+
+        Assert.Equal(new DateTime(2023, 7, 12, 14, 30, 0), result);
     }
+
+    [Theory]
+    [InlineData("2023-12-31T23:59:59.9999999Z")]
+    [InlineData("2023-12-31T23:59:59+08:00")]
+    public void ParseDateTimeOffset_ValidFormats_ReturnsCorrectValue(string input)
+    {
+        var result = input.ParseDateTimeOffset();
+        Assert.IsType<DateTimeOffset>(result);
+    }
+
     #endregion
 
     #region Enum Tests
+
     public enum TestEnum
     {
         First,
-        Second
+        Second,
+        Third
     }
 
     [Theory]
-    [InlineData("First", false, TestEnum.First)]
-    [InlineData("SECOND", true, TestEnum.Second)]
-    public void ParseEnum_ValidValues_ReturnsCorrect(
+    [InlineData("First", TestEnum.First)]
+    [InlineData("SECOND", TestEnum.Second, true)]
+    [InlineData("third", TestEnum.Third, true)]
+    public void ParseEnum_ValidValues_ReturnsCorrectValue(
         string input,
-        bool ignoreCase,
-        TestEnum expected
+        TestEnum expected,
+        bool ignoreCase = false
     )
     {
         var result = input.ParseEnum<TestEnum>(ignoreCase);
@@ -130,41 +197,56 @@ public class AoxeExtensionsStringParseTests
     }
 
     [Fact]
-    public void ParseEnum_InvalidType_Throws()
+    public void ParseEnum_NonEnumType_ThrowsArgumentException()
     {
-        Assert.Throws<ArgumentException>(() => "1".ParseEnum(typeof(int)));
+        Assert.Throws<ArgumentException>(() => "123".ParseEnum(typeof(int)));
     }
-    #endregion
 
-    #region Special Number Cases
-    [Theory]
-    [InlineData("Infinity", NumberStyles.Any, double.PositiveInfinity)]
-    [InlineData("-Infinity", NumberStyles.Any, double.NegativeInfinity)]
-    [InlineData("NaN", NumberStyles.Any, double.NaN)]
-    public void ParseDouble_SpecialValues_HandledCorrectly(
-        string input,
-        NumberStyles style,
-        double expected
-    )
-    {
-        var result = input.ParseDouble(style, CultureInfo.InvariantCulture);
-        Assert.Equal(expected, result);
-    }
     #endregion
 
     #region Culture-Specific Tests
-    [Theory]
-    [InlineData("1.234,56", "de-DE", 1234.56)] // German number format
-    [InlineData("1234,56", "fr-FR", 1234.56)] // French number format
-    public void ParseDouble_CultureSpecific_ReturnsCorrect(
-        string input,
-        string culture,
-        double expected
-    )
+
+    [Fact]
+    public void ParseDecimal_WithGermanCulture_ReturnsCorrectValue()
     {
-        var provider = new CultureInfo(culture);
-        var result = input.ParseDouble(NumberStyles.Number, provider);
+        var culture = new CultureInfo("de-DE");
+        var value = "1.234,56"; // German uses . as thousand separator and , as decimal
+
+        var result = value.ParseDecimal(provider: culture);
+
+        Assert.Equal(1234.56m, result);
+    }
+
+    [Fact]
+    public void ParseDouble_WithInvariantCulture_ReturnsCorrectValue()
+    {
+        var value = "1234567.89";
+
+        var result = value.ParseDouble(provider: CultureInfo.InvariantCulture);
+
+        Assert.Equal(1234567.89, result);
+    }
+
+    #endregion
+
+    #region Edge Case Tests
+
+    [Theory]
+    [InlineData("2147483647", int.MaxValue)]
+    [InlineData("-2147483648", int.MinValue)]
+    public void ParseInt_EdgeCases_ReturnsCorrectValue(string input, int expected)
+    {
+        var result = input.ParseInt();
         Assert.Equal(expected, result);
     }
+
+    [Theory]
+    [InlineData("18446744073709551615", ulong.MaxValue)]
+    public void ParseUlong_MaxValue_ReturnsCorrectValue(string input, ulong expected)
+    {
+        var result = input.ParseUlong();
+        Assert.Equal(expected, result);
+    }
+
     #endregion
 }

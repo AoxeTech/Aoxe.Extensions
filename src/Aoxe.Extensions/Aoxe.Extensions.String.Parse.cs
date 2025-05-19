@@ -70,7 +70,7 @@ public static partial class AoxeExtension
 
     public static long ParseLong(
         this string value,
-        NumberStyles styles = NumberStyles.Integer,
+        NumberStyles styles = NumberStyles.Number,
         IFormatProvider? provider = null
     )
     {
@@ -81,7 +81,7 @@ public static partial class AoxeExtension
 
     public static ulong ParseUlong(
         this string value,
-        NumberStyles styles = NumberStyles.Integer,
+        NumberStyles styles = NumberStyles.Number,
         IFormatProvider? provider = null
     )
     {

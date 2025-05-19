@@ -65,7 +65,7 @@ public static partial class AoxeExtension
     public static long TryParseLong(
         this string? value,
         long defaultValue = 0,
-        NumberStyles styles = NumberStyles.Integer,
+        NumberStyles styles = NumberStyles.Number,
         IFormatProvider? provider = null
     ) =>
         long.TryParse(value, styles, provider ?? CultureInfo.InvariantCulture, out var result)
@@ -75,7 +75,7 @@ public static partial class AoxeExtension
     public static ulong TryParseUlong(
         this string? value,
         ulong defaultValue = 0,
-        NumberStyles styles = NumberStyles.Integer,
+        NumberStyles styles = NumberStyles.Number,
         IFormatProvider? provider = null
     ) =>
         ulong.TryParse(value, styles, provider ?? CultureInfo.InvariantCulture, out var result)
