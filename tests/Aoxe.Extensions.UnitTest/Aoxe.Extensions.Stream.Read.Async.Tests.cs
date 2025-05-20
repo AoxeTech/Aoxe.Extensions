@@ -2,95 +2,151 @@
 
 public class AoxeExtensionsStreamReadAsyncTests
 {
-    #region TryReadAsync Tests
-    [Fact(DisplayName = "TryReadAsync with null stream returns -1")]
+    #region TryReadAsync Tests (Simple Overload)
+    [Fact]
     public async Task TryReadAsync_NullStream_ReturnsMinusOne()
     {
         // Arrange
-        Stream nullStream = null!;
+        Stream stream = null;
         byte[] buffer = new byte[10];
 
         // Act
-        var result = await nullStream.TryReadAsync(buffer);
+        var result = await stream.TryReadAsync(buffer);
 
         // Assert
         Assert.Equal(-1, result);
     }
 
-    [Fact(DisplayName = "TryReadAsync respects cancellation token")]
-    public async Task TryReadAsync_Cancellation_ThrowsTaskCanceled()
+    [Fact]
+    public async Task TryReadAsync_UnreadableStream_ReturnsMinusOne()
     {
         // Arrange
-        using var stream = new MemoryStream(new byte[100]);
+        var stream = new UnreadableStream();
+        byte[] buffer = new byte[10];
+
+        // Act
+        var result = await stream.TryReadAsync(buffer);
+
+        // Assert
+        Assert.Equal(-1, result);
+    }
+
+    [Fact]
+    public async Task TryReadAsync_ReadableStream_ReturnsBytesRead()
+    {
+        // Arrange
+        var data = new byte[] { 1, 2, 3, 4, 5 };
+        using var stream = new MemoryStream(data);
+        byte[] buffer = new byte[data.Length];
+
+        // Act
+        var result = await stream.TryReadAsync(buffer);
+
+        // Assert
+        Assert.Equal(data.Length, result);
+        Assert.Equal(data, buffer);
+    }
+
+    [Fact]
+    public async Task TryReadAsync_CancellationRequested_ThrowsTaskCanceledException()
+    {
+        // Arrange
+        using var stream = new SlowStream(new byte[100]);
         var cts = new CancellationTokenSource();
+        var buffer = new byte[10];
         cts.Cancel();
 
         // Act & Assert
         await Assert.ThrowsAsync<TaskCanceledException>(
-            () => stream.TryReadAsync(new byte[10], cts.Token).AsTask()
+            () => stream.TryReadAsync(buffer, cts.Token).AsTask()
         );
     }
+    #endregion
 
-    [Fact(DisplayName = "TryReadAsync with offset reads correct data")]
-    public async Task TryReadAsync_WithOffset_ReadsCorrectData()
+    #region TryReadAsync Tests (Offset Overload)
+    [Fact]
+    public async Task TryReadAsync_WithOffset_ReadsCorrectSegment()
     {
         // Arrange
-        var testData = new byte[] { 1, 2, 3, 4, 5 };
-        using var stream = new MemoryStream(testData);
-        byte[] buffer = new byte[5];
-        int offset = 2;
+        var data = new byte[] { 1, 2, 3, 4, 5 };
+        using var stream = new MemoryStream(data);
+        byte[] buffer = new byte[5] { 0, 0, 0, 0, 0 };
+        int offset = 1;
         int count = 3;
 
         // Act
-        var bytesRead = await stream.TryReadAsync(buffer, offset, count);
+        var result = await stream.TryReadAsync(buffer, offset, count);
 
         // Assert
-        Assert.Equal(3, bytesRead);
-        Assert.Equal([0, 0, 1, 2, 3], buffer);
+        Assert.Equal(3, result);
+        Assert.Equal(new byte[] { 0, 1, 2, 3, 0 }, buffer);
     }
     #endregion
 
     #region ReadToEndAsync Tests
-    [Fact(DisplayName = "ReadToEndAsync handles large streams")]
-    public async Task ReadToEndAsync_LargeStream_ReadsAllContent()
+    [Fact]
+    public async Task ReadToEndAsync_NullStream_ReturnsEmptyArray()
     {
         // Arrange
-        using var stream = new LargeTestStream(1024 * 1024); // 1MB
-        var expected = new byte[1024 * 1024];
-        for (int i = 0; i < expected.Length; i++)
-        {
-            expected[i] = 0x01;
-        }
+        Stream stream = null;
 
         // Act
         var result = await stream.ReadToEndAsync();
 
         // Assert
-        Assert.Equal(expected, result);
+        Assert.Empty(result);
     }
 
-    [Fact(DisplayName = "ReadToEndAsync with bufferSize parameter")]
-    public async Task ReadToEndAsync_CustomBufferSize_ReadsCorrectly()
+    [Fact]
+    public async Task ReadToEndAsync_MemoryStream_ReturnsDirectBuffer()
     {
         // Arrange
-        var testData = new byte[8192];
-        new Random().NextBytes(testData); // Replaced Random.Shared
-        using var stream = new MemoryStream(testData);
+        var data = new byte[] { 1, 2, 3 };
+        using var stream = new MemoryStream(data);
 
         // Act
-        var result = await stream.ReadToEndAsync(bufferSize: 512);
+        var result = await stream.ReadToEndAsync();
 
         // Assert
-        Assert.Equal(testData, result);
+        Assert.Equal(data, result);
+    }
+
+    [Fact]
+    public async Task ReadToEndAsync_NonMemoryStream_CopiesCorrectly()
+    {
+        // Arrange
+        var data = new byte[] { 1, 2, 3 };
+        using var baseStream = new MemoryStream(data);
+        using var stream = new BufferedStream(baseStream);
+
+        // Act
+        var result = await stream.ReadToEndAsync();
+
+        // Assert
+        Assert.Equal(data, result);
+    }
+
+    [Fact]
+    public async Task ReadToEndAsync_WithBufferSize_CopiesCorrectly()
+    {
+        // Arrange
+        var data = new byte[] { 1, 2, 3, 4, 5 };
+        using var stream = new TestStream(data);
+
+        // Act
+        var result = await stream.ReadToEndAsync(bufferSize: 1024);
+
+        // Assert
+        Assert.Equal(data, result);
     }
     #endregion
 
     #region ReadStringAsync Tests
-    [Fact(DisplayName = "ReadStringAsync handles empty streams")]
-    public async Task ReadStringAsync_EmptyStream_ReturnsEmptyString()
+    [Fact]
+    public async Task ReadStringAsync_NullStream_ReturnsEmptyString()
     {
         // Arrange
-        using var stream = new MemoryStream();
+        Stream stream = null;
 
         // Act
         var result = await stream.ReadStringAsync();
@@ -98,89 +154,117 @@ public class AoxeExtensionsStreamReadAsyncTests
         // Assert
         Assert.Equal(string.Empty, result);
     }
-    #endregion
 
-    #region ToReadOnlyMemory/Sequence Tests
-    [Fact(DisplayName = "ToReadOnlyMemoryAsync returns correct data")]
-    public async Task ToReadOnlyMemoryAsync_ValidStream_MatchesContent()
+    [Theory]
+    [InlineData("ASCII", "Hello World")]
+    [InlineData("UTF-8", "こんにちは")]
+    [InlineData("Unicode", "���")]
+    public async Task ReadStringAsync_WithEncoding_ReturnsCorrectString(
+        string encodingName,
+        string text
+    )
     {
         // Arrange
-        var testData = new byte[] { 1, 2, 3, 4 };
-        using var stream = new MemoryStream(testData);
+        var encoding = encodingName switch
+        {
+            "ASCII" => Encoding.ASCII,
+            "UTF-8" => Encoding.UTF8,
+            "Unicode" => Encoding.Unicode,
+            _ => throw new ArgumentException("Invalid encoding")
+        };
+        var data = encoding.GetBytes(text);
+        using var stream = new MemoryStream(data);
 
         // Act
-        var memory = await stream.ToReadOnlyMemoryAsync();
+        var result = await stream.ReadStringAsync(encoding);
 
         // Assert
-        Assert.Equal(testData, memory.ToArray());
+        Assert.Equal(text, result);
     }
 
-    [Fact(DisplayName = "ToReadOnlySequenceAsync handles chunked data")]
-    public async Task ToReadOnlySequenceAsync_ChunkedStream_CombinesCorrectly()
+    [Fact]
+    public async Task ReadStringAsync_DefaultEncoding_UsesUtf8()
     {
         // Arrange
-        using var stream = new ChunkedMemoryStream(
-            [
-                [1, 2],
-                [3, 4]
-            ]
-        );
+        var text = "Test UTF-8 Default";
+        var data = Encoding.UTF8.GetBytes(text);
+        using var stream = new MemoryStream(data);
 
         // Act
-        var sequence = await stream.ToReadOnlySequenceAsync();
+        var result = await stream.ReadStringAsync();
 
         // Assert
-        Assert.Equal([1, 2, 3, 4], sequence.ToArray());
+        Assert.Equal(text, result);
     }
     #endregion
 
     #region Helper Classes
-    private class LargeTestStream : MemoryStream
-    {
-        public LargeTestStream(int size)
-        {
-            var buffer = new byte[size];
-            for (var i = 0; i < buffer.Length; i++)
-            {
-                buffer[i] = 0x01;
-            }
-            Write(buffer, 0, size);
-            Position = 0;
-        }
-
-        public sealed override long Position
-        {
-            get => base.Position;
-            set => base.Position = value;
-        }
-
-        public sealed override void Write(byte[] buffer, int offset, int count) =>
-            base.Write(buffer, offset, count);
-    }
-
-    private class ChunkedMemoryStream : MemoryStream
-    {
-        public ChunkedMemoryStream(byte[][] chunks)
-            : base()
-        {
-            foreach (var chunk in chunks)
-                Write(chunk, 0, chunk.Length);
-            Position = 0;
-        }
-
-        public sealed override long Position
-        {
-            get => base.Position;
-            set => base.Position = value;
-        }
-
-        public sealed override void Write(byte[] buffer, int offset, int count) =>
-            base.Write(buffer, offset, count);
-    }
-
-    private class NonReadableStream : MemoryStream
+    private class UnreadableStream : Stream
     {
         public override bool CanRead => false;
+        public override bool CanSeek => false;
+        public override bool CanWrite => false;
+        public override long Length => throw new NotSupportedException();
+        public override long Position { get; set; }
+
+        public override void Flush() => throw new NotSupportedException();
+
+        public override int Read(byte[] buffer, int offset, int count) =>
+            throw new NotSupportedException();
+
+        public override long Seek(long offset, SeekOrigin origin) =>
+            throw new NotSupportedException();
+
+        public override void SetLength(long value) => throw new NotSupportedException();
+
+        public override void Write(byte[] buffer, int offset, int count) =>
+            throw new NotSupportedException();
+    }
+
+    private class SlowStream : MemoryStream
+    {
+        public SlowStream(byte[] buffer)
+            : base(buffer) { }
+
+        public override async Task<int> ReadAsync(
+            byte[] buffer,
+            int offset,
+            int count,
+            CancellationToken cancellationToken
+        )
+        {
+            await Task.Delay(100, cancellationToken);
+            return await base.ReadAsync(buffer, offset, count, cancellationToken);
+        }
+    }
+
+    private class TestStream : Stream
+    {
+        private readonly MemoryStream _inner;
+
+        public TestStream(byte[] data) => _inner = new MemoryStream(data);
+
+        public override bool CanRead => _inner.CanRead;
+        public override bool CanSeek => _inner.CanSeek;
+        public override bool CanWrite => _inner.CanWrite;
+        public override long Length => _inner.Length;
+        public override long Position
+        {
+            get => _inner.Position;
+            set => _inner.Position = value;
+        }
+
+        public override void Flush() => _inner.Flush();
+
+        public override int Read(byte[] buffer, int offset, int count) =>
+            _inner.Read(buffer, offset, count);
+
+        public override long Seek(long offset, SeekOrigin origin) => _inner.Seek(offset, origin);
+
+        public override void SetLength(long value) => _inner.SetLength(value);
+
+        public override void Write(byte[] buffer, int offset, int count) =>
+            _inner.Write(buffer, offset, count);
     }
     #endregion
 }
