@@ -71,6 +71,12 @@ public class AoxeExtensionsStringBase64Tests
 
     #region ToBase64Bytes Tests
 
+    [Fact]
+    public void ToBase64Bytes_NullThrow()
+    {
+        Assert.Throws<ArgumentNullException>(() => ((string)null!).ToBase64Bytes());
+    }
+
     /// <summary>
     /// Verify that ToBase64Bytes returns ASCII bytes of Base64 string
     /// </summary>

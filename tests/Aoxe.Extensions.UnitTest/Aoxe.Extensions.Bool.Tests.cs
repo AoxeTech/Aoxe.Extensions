@@ -78,6 +78,24 @@ public class AoxeExtensionBoolTests
         Assert.Throws<NullReferenceException>(() => true.Then(nullAction));
     }
 
+    [Fact]
+    public void Then_TrueAction_ThrowsNullReference()
+    {
+        string? result = null;
+        Action action = () => result = "success";
+        true.Then(action);
+        Assert.Equal("success", result);
+    }
+
+    [Fact]
+    public void Then_FalseAction_ThrowsNullReference()
+    {
+        string? result = null;
+        Action action = () => result = "success";
+        false.Then(action);
+        Assert.Null(result);
+    }
+
     // Then<TResult> tests
     [Fact]
     public void ThenTResult_TrueCondition_ReturnsValue()
@@ -122,6 +140,24 @@ public class AoxeExtensionBoolTests
     {
         Action nullAction = null;
         Assert.Throws<NullReferenceException>(() => false.Otherwise(nullAction));
+    }
+
+    [Fact]
+    public void Otherwise_TrueAction_ThrowsNullReference()
+    {
+        string? result = null;
+        Action action = () => result = "success";
+        true.Otherwise(action);
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void Otherwise_FalseAction_ThrowsNullReference()
+    {
+        string? result = null;
+        Action action = () => result = "success";
+        false.Otherwise(action);
+        Assert.Equal("success", result);
     }
 
     // Otherwise<TResult> tests

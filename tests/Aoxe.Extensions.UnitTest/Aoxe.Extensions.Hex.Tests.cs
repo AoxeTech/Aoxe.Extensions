@@ -45,6 +45,12 @@ public class AoxeExtensionsHexTests
     #region ToHexBytes Tests
 
     [Fact]
+    public void ToHexBytes_Null_Throw()
+    {
+        Assert.Throws<ArgumentNullException>(() => ((string)null!).ToHexBytes());
+    }
+
+    [Fact]
     public void ToHexBytes_WhenGivenString_ReturnsCorrectHexBytes()
     {
         // Arrange
@@ -223,6 +229,12 @@ public class AoxeExtensionsHexTests
 
         // Assert: Verify exact match
         Assert.Equal(original, result);
+    }
+
+    [Fact]
+    public void ToHex_Null_Throw()
+    {
+        Assert.Throws<ArgumentNullException>(() => ((byte[])null!).ToHexBytes());
     }
 
     [Fact]
