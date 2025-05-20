@@ -85,6 +85,119 @@ public class AoxeExtensionsStreamAsyncTests
         }
     }
 
+    #region ToReadOnlyMemoryAsync Tests
+    [Fact]
+    public async Task ToReadOnlyMemoryAsync_NullStream_ThrowsArgumentNullException()
+    {
+        // Arrange
+        Stream? nullStream = null;
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentNullException>(
+            async () => await nullStream!.ToReadOnlyMemoryAsync()
+        );
+    }
+
+    [Fact]
+    public async Task ToReadOnlyMemoryAsync_NonReadableStream_ThrowsNotSupportedException()
+    {
+        // Arrange
+        var nonReadableStream = new NonReadableStream(new byte[10]);
+
+        // Act & Assert
+        await Assert.ThrowsAsync<NotSupportedException>(
+            async () => await nonReadableStream.ToReadOnlyMemoryAsync()
+        );
+    }
+
+    [Fact]
+    public async Task ToReadOnlyMemoryAsync_ValidStream_ReturnsCorrectMemory()
+    {
+        // Arrange
+        var expectedData = new byte[] { 1, 2, 3 };
+        var stream = new MemoryStream(expectedData);
+
+        // Act
+        var result = await stream.ToReadOnlyMemoryAsync();
+
+        // Assert
+        Assert.Equal(expectedData, result.ToArray());
+    }
+    #endregion
+
+    #region ToReadOnlySequenceAsync Tests
+    [Fact]
+    public async Task ToReadOnlySequenceAsync_NullStream_ThrowsArgumentNullException()
+    {
+        // Arrange
+        Stream? nullStream = null;
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentNullException>(
+            async () => await nullStream!.ToReadOnlySequenceAsync()
+        );
+    }
+
+    [Fact]
+    public async Task ToReadOnlySequenceAsync_NonReadableStream_ThrowsNotSupportedException()
+    {
+        // Arrange
+        var nonReadableStream = new NonReadableStream(new byte[10]);
+
+        // Act & Assert
+        await Assert.ThrowsAsync<NotSupportedException>(
+            async () => await nonReadableStream.ToReadOnlySequenceAsync()
+        );
+    }
+
+    [Fact]
+    public async Task ToReadOnlySequenceAsync_ValidStream_ReturnsCorrectSequence()
+    {
+        // Arrange
+        var expectedData = new byte[] { 1, 2, 3 };
+        var stream = new MemoryStream(expectedData);
+
+        // Act
+        var result = await stream.ToReadOnlySequenceAsync();
+
+        // Assert
+        Assert.Equal(expectedData, result.ToArray());
+    }
+
+    [Fact]
+    public async Task ToReadOnlySequenceAsync_LargeStream_HandlesChunkedReads()
+    {
+        // Arrange
+        var largeData = new byte[10_000];
+        new Random().NextBytes(largeData);
+        var stream = new ThrottledStream(largeData); // Stream that returns partial reads
+
+        // Act
+        var result = await stream.ToReadOnlySequenceAsync();
+
+        // Assert
+        Assert.Equal(largeData, result.ToArray());
+    }
+    #endregion
+
+    #region Additional Helpers
+    private class ThrottledStream(byte[] data) : MemoryStream(data)
+    {
+        public override async Task<int> ReadAsync(
+            byte[] buffer,
+            int offset,
+            int count,
+            CancellationToken cancellationToken
+        )
+        {
+            // Simulate partial reads by returning max 100 bytes at a time
+            var actualCount = Math.Min(count, 100);
+            return await base.ReadAsync(buffer, offset, actualCount, cancellationToken);
+        }
+    }
+    #endregion
+
+
     // Helper class for testing non-seekable streams
     private class NonSeekableMemoryStream(byte[] buffer) : MemoryStream(buffer)
     {
@@ -95,5 +208,10 @@ public class AoxeExtensionsStreamAsyncTests
             get => base.Position;
             set => throw new NotSupportedException();
         }
+    }
+
+    private class NonReadableStream(byte[] data) : MemoryStream(data)
+    {
+        public override bool CanRead => false;
     }
 }

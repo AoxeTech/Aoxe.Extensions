@@ -29,6 +29,8 @@ public static partial class AoxeExtension
         {
             case null:
                 return [];
+            case { CanRead: false }:
+                throw new NotSupportedException("Stream is not readable");
             case MemoryStream ms:
                 return ms.ToArray();
             default:

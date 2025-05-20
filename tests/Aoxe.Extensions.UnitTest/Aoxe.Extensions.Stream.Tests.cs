@@ -1,216 +1,214 @@
 namespace Aoxe.Extensions.UnitTest;
 
-public class AoxeExtensionsStreamTests
+public class AoxeExtensionStreamTests
 {
     #region IsNullOrEmpty Tests
-
-    [Theory]
-    [InlineData(null, true)] // Null stream
-    [InlineData("", true)] // Empty MemoryStream
-    [InlineData("test", false)] // Non-empty MemoryStream
-    public void IsNullOrEmpty_ValidatesCorrectly(string content, bool expected)
+    [Fact]
+    public void IsNullOrEmpty_NullStream_ReturnsTrue()
     {
         // Arrange
-        Stream stream = content != null ? new MemoryStream(ToBytes(content)) : null;
+        Stream? nullStream = null;
+
+        // Act
+        var result = nullStream.IsNullOrEmpty();
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void IsNullOrEmpty_EmptySeekableStream_ReturnsTrue()
+    {
+        // Arrange
+        var emptyStream = new MemoryStream();
+
+        // Act
+        var result = emptyStream.IsNullOrEmpty();
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void IsNullOrEmpty_NonSeekableStream_ReturnsFalse()
+    {
+        // Arrange
+        var nonSeekableStream = new NonSeekableStream(new byte[] { 1, 2, 3 });
+
+        // Act
+        var result = nonSeekableStream.IsNullOrEmpty();
+
+        // Assert
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void IsNullOrEmpty_NonEmptyStream_ReturnsFalse()
+    {
+        // Arrange
+        var stream = new MemoryStream(new byte[] { 1, 2, 3 });
 
         // Act
         var result = stream.IsNullOrEmpty();
 
         // Assert
-        Assert.Equal(expected, result);
+        Assert.False(result);
     }
-
-    [Fact]
-    public void IsNullOrEmpty_WithNonSeekableStream_ReturnsFalse()
-    {
-        // Arrange - Create non-seekable stream wrapper
-        var baseStream = new MemoryStream(ToBytes("test"));
-        var nonSeekableStream = new NonSeekableStreamWrapper(baseStream);
-
-        // Act & Assert
-        Assert.False(nonSeekableStream.IsNullOrEmpty());
-    }
-
     #endregion
 
     #region TrySeek Tests
-
     [Fact]
-    public void TrySeek_WithSeekableStream_ReturnsNewPosition()
+    public void TrySeek_NullStream_ThrowsArgumentNullException()
     {
         // Arrange
-        using var stream = new MemoryStream(ToBytes("12345"));
-        const int offset = 2;
-        const int expectedPosition = 2;
+        Stream? nullStream = null;
 
-        // Act
-        var result = stream.TrySeek(offset, SeekOrigin.Begin);
-
-        // Assert
-        Assert.Equal(expectedPosition, result);
-        Assert.Equal(expectedPosition, stream.Position);
+        // Act & Assert
+        Assert.Throws<ArgumentNullException>(() => nullStream!.TrySeek(0, SeekOrigin.Begin));
     }
 
     [Fact]
-    public void TrySeek_WithNonSeekableStream_ReturnsMinusOne()
+    public void TrySeek_SeekableStream_ReturnsNewPosition()
     {
         // Arrange
-        var baseStream = new MemoryStream(ToBytes("12345"));
-        using var nonSeekableStream = new NonSeekableStreamWrapper(baseStream);
+        var stream = new MemoryStream(new byte[100]);
+        long expectedPosition = 50;
 
         // Act
-        var result = nonSeekableStream.TrySeek(2, SeekOrigin.Begin);
+        var result = stream.TrySeek(expectedPosition, SeekOrigin.Begin);
+
+        // Assert
+        Assert.Equal(expectedPosition, result);
+    }
+
+    [Fact]
+    public void TrySeek_NonSeekableStream_ReturnsNegativeOne()
+    {
+        // Arrange
+        var nonSeekableStream = new NonSeekableStream(new byte[100]);
+
+        // Act
+        var result = nonSeekableStream.TrySeek(0, SeekOrigin.Begin);
 
         // Assert
         Assert.Equal(-1, result);
     }
-
     #endregion
 
     #region ToMemoryStream Tests
-
-    [Theory]
-    [InlineData("test")] // Regular content
-    [InlineData("")] // Empty stream
-    [InlineData(null)] // Null stream (should throw)
-    public void ToMemoryStream_HandlesDifferentCases(string content)
-    {
-        // Arrange
-        Stream stream = content != null ? new MemoryStream(ToBytes(content)) : null;
-
-        if (content is null)
-        {
-            // Act & Assert for null case
-            Assert.Throws<ArgumentNullException>(() => stream.ToMemoryStream());
-            return;
-        }
-
-        // Act
-        var memoryStream = stream.ToMemoryStream();
-
-        // Assert
-        Assert.Equal(content, ToUtf8String(memoryStream.ToArray()));
-        Assert.True(memoryStream.CanRead);
-    }
-
     [Fact]
-    public void ToMemoryStream_PreservesOriginalPosition()
+    public void ToMemoryStream_NullStream_ThrowsArgumentNullException()
     {
         // Arrange
-        using var stream = new MemoryStream(ToBytes("12345"));
-        stream.Position = 3;
-        var originalPosition = stream.Position;
-
-        // Act
-        _ = stream.ToMemoryStream();
-
-        // Assert
-        Assert.Equal(originalPosition, stream.Position);
-    }
-
-    [Fact]
-    public void ToMemoryStream_WithNonReadableStream_ThrowsException()
-    {
-        // Arrange
-        using var stream = new NonReadableStreamWrapper();
+        Stream? nullStream = null;
 
         // Act & Assert
-        Assert.Throws<NotSupportedException>(() => stream.ToMemoryStream());
+        Assert.Throws<ArgumentNullException>(() => nullStream!.ToMemoryStream());
     }
 
-    #endregion
-
-    #region ReadOnlyMemory/Sequence Conversion Tests
-
-    [Theory]
-    [InlineData("test")]
-    [InlineData("")]
-    [InlineData("large content")] // Add more test data as needed
-    public async Task ConversionMethods_ProduceCorrectResults(string content)
+    [Fact]
+    public void ToMemoryStream_NonReadableStream_ThrowsNotSupportedException()
     {
         // Arrange
-        using var stream = new MemoryStream(ToBytes(content));
+        var nonReadableStream = new NonReadableStream(new byte[10]);
 
-        // Act - Synchronous
-        var memory = stream.ToReadOnlyMemory();
-        var sequence = stream.ToReadOnlySequence();
+        // Act & Assert
+        Assert.Throws<NotSupportedException>(() => nonReadableStream.ToMemoryStream());
+    }
 
-        // Act - Asynchronous
-        var asyncMemory = await stream.ToReadOnlyMemoryAsync();
-        var asyncSequence = await stream.ToReadOnlySequenceAsync();
+    [Fact]
+    public void ToMemoryStream_SeekableStream_CopiesContentAndResetsPosition()
+    {
+        // Arrange
+        var originalData = new byte[] { 1, 2, 3 };
+        var stream = new MemoryStream(originalData);
+        stream.Position = 1;
+
+        // Act
+        var result = stream.ToMemoryStream();
 
         // Assert
-        Assert.Equal(content, ToUtf8String(memory.ToArray()));
-        Assert.Equal(content, ToUtf8String(sequence.ToArray()));
-        Assert.Equal(content, ToUtf8String(asyncMemory.ToArray()));
-        Assert.Equal(content, ToUtf8String(asyncSequence.ToArray()));
+        Assert.Equal(0, result.Position);
+        Assert.Equal(originalData, result.ToArray());
+        Assert.Equal(1, stream.Position); // Original position restored
     }
 
+    [Fact]
+    public void ToMemoryStream_NonSeekableStream_CopiesContent()
+    {
+        // Arrange
+        var originalData = new byte[] { 1, 2, 3 };
+        var nonSeekableStream = new NonSeekableStream(originalData);
+
+        // Act
+        var result = nonSeekableStream.ToMemoryStream();
+
+        // Assert
+        Assert.Equal(originalData, result.ToArray());
+    }
     #endregion
 
-    #region Helper Methods/Classes
-
-    private static byte[] ToBytes(string s) => s != null ? Encoding.UTF8.GetBytes(s) : [];
-
-    private static string ToUtf8String(byte[] bytes) => Encoding.UTF8.GetString(bytes);
-
-    // Helper stream implementations for testing
-    private class NonSeekableStreamWrapper : Stream
+    #region ToReadOnlyMemory Tests
+    [Fact]
+    public void ToReadOnlyMemory_NullStream_ThrowsArgumentNullException()
     {
-        private readonly Stream _baseStream;
+        // Arrange
+        Stream? nullStream = null;
 
-        public NonSeekableStreamWrapper(Stream baseStream) => _baseStream = baseStream;
-
-        public override bool CanSeek => false;
-        public override bool CanRead => _baseStream.CanRead;
-        public override bool CanWrite => _baseStream.CanWrite;
-        public override long Length => _baseStream.Length;
-        public override long Position
-        {
-            get => _baseStream.Position;
-            set => throw new NotSupportedException();
-        }
-
-        public override void Flush() => _baseStream.Flush();
-
-        public override int Read(byte[] buffer, int offset, int count) =>
-            _baseStream.Read(buffer, offset, count);
-
-        public override long Seek(long offset, SeekOrigin origin) =>
-            _baseStream.Seek(offset, origin);
-
-        public override void SetLength(long value) => _baseStream.SetLength(value);
-
-        public override void Write(byte[] buffer, int offset, int count) =>
-            _baseStream.Write(buffer, offset, count);
-
-        protected override void Dispose(bool disposing) => _baseStream.Dispose();
+        // Act & Assert
+        Assert.Throws<ArgumentNullException>(() => nullStream!.ToReadOnlyMemory());
     }
 
-    private class NonReadableStreamWrapper : Stream
+    [Fact]
+    public void ToReadOnlyMemory_ValidStream_ReturnsCorrectMemory()
+    {
+        // Arrange
+        var expectedData = new byte[] { 1, 2, 3 };
+        var stream = new MemoryStream(expectedData);
+
+        // Act
+        var result = stream.ToReadOnlyMemory();
+
+        // Assert
+        Assert.Equal(expectedData, result.ToArray());
+    }
+    #endregion
+
+    #region ToReadOnlySequence Tests
+    [Fact]
+    public void ToReadOnlySequence_NullStream_ThrowsArgumentNullException()
+    {
+        // Arrange
+        Stream? nullStream = null;
+
+        // Act & Assert
+        Assert.Throws<ArgumentNullException>(() => nullStream!.ToReadOnlySequence());
+    }
+
+    [Fact]
+    public void ToReadOnlySequence_ValidStream_ReturnsCorrectSequence()
+    {
+        // Arrange
+        var expectedData = new byte[] { 1, 2, 3 };
+        var stream = new MemoryStream(expectedData);
+
+        // Act
+        var result = stream.ToReadOnlySequence();
+
+        // Assert
+        Assert.Equal(expectedData, result.ToArray());
+    }
+    #endregion
+
+    #region Helper Classes
+    private class NonSeekableStream(byte[] data) : MemoryStream(data)
+    {
+        public override bool CanSeek => false;
+    }
+
+    private class NonReadableStream(byte[] data) : MemoryStream(data)
     {
         public override bool CanRead => false;
-        public override bool CanSeek => false;
-        public override bool CanWrite => true;
-        public override long Length => throw new NotSupportedException();
-        public override long Position
-        {
-            get => throw new NotSupportedException();
-            set => throw new NotSupportedException();
-        }
-
-        public override void Flush() { }
-
-        public override int Read(byte[] buffer, int offset, int count) =>
-            throw new NotSupportedException();
-
-        public override long Seek(long offset, SeekOrigin origin) =>
-            throw new NotSupportedException();
-
-        public override void SetLength(long value) => throw new NotSupportedException();
-
-        public override void Write(byte[] buffer, int offset, int count) { }
     }
-
     #endregion
 }
