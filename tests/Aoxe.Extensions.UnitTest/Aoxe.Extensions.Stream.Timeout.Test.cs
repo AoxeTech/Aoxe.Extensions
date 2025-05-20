@@ -2,78 +2,78 @@
 
 public class AoxeExtensionsStreamTimeoutTest
 {
-    #region TrySetReadTimeout Tests
-    [Fact(DisplayName = "TrySetReadTimeout with null stream returns false")]
+    #region TrySetReadTimeout (int milliseconds) Tests
+    [Fact]
+    public void TrySetReadTimeout_NegativeMilliseconds_ThrowsArgumentOutOfRange()
+    {
+        // Arrange
+        Stream? stream = null;
+
+        // Act & Assert
+        Assert.Throws<ArgumentOutOfRangeException>(() => stream.TrySetReadTimeout(-1));
+    }
+
+    [Fact]
     public void TrySetReadTimeout_NullStream_ReturnsFalse()
     {
         // Arrange
-        Stream nullStream = null!;
+        Stream? stream = null;
 
         // Act
-        var result = nullStream.TrySetReadTimeout(1000);
+        var result = stream.TrySetReadTimeout(100);
 
         // Assert
         Assert.False(result);
     }
 
-    [Fact(DisplayName = "TrySetReadTimeout with non-timeout stream returns false")]
+    [Fact]
     public void TrySetReadTimeout_NonTimeoutStream_ReturnsFalse()
     {
         // Arrange
-        using var stream = new NonTimeoutStream();
+        using var stream = new MemoryStream();
 
         // Act
-        var result = stream.TrySetReadTimeout(1000);
+        var result = stream.TrySetReadTimeout(100);
 
         // Assert
         Assert.False(result);
     }
 
-    [Fact(DisplayName = "TrySetReadTimeout with valid stream sets timeout")]
-    public void TrySetReadTimeout_ValidStream_SetsTimeout()
+    [Fact]
+    public void TrySetReadTimeout_ValidStream_SetsTimeoutAndReturnsTrue()
     {
         // Arrange
-        using var stream = new TimeoutCapableStream();
-        const int testTimeout = 5000;
+        using var stream = new TestStream();
+        const int timeout = 500;
 
         // Act
-        var result = stream.TrySetReadTimeout(testTimeout);
+        var result = stream.TrySetReadTimeout(timeout);
 
         // Assert
         Assert.True(result);
-        Assert.Equal(testTimeout, stream.ReadTimeout);
+        Assert.Equal(timeout, stream.ReadTimeout);
     }
 
-    [Fact(DisplayName = "TrySetReadTimeout throws for negative milliseconds")]
-    public void TrySetReadTimeout_NegativeMilliseconds_ThrowsException()
-    {
-        // Arrange
-        using var stream = new TimeoutCapableStream();
-
-        // Act & Assert
-        Assert.Throws<ArgumentOutOfRangeException>(() => stream.TrySetReadTimeout(-100));
-    }
-
-    [Fact(DisplayName = "TrySetReadTimeout handles invalid operation exceptions")]
+    [Fact]
     public void TrySetReadTimeout_InvalidOperation_ReturnsFalse()
     {
         // Arrange
-        using var stream = new InvalidOperationStream();
+        using var stream = new TestStream { SimulateSetError = true };
 
         // Act
-        var result = stream.TrySetReadTimeout(1000);
+        var result = stream.TrySetReadTimeout(500);
 
         // Assert
         Assert.False(result);
     }
     #endregion
 
-    #region TrySetReadTimeout TimeSpan Tests
-    [Fact(DisplayName = "TrySetReadTimeout with TimeSpan converts correctly")]
-    public void TrySetReadTimeout_ValidTimeSpan_ConvertsCorrectly()
+    #region TrySetReadTimeout (TimeSpan) Tests
+    [Fact]
+    public void TrySetReadTimeout_ValidTimeSpan_ConvertsAndSetsTimeout()
     {
         // Arrange
-        using var stream = new TimeoutCapableStream();
+        using var stream = new TestStream();
         var timeout = TimeSpan.FromSeconds(5);
 
         // Act
@@ -84,69 +84,163 @@ public class AoxeExtensionsStreamTimeoutTest
         Assert.Equal(5000, stream.ReadTimeout);
     }
 
-    [Fact(DisplayName = "TrySetReadTimeout with large TimeSpan throws overflow")]
-    public void TrySetReadTimeout_TooLargeTimeSpan_ThrowsOverflow()
+    [Fact]
+    public void TrySetReadTimeout_OverflowTimeSpan_ThrowsOverflowException()
     {
         // Arrange
-        using var stream = new TimeoutCapableStream();
-        var timeout = TimeSpan.FromMilliseconds(int.MaxValue + 1.0);
+        Stream? stream = null;
+        var timeout = TimeSpan.FromMilliseconds(int.MaxValue + 1L);
 
         // Act & Assert
         Assert.Throws<OverflowException>(() => stream.TrySetReadTimeout(timeout));
     }
     #endregion
 
-    #region TrySetWriteTimeout Tests
-    [Fact(DisplayName = "TrySetWriteTimeout with valid stream sets timeout")]
-    public void TrySetWriteTimeout_ValidStream_SetsTimeout()
+    #region TrySetWriteTimeout (int milliseconds) Tests
+    [Fact]
+    public void TrySetWriteTimeout_NegativeMilliseconds_ThrowsArgumentOutOfRange()
     {
         // Arrange
-        using var stream = new TimeoutCapableStream();
-        const int testTimeout = 3000;
+        Stream? stream = null;
+
+        // Act & Assert
+        Assert.Throws<ArgumentOutOfRangeException>(() => stream.TrySetWriteTimeout(-1));
+    }
+
+    [Fact]
+    public void TrySetWriteTimeout_NullStream_ReturnsFalse()
+    {
+        // Arrange
+        Stream? stream = null;
 
         // Act
-        var result = stream.TrySetWriteTimeout(testTimeout);
+        var result = stream.TrySetWriteTimeout(100);
+
+        // Assert
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void TrySetWriteTimeout_NonTimeoutStream_ReturnsFalse()
+    {
+        // Arrange
+        using var stream = new MemoryStream();
+
+        // Act
+        var result = stream.TrySetWriteTimeout(100);
+
+        // Assert
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void TrySetWriteTimeout_ValidStream_SetsTimeoutAndReturnsTrue()
+    {
+        // Arrange
+        using var stream = new TestStream();
+        const int timeout = 500;
+
+        // Act
+        var result = stream.TrySetWriteTimeout(timeout);
 
         // Assert
         Assert.True(result);
-        Assert.Equal(testTimeout, stream.WriteTimeout);
+        Assert.Equal(timeout, stream.WriteTimeout);
     }
 
-    [Fact(DisplayName = "TrySetWriteTimeout throws for negative milliseconds")]
-    public void TrySetWriteTimeout_NegativeMilliseconds_ThrowsException()
+    [Fact]
+    public void TrySetWriteTimeout_InvalidOperation_ReturnsFalse()
     {
         // Arrange
-        using var stream = new TimeoutCapableStream();
+        using var stream = new TestStream { SimulateSetError = true };
 
-        // Act & Assert
-        Assert.Throws<ArgumentOutOfRangeException>(() => stream.TrySetWriteTimeout(-200));
+        // Act
+        var result = stream.TrySetWriteTimeout(500);
+
+        // Assert
+        Assert.False(result);
     }
     #endregion
 
-    #region Helper Streams
-    private class TimeoutCapableStream : MemoryStream
+    #region TrySetWriteTimeout (TimeSpan) Tests
+    [Fact]
+    public void TrySetWriteTimeout_ValidTimeSpan_ConvertsAndSetsTimeout()
     {
-        public override bool CanTimeout => true;
-        public override int ReadTimeout { get; set; } = -1;
-        public override int WriteTimeout { get; set; } = -1;
+        // Arrange
+        using var stream = new TestStream();
+        var timeout = TimeSpan.FromSeconds(5);
+
+        // Act
+        var result = stream.TrySetWriteTimeout(timeout);
+
+        // Assert
+        Assert.True(result);
+        Assert.Equal(5000, stream.WriteTimeout);
     }
 
-    private class InvalidOperationStream : TimeoutCapableStream
+    [Fact]
+    public void TrySetWriteTimeout_OverflowTimeSpan_ThrowsOverflowException()
     {
+        // Arrange
+        Stream? stream = null;
+        var timeout = TimeSpan.FromMilliseconds(int.MaxValue + 1L);
+
+        // Act & Assert
+        Assert.Throws<OverflowException>(() => stream.TrySetWriteTimeout(timeout));
+    }
+    #endregion
+
+    private class TestStream : Stream
+    {
+        #region Required Overrides
+        public override bool CanRead => true;
+        public override bool CanSeek => false;
+        public override bool CanWrite => true;
+        public override long Length => throw new NotSupportedException();
+        public override long Position
+        {
+            get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
+        }
+        private int _readTimeout;
+        private int _writeTimeout;
+        public bool SimulateSetError { get; set; }
+
+        public override bool CanTimeout => true;
+
         public override int ReadTimeout
         {
-            set => throw new InvalidOperationException();
+            get => _readTimeout;
+            set
+            {
+                if (SimulateSetError)
+                    throw new InvalidOperationException();
+                _readTimeout = value;
+            }
         }
 
         public override int WriteTimeout
         {
-            set => throw new InvalidOperationException();
+            get => _writeTimeout;
+            set
+            {
+                if (SimulateSetError)
+                    throw new InvalidOperationException();
+                _writeTimeout = value;
+            }
         }
-    }
 
-    private class NonTimeoutStream : MemoryStream
-    {
-        public override bool CanTimeout => false;
+        public override void Flush() { }
+
+        public override int Read(byte[] buffer, int offset, int count) => 0;
+
+        public override long Seek(long offset, SeekOrigin origin) =>
+            throw new NotSupportedException();
+
+        public override void SetLength(long value) => throw new NotSupportedException();
+
+        public override void Write(byte[] buffer, int offset, int count) { }
+
+        #endregion
     }
-    #endregion
 }
